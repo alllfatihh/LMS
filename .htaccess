@@ -1,0 +1,35 @@
+# Apache: DocumentRoot harus mengarah ke folder ini (induk dari /public), BUKAN ke /public.
+# Tanpa rewrite ini, URL seperti /guru/... dicari sebagai berkas di disk → 404 "Object not found".
+#
+# Disarankan: Virtual Host dengan DocumentRoot ".../lms/public" — lalu hapus file .htaccess ini.
+# Subfolder http://localhost/lms/ dengan DocumentRoot = htdocs saja: atur Alias/VHost ke .../lms/public,
+# atau akses http://localhost/lms/public/ — pola %{DOCUMENT_ROOT}/public%{REQUEST_URI} di bawah tidak cocok.
+
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    RewriteCond %{HTTP:x-xsrf-token} .
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # Aset statis di /public (Vite /build, favicon, symlink storage, …)
+    RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -d
+    RewriteRule ^ public%{REQUEST_URI} [L]
+
+    # Rute aplikasi Laravel
+    RewriteRule ^ public/index.php [L,QSA]
+</IfModule>
+
+# Jika DocumentRoot = folder proyek, larang unduh berkas sensitif lewat HTTP.
+<FilesMatch "^\.env$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>

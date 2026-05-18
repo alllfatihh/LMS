@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+    
+    body {
+        @apply text-slate-900 bg-gray-50/50 antialiased;
+    }
+
+    /* Standardized Scrollbar */
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #ed1e2820;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #ed1e2850;
+    }
+}
+
+@layer components {
+    /* Standardized Glassmorphism Header */
+    .glass-header {
+        @apply sticky top-0 z-40 w-full backdrop-blur-md bg-white/80 border-b border-slate-100/50;
+    }
+
+    /* Standardized Premium Card */
+    .premium-card {
+        @apply bg-white rounded-2xl border border-slate-100 shadow-premium transition-all duration-300;
+    }
+    .premium-card:hover {
+        @apply shadow-xl shadow-slate-200/40 -translate-y-0.5;
+    }
+
+    /* Standardized Brand Button */
+    .btn-brand {
+        @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand-red px-6 py-2.5 text-sm font-bold text-white transition-all hover:bg-brand-red-dark hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-red-100;
+    }
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+/* 
+ * Iframe responsiveness for materials 
+ */
+.materi-prose iframe,
+.materi-prose-wrap iframe,
+.lesson-html iframe {
+    @apply relative block w-full aspect-video h-auto border-0 rounded-2xl shadow-premium my-6;
+}
