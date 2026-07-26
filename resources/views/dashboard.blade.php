@@ -222,6 +222,9 @@
                         <div class="p-6 sm:p-10 space-y-4">
                             @foreach($data['aktivitas_terbaru'] as $akt)
                                 <div class="group relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 rounded-3xl p-6 bg-white border border-slate-100 shadow-sm hover:shadow-[0_10px_40px_rgb(0,0,0,0.06)] hover:border-slate-200 transition-all duration-300">
+                                    {{-- Link Overlay for the whole card --}}
+                                    <a href="{{ route('guru.audit.tampil', $akt->sesi_id) }}" title="Audit Jawaban Siswa" class="absolute inset-0 z-0"></a>
+
                                     {{-- Left Side: Avatar + Details --}}
                                     <div class="flex items-center gap-5">
                                         <div class="relative">

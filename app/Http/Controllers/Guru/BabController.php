@@ -25,12 +25,17 @@ class BabController extends Controller
             abort(403);
         }
 
-        $permintaan->validate(['title' => 'required|string|max:255', 'order' => 'required|integer']);
+        $permintaan->validate([
+            'title' => 'required|string|max:255', 
+            'order' => 'required|integer',
+            'durasi' => 'required|integer|min:1'
+        ]);
 
         Bab::create([
             'kelas_id' => $kelas->id,
             'title' => $permintaan->title,
             'order' => $permintaan->order,
+            'durasi' => $permintaan->durasi,
         ]);
 
         return redirect()->route('guru.kelas.tampil', $kelas->id)->with('success', 'Bab baru berhasil ditambahkan.');
@@ -70,8 +75,17 @@ class BabController extends Controller
             abort(403);
         }
 
-        $permintaan->validate(['title' => 'required|string|max:255', 'order' => 'required|integer']);
-        $bab->update(['title' => $permintaan->title, 'order' => $permintaan->order]);
+        $permintaan->validate([
+            'title' => 'required|string|max:255', 
+            'order' => 'required|integer',
+            'durasi' => 'required|integer|min:1'
+        ]);
+        
+        $bab->update([
+            'title' => $permintaan->title, 
+            'order' => $permintaan->order,
+            'durasi' => $permintaan->durasi
+        ]);
 
         return redirect()->route('guru.bab.tampil', $bab->id)->with('success', 'Bab berhasil diperbarui.');
     }

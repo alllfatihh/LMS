@@ -1,3 +1,12 @@
+@php
+    $t = strtolower(trim((string)$modul->tipe));
+    $jumlahKata = 0;
+    $waktuDetikDinamis = 10;
+    if($t === 'teks') {
+        $jumlahKata = str_word_count(strip_tags($modul->konten_teks));
+        $waktuDetikDinamis = max(10, ceil(($jumlahKata / 250) * 60));
+    }
+@endphp
 @push('styles')
     <style>
         /* Custom styles for tables within prose to make them look premium */
@@ -23,8 +32,226 @@
             }
         };
     </script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnSelesai = document.getElementById('btn-selesai');
+            const textSelesai = document.getElementById('text-selesai');
+            const formSelesai = document.getElementById('form-selesai');
+            
+            const enabledClasses = ['bg-brand-red', 'shadow-lg', 'shadow-red-200', 'hover:bg-brand-red-dark', 'transform', 'hover:scale-105', 'cursor-pointer'];
+            const disabledClasses = ['bg-gray-400', 'shadow-md', 'cursor-not-allowed'];
+            
+            if (!btnSelesai) return;
+            
+            function enableButton(defaultText) {
+                btnSelesai.disabled = false;
+                disabledClasses.forEach(cls => btnSelesai.classList.remove(cls));
+                enabledClasses.forEach(cls => btnSelesai.classList.add(cls));
+                textSelesai.textContent = defaultText;
+            }
+
+            function updateButtonText(text) {
+                textSelesai.textContent = text;
+            }
+            
+            function updateHeaderTimer(seconds) {
+                const headerTimer = document.getElementById('header-timer');
+                if (headerTimer) {
+                    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+                    const s = (seconds % 60).toString().padStart(2, '0');
+                    headerTimer.textContent = `${m}:${s}`;
+                }
+            }
+
+            const materiTipe = '{{ strtolower(trim((string)$modul->tipe)) }}';
+            
+            if (materiTipe === 'teks') {
+                let timeElapsed = false;
+                let bottomReached = false;
+                let timeLeft = {{ $waktuDetikDinamis }};
+                
+                const timer = setInterval(() => {
+                    timeLeft--;
+                    if (timeLeft <= 0) {
+                        timeElapsed = true;
+                        clearInterval(timer);
+                        updateHeaderTimer(0);
+                        checkTextCompletion();
+                    } else {
+                        updateHeaderTimer(timeLeft);
+                        if (!bottomReached) {
+                            updateButtonText(`Tunggu ${timeLeft} detik & gulir ke bawah`);
+                        } else {
+                            updateButtonText(`Tunggu ${timeLeft} detik`);
+                        }
+                    }
+                }, 1000);
+
+                const marker = document.getElementById('article-bottom-marker');
+                if (marker) {
+                    const observer = new IntersectionObserver((entries) => {
+                        if (entries[0].isIntersecting) {
+                            bottomReached = true;
+                            if (timeLeft > 0) {
+                                updateButtonText(`Tunggu ${timeLeft} detik`);
+                            }
+                            checkTextCompletion();
+                        }
+                    });
+                    observer.observe(marker);
+                } else {
+                    bottomReached = true;
+                }
+
+                function checkTextCompletion() {
+                    if (timeElapsed && bottomReached) {
+                        enableButton('Sudah Selesai Membaca');
+                    } else if (timeElapsed && !bottomReached) {
+                        updateButtonText('Tolong gulir (scroll) hingga ke bawah artikel');
+                    }
+                }
+            } 
+            else if (materiTipe === 'pdf') {
+                let timeLeft = 60;
+                const timer = setInterval(() => {
+                    timeLeft--;
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        updateHeaderTimer(0);
+                        enableButton('Sudah Selesai Membaca');
+                    } else {
+                        updateHeaderTimer(timeLeft);
+                        updateButtonText(`Tunggu ${timeLeft} detik`);
+                    }
+                }, 1000);
+            }
+        });
+    </script>
+    
+    @if(strtolower(trim((string)$modul->tipe)) === 'video')
+    <script>
+        let youtubePlayer;
+        let isVideoCompleted = false;
+        
+        function onYouTubeIframeAPIReady() {
+            youtubePlayer = new YT.Player('youtube-player', {
+                events: {
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+        
+        let videoCheckInterval;
+        function onPlayerStateChange(event) {
+            if (isVideoCompleted) return;
+            
+            if (event.data == YT.PlayerState.PLAYING) {
+                videoCheckInterval = setInterval(checkVideoProgress, 1000);
+            } else {
+                clearInterval(videoCheckInterval);
+            }
+        }
+        
+        function checkVideoProgress() {
+            if (isVideoCompleted) return;
+            
+            const btnSelesai = document.getElementById('btn-selesai');
+            if (!btnSelesai) return;
+
+            const duration = youtubePlayer.getDuration();
+            const currentTime = youtubePlayer.getCurrentTime();
+            
+            if (duration > 0) {
+                const percent = (currentTime / duration) * 100;
+                const textSelesai = document.getElementById('text-selesai');
+                
+                if (percent >= 90) {
+                    isVideoCompleted = true;
+                    clearInterval(videoCheckInterval);
+                    
+                    btnSelesai.disabled = false;
+                    ['bg-gray-400', 'shadow-md', 'cursor-not-allowed'].forEach(cls => btnSelesai.classList.remove(cls));
+                    ['bg-brand-red', 'shadow-lg', 'shadow-red-200', 'hover:bg-brand-red-dark', 'transform', 'hover:scale-105', 'cursor-pointer'].forEach(cls => btnSelesai.classList.add(cls));
+                    textSelesai.textContent = 'Sudah Selesai Menonton';
+                } else {
+                    textSelesai.textContent = `Tonton video (Mencapai ${Math.floor(percent)}%)`;
+                }
+            }
+        }
+    </script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    @endif
+    
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('aiTutorWidget', (endpointUrl) => ({
+                isOpen: false,
+                isLoading: false,
+                inputText: '',
+                messages: [],
+                
+                toggleChat() {
+                    this.isOpen = !this.isOpen;
+                    if (this.isOpen) {
+                        setTimeout(() => this.$refs.chatBox.scrollTop = this.$refs.chatBox.scrollHeight, 100);
+                    }
+                },
+                
+                async sendMessage() {
+                    if (this.inputText.trim() === '' || this.isLoading) return;
+                    
+                    const question = this.inputText.trim();
+                    this.inputText = '';
+                    
+                    // Add user message to UI
+                    this.messages.push({ role: 'user', text: question });
+                    this.scrollToBottom();
+                    
+                    this.isLoading = true;
+                    
+                    try {
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+                        
+                        const response = await fetch(endpointUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken
+                            },
+                            body: JSON.stringify({ pesan: question })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            // Format basic markdown (bold, newlines)
+                            let formattedHtml = data.pesan
+                                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                                .replace(/\n/g, '<br>');
+                            
+                            this.messages.push({ role: 'ai', text: formattedHtml });
+                        } else {
+                            const errorMsg = data.pesan || data.message || JSON.stringify(data);
+                            this.messages.push({ role: 'ai', text: '<span class="text-red-500">Error: ' + errorMsg + '</span>' });
+                        }
+                    } catch (error) {
+                        this.messages.push({ role: 'ai', text: '<span class="text-red-500">Maaf, terjadi kesalahan koneksi. Coba lagi nanti.</span>' });
+                    } finally {
+                        this.isLoading = false;
+                        this.scrollToBottom();
+                    }
+                },
+                
+                scrollToBottom() {
+                    setTimeout(() => {
+                        this.$refs.chatBox.scrollTop = this.$refs.chatBox.scrollHeight;
+                    }, 50);
+                }
+            }));
+        });
+    </script>
 @endpush
 
 <x-app-layout>
@@ -50,6 +277,17 @@
                 @if(auth()->user()->role === 'guru')
                     <a href="{{ route('guru.materi.edit', $modul) }}" class="rounded-xl border border-red-100 bg-red-50 px-3 py-1.5 text-xs font-bold text-brand-red">Edit (Guru)</a>
                 @endif
+                
+                @if(in_array($t, ['teks', 'pdf']) && auth()->user()->role === 'siswa')
+                    @php
+                        $initTime = $t === 'teks' ? $waktuDetikDinamis : 60;
+                    @endphp
+                    <span class="flex items-center gap-1 rounded-full bg-red-50 border border-red-100 px-3 py-1 text-xs font-bold text-brand-red" title="Sisa Waktu Baca">
+                        <svg class="h-3.5 w-3.5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span id="header-timer">{{ sprintf('%02d:%02d', floor($initTime/60), $initTime%60) }}</span>
+                    </span>
+                @endif
+                
                 <span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-500">{{ $modul->labelTipe() }}</span>
             </div>
         </div>
@@ -64,29 +302,45 @@
                         <div class="border-b border-gray-50 bg-gray-50/50 px-5 py-4">
                             <p class="text-xs font-extrabold uppercase tracking-widest text-gray-400">Daftar Modul</p>
                         </div>
-                        <nav class="space-y-1 p-2">
-                            @foreach($daftarMateri ?? [] as $item)
-                                @php
-                                    $tipeItem = strtolower(trim((string)$item->tipe));
-                                    $isAktif = $item->slug === $modul->slug;
-                                    
-                                    $ikon = match($tipeItem) {
-                                        'video' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>',
-                                        'pdf'   => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>',
-                                        default => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>',
-                                    };
-                                @endphp
-                                <a href="{{ route('siswa.materi.tampil', $item->slug) }}" 
-                                   class="group flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold transition-all duration-200 {{ $isAktif ? 'bg-brand-red text-white shadow-md shadow-red-100' : 'text-gray-600 hover:bg-gray-50 hover:text-brand-red' }}">
-                                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl transition-colors {{ $isAktif ? 'bg-white/20' : 'bg-gray-100 group-hover:bg-brand-red/10' }}">
-                                        <svg class="h-5 w-5 {{ $isAktif ? 'text-white' : 'text-gray-400 group-hover:text-brand-red' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            {!! $ikon !!}
-                                        </svg>
-                                    </div>
-                                    <span class="truncate">{{ $item->judul }}</span>
-                                </a>
+                        @php
+                            $sortedMateri = collect($daftarMateri ?? [])->sortBy(function($item) {
+                                return sprintf('%04d-%04d', $item->bab ? $item->bab->order : 9999, $item->order);
+                            });
+                            $materiPerBab = $sortedMateri->groupBy(function($item) {
+                                return $item->bab ? 'Bab ' . $item->bab->order . ': ' . $item->bab->title : 'Materi Tambahan';
+                            });
+                        @endphp
+                        
+                        <div class="max-h-[70vh] overflow-y-auto custom-scrollbar p-3 space-y-6">
+                            @foreach($materiPerBab as $namaBab => $materiGrup)
+                                <div>
+                                    <h4 class="px-2 text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">{{ $namaBab }}</h4>
+                                    <nav class="space-y-1">
+                                        @foreach($materiGrup as $item)
+                                            @php
+                                                $tipeItem = strtolower(trim((string)$item->tipe));
+                                                $isAktif = $item->slug === $modul->slug;
+                                                
+                                                $ikon = match($tipeItem) {
+                                                    'video' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>',
+                                                    'pdf'   => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>',
+                                                    default => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>',
+                                                };
+                                            @endphp
+                                            <a href="{{ route('siswa.materi.tampil', $item->slug) }}" 
+                                               class="group flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold transition-all duration-200 {{ $isAktif ? 'bg-brand-red text-white shadow-md shadow-red-100' : 'text-gray-600 hover:bg-gray-50 hover:text-brand-red' }}">
+                                                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl transition-colors {{ $isAktif ? 'bg-white/20' : 'bg-gray-100 group-hover:bg-brand-red/10' }}">
+                                                    <svg class="h-5 w-5 {{ $isAktif ? 'text-white' : 'text-gray-400 group-hover:text-brand-red' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        {!! $ikon !!}
+                                                    </svg>
+                                                </div>
+                                                <span class="truncate">{{ $item->judul }}</span>
+                                            </a>
+                                        @endforeach
+                                    </nav>
+                                </div>
                             @endforeach
-                        </nav>
+                        </div>
                     </div>
                 </aside>
 
@@ -101,6 +355,7 @@
                             <article class="prose prose-slate prose-lg max-w-none prose-headings:text-brand-red prose-a:text-brand-red prose-strong:text-slate-900 prose-headings:font-black">
                                 {!! $modul->konten_teks !!}
                             </article>
+                            <div id="article-bottom-marker" class="h-1"></div>
                             
                             @if(auth()->user()->role === 'siswa')
                                 <div class="mt-10 pt-8 border-t border-gray-50 flex justify-center">
@@ -110,10 +365,10 @@
                                             Modul sudah diselesaikan
                                         </span>
                                     @else
-                                        <form action="{{ route('siswa.materi.tandai-dibaca', $modul->slug) }}" method="POST">
+                                        <form action="{{ route('siswa.materi.tandai-dibaca', $modul->slug) }}" method="POST" id="form-selesai">
                                             @csrf
-                                            <button type="submit" class="inline-flex items-center gap-2 rounded-full bg-brand-red px-8 py-3 text-sm font-extrabold text-white shadow-lg shadow-red-200 hover:bg-brand-red-dark transition-all transform hover:scale-105">
-                                                Tandai Selesai & Lanjut
+                                            <button type="submit" id="btn-selesai" disabled class="inline-flex items-center gap-2 rounded-full bg-gray-400 px-8 py-3 text-sm font-extrabold text-white shadow-md cursor-not-allowed transition-all duration-300">
+                                                <span id="text-selesai">Tunggu {{ $waktuDetikDinamis }} detik & gulir ke bawah</span>
                                             </button>
                                         </form>
                                     @endif
@@ -133,7 +388,7 @@
                             <div class="p-4 sm:p-8">
                                 @if($embed)
                                     <div class="relative aspect-video w-full overflow-hidden rounded-2xl bg-black shadow-2xl">
-                                        <iframe src="{{ $embed }}?rel=0&modestbranding=1" 
+                                        <iframe id="youtube-player" src="{{ $embed }}?rel=0&modestbranding=1&enablejsapi=1" 
                                                 class="absolute inset-0 h-full w-full border-0" 
                                                 allowfullscreen 
                                                 loading="lazy"></iframe>
@@ -154,10 +409,10 @@
                                                     Video sudah diselesaikan
                                                 </span>
                                             @else
-                                                <form action="{{ route('siswa.materi.tandai-dibaca', $modul->slug) }}" method="POST">
+                                                <form action="{{ route('siswa.materi.tandai-dibaca', $modul->slug) }}" method="POST" id="form-selesai">
                                                     @csrf
-                                                    <button type="submit" class="inline-flex items-center gap-2 rounded-full bg-brand-red px-8 py-3 text-sm font-extrabold text-white shadow-lg shadow-red-200 hover:bg-brand-red-dark transition-all transform hover:scale-105">
-                                                        Selesai Menonton
+                                                    <button type="submit" id="btn-selesai" disabled class="inline-flex items-center gap-2 rounded-full bg-gray-400 px-8 py-3 text-sm font-extrabold text-white shadow-md cursor-not-allowed transition-all duration-300">
+                                                        <span id="text-selesai">Tonton video hingga 90%...</span>
                                                     </button>
                                                 </form>
                                             @endif
@@ -198,10 +453,10 @@
                                                     Dokumen sudah dipelajari
                                                 </span>
                                             @else
-                                                <form action="{{ route('siswa.materi.tandai-dibaca', $modul->slug) }}" method="POST">
+                                                <form action="{{ route('siswa.materi.tandai-dibaca', $modul->slug) }}" method="POST" id="form-selesai">
                                                     @csrf
-                                                    <button type="submit" class="inline-flex items-center gap-2 rounded-full bg-brand-red px-8 py-3 text-sm font-extrabold text-white shadow-lg shadow-red-200 hover:bg-brand-red-dark transition-all transform hover:scale-105">
-                                                        Selesai Membaca
+                                                    <button type="submit" id="btn-selesai" disabled class="inline-flex items-center gap-2 rounded-full bg-gray-400 px-8 py-3 text-sm font-extrabold text-white shadow-md cursor-not-allowed transition-all duration-300">
+                                                        <span id="text-selesai">Tunggu 60 detik...</span>
                                                     </button>
                                                 </form>
                                             @endif
@@ -223,4 +478,6 @@
             </div>
         </div>
     </div>
+
+
 </x-app-layout>

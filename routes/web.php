@@ -15,32 +15,33 @@ Route::get('/beranda', function () {
         if ($pengguna->kelasYangDiikuti()->count() === 0) {
             return redirect()->route('siswa.gabung-kelas.index');
         }
-        
+
         $sesiSelesai = \App\Models\SesiUjian::where('user_id', $pengguna->id)
             ->whereNotNull('finished_at')
             ->with(['bab.kelas', 'daftarJawaban'])
             ->latest('finished_at')
             ->get();
-            
+
         $data['total_kelas'] = $pengguna->kelasYangDiikuti()->count();
         $data['total_ujian'] = $sesiSelesai->count();
-        
+
         $skorList = $sesiSelesai->map(function ($sesi) {
             $total = $sesi->daftarJawaban->count();
-            if ($total === 0) return 0;
+            if ($total === 0)
+                return 0;
             $benar = $sesi->daftarJawaban->where('is_correct', true)->count();
             return ($benar / $total) * 100;
         });
-        
+
         $data['rata_skor'] = $skorList->count() > 0 ? round($skorList->average()) : 0;
         $data['skor_tertinggi'] = $skorList->count() > 0 ? round($skorList->max()) : 0;
-        
+
         $data['daftar_kelas'] = $pengguna->kelasYangDiikuti()->with('guru')->get();
         $data['aktivitas_terbaru'] = $sesiSelesai->take(5)->map(function ($sesi) {
             $total = $sesi->daftarJawaban->count();
             $benar = $sesi->daftarJawaban->where('is_correct', true)->count();
             $skor = $total > 0 ? round(($benar / $total) * 100) : 0;
-            
+
             return (object) [
                 'judul_bab' => $sesi->bab->title,
                 'nama_kelas' => $sesi->bab->kelas->name,
@@ -54,34 +55,36 @@ Route::get('/beranda', function () {
         if ($pengguna->kelasYangDiajar()->count() === 0) {
             return redirect()->route('guru.kelas.buat');
         }
-        
+
         $kelas = $pengguna->kelasYangDiajar;
         $data['total_kelas'] = $kelas->count();
         $data['total_siswa'] = $kelas->sum(fn($k) => $k->siswa()->count());
-        
+
         $babIds = \App\Models\Bab::whereIn('kelas_id', $kelas->pluck('id'))->pluck('id');
         $sesiSelesai = \App\Models\SesiUjian::whereIn('bab_id', $babIds)
             ->whereNotNull('finished_at')
             ->with(['user', 'bab.kelas', 'daftarJawaban'])
             ->latest('finished_at')
             ->get();
-            
+
         $data['total_ujian'] = $sesiSelesai->count();
-        
+
         $skorList = $sesiSelesai->map(function ($sesi) {
             $total = $sesi->daftarJawaban->count();
-            if ($total === 0) return 0;
+            if ($total === 0)
+                return 0;
             $benar = $sesi->daftarJawaban->where('is_correct', true)->count();
             return ($benar / $total) * 100;
         });
-        
+
         $data['rata_skor'] = $skorList->count() > 0 ? round($skorList->average()) : 0;
         $data['aktivitas_terbaru'] = $sesiSelesai->take(5)->map(function ($sesi) {
             $total = $sesi->daftarJawaban->count();
             $benar = $sesi->daftarJawaban->where('is_correct', true)->count();
             $skor = $total > 0 ? round(($benar / $total) * 100) : 0;
-            
+
             return (object) [
+                'sesi_id' => $sesi->id,
                 'nama_siswa' => $sesi->user->name,
                 'judul_bab' => $sesi->bab->title,
                 'nama_kelas' => $sesi->bab->kelas->name,
@@ -96,11 +99,17 @@ Route::get('/beranda', function () {
 
 /** Nama route `dashboard` dipertahankan agar kompatibel dengan layout Breeze */
 Route::redirect('/dashboard', '/beranda')->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profil', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profil', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profil', [ProfileController::class, 'hapus'])->name('profile.destroy');
+
+    // Halaman detail materi yang bisa diakses oleh siswa dan dipratinjau oleh guru kelas
+    Route::get('/siswa/materi/{slug}', [\App\Http\Controllers\Siswa\MateriController::class, 'tampil'])
+        ->middleware('siswaBeradaDiKelas')
+        ->name('siswa.materi.tampil');
+
+
 
     Route::middleware('role:siswa')->prefix('siswa')->name('siswa.')->group(function () {
         Route::get('/gabung-kelas', [\App\Http\Controllers\Siswa\GabungKelasController::class, 'index'])->name('gabung-kelas.index');
@@ -108,7 +117,6 @@ Route::middleware('auth')->group(function () {
         Route::delete('/kelas/{kelas}/keluar', [\App\Http\Controllers\Siswa\GabungKelasController::class, 'keluar'])->name('gabung-kelas.keluar');
 
         Route::middleware('siswaBeradaDiKelas')->group(function () {
-            Route::get('/materi/{slug}', [\App\Http\Controllers\Siswa\MateriController::class, 'tampil'])->name('materi.tampil');
             Route::post('/materi/{slug}/baca', [\App\Http\Controllers\Siswa\MateriController::class, 'tandaiSudahDibaca'])->name('materi.tandai-dibaca');
         });
 
@@ -123,11 +131,17 @@ Route::middleware('auth')->group(function () {
             Route::post('/bab/{bab}/mulai', [\App\Http\Controllers\Siswa\UjianController::class, 'mulai'])->name('bab.mulai');
             Route::get('/sesi/{sesi_ujian}', [\App\Http\Controllers\Siswa\UjianController::class, 'tampilSoal'])->name('tampil-soal');
             Route::post('/jawaban/{jawaban}/kirim', [\App\Http\Controllers\Siswa\UjianController::class, 'kirimJawaban'])->name('jawaban.kirim');
+            Route::post('/sesi/{sesi_ujian}/selesaikan', [\App\Http\Controllers\Siswa\UjianController::class, 'selesaikan'])->name('selesaikan');
             Route::get('/sesi/{sesi_ujian}/hasil', [\App\Http\Controllers\Siswa\UjianController::class, 'hasil'])->name('hasil');
         });
     });
 
     Route::middleware('role:guru')->prefix('guru')->name('guru.')->group(function () {
+        // Fitur AI Guru
+        Route::get('/ai/sisa-kuota', [\App\Http\Controllers\Guru\AiGuruController::class, 'sisaKuota'])->name('ai.sisa-kuota');
+        Route::post('/ai/generate-materi', [\App\Http\Controllers\Guru\AiGuruController::class, 'generateMateri'])->name('ai.generate-materi');
+        Route::post('/ai/generate-soal/{bab}', [\App\Http\Controllers\Guru\AiGuruController::class, 'generateSoal'])->name('ai.generate-soal');
+
         Route::get('kelas', [\App\Http\Controllers\Guru\KelasController::class, 'index'])->name('kelas.index');
         Route::get('kelas/buat', [\App\Http\Controllers\Guru\KelasController::class, 'buat'])->name('kelas.buat');
         Route::post('kelas', [\App\Http\Controllers\Guru\KelasController::class, 'simpan'])->name('kelas.simpan');
@@ -159,7 +173,10 @@ Route::middleware('auth')->group(function () {
         Route::get('soal/{soal}/edit', [\App\Http\Controllers\Guru\SoalController::class, 'edit'])->name('soal.edit');
         Route::put('soal/{soal}', [\App\Http\Controllers\Guru\SoalController::class, 'perbarui'])->name('soal.perbarui');
         Route::delete('soal/{soal}', [\App\Http\Controllers\Guru\SoalController::class, 'hapus'])->name('soal.hapus');
+
+        // Audit Ujian
+        Route::get('sesi-ujian/{sesi_ujian}/audit', [\App\Http\Controllers\Guru\AuditUjianController::class, 'tampil'])->name('audit.tampil');
     });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

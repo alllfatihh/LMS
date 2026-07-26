@@ -42,6 +42,10 @@ class MateriController extends Controller
 
         Materi::create($payload);
 
+        if ($bab) {
+            $this->reorderMateriDalamBab($bab);
+        }
+
         return redirect()
             ->route('guru.bab.tampil', $bab)
             ->with('success', 'Materi berhasil ditambahkan pada bab ini.');
@@ -77,6 +81,10 @@ class MateriController extends Controller
         
         $materi->update($payload);
 
+        if ($materi->bab) {
+            $this->reorderMateriDalamBab($materi->bab);
+        }
+
         return redirect()
             ->route('siswa.materi.tampil', $materi->fresh()->slug)
             ->with('success', 'Materi berhasil diperbarui.');
@@ -101,9 +109,10 @@ class MateriController extends Controller
         $materi->delete();
 
         if ($bab) {
+            $this->reorderMateriDalamBab($bab);
             return redirect()
                 ->route('guru.bab.tampil', $bab)
-                ->with('success', 'Materi telah dihapus.');
+                ->with('success', 'Materi telah dihapus dan urutan disesuaikan ulang.');
         }
 
         return redirect()
@@ -195,5 +204,17 @@ class MateriController extends Controller
         return redirect()
             ->route('guru.kelas.tampil', $kelasId)
             ->with('error', 'Database perlu diperbarui: jalankan `php artisan migrate` di server (menambahkan kolom bab_id pada tabel materi).');
+    }
+
+    private function reorderMateriDalamBab(Bab $bab): void
+    {
+        $daftarMateri = $bab->materi()->orderBy('order')->orderBy('updated_at', 'desc')->get();
+        $urutan = 1;
+        foreach ($daftarMateri as $m) {
+            if ($m->order !== $urutan) {
+                $m->update(['order' => $urutan]);
+            }
+            $urutan++;
+        }
     }
 }

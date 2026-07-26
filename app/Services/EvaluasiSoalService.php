@@ -2,18 +2,18 @@
 
 namespace App\Services;
 
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use NXP\MathExecutor;
 
 class EvaluasiSoalService
 {
-    private ExpressionLanguage $expressionLanguage;
+    private MathExecutor $expressionLanguage;
 
-    /** Digit desimal saat membandingkan jawaban siswa vs nilai benar. */
-    public const SKALA_PERBANDINGAN_JAWABAN = 6;
+    /** Digit desimal saat membandingkan jawaban siswa vs nilai benar (dibatasi 2 angka di belakang koma). */
+    public const SKALA_PERBANDINGAN_JAWABAN = 2;
 
     public function __construct()
     {
-        $this->expressionLanguage = new ExpressionLanguage;
+        $this->expressionLanguage = new MathExecutor();
     }
 
     /**
@@ -54,7 +54,13 @@ class EvaluasiSoalService
      */
     public function hitungRumus(string $rumus, array $variabel)
     {
-        return $this->expressionLanguage->evaluate($rumus, $variabel);
+        // MathExecutor menggunakan '^' untuk perpangkatan, bukan '**' (PHP/Python)
+        $rumus = str_replace('**', '^', $rumus);
+
+        foreach ($variabel as $kunci => $nilai) {
+            $this->expressionLanguage->setVar($kunci, $nilai);
+        }
+        return $this->expressionLanguage->execute($rumus);
     }
 
     public function jawabanNumerikSama(float|string|null $jawabanSiswa, mixed $jawabanBenar, ?int $skala = null): bool

@@ -1,0 +1,4811 @@
+
+
+===== HALAMAN 1 =====
+
+ 
+ 
+Pengembangan Soal Latihan Dinamis untuk 
+Pembelajaran Matematika Tingkat SMP 
+Berbasis Web 
+ 
+Development of Dynamic Practice 
+Questions for Web-Based Middle School 
+Mathematics Learning 
+ 
+Dokumen ini ditujukan untuk memenuhi persyaratan  
+Mata Kuliah Tugas Akhir 
+Jalur Reguler 
+ 
+Disusun oleh, 
+ 
+607012330007– Muhammad Zaid Alfatih 
+ 
+PROGRAM STUDI D3 SISTEM INFORMASI 
+FAKULTAS ILMU TERAPAN  
+UNIVERSITAS TELKOM 
+
+
+===== HALAMAN 2 =====
+
+ 
+ 
+BANDUNG 
+2026 
+LEMBAR PERSEMBAHAN 
+Segala puji bagi Allah SWT atas limpahan rahmat dan 
+hidayahnya, yang telah memberikan kekuatan, kemudahan, 
+dan kelancaran dalam menyelesaikan penelitian ini.  
+Dengan penuh rasa syukur dan hormat, karya ini saya 
+persembahkan kepada:  
+➢ 
+ Umi & Abi tercinta, atas doa, kasih sayang, dan 
+pengorbanan yang tiada henti, yang selalu menjadi 
+sumber kekuatan dan motivasi dalam setiap langkah 
+hidup saya.  
+➢ 
+Dr. Hanung Nindito Prasetyo, S.Si., M.T. Hanang 
+Priambodo, S.T, M.Kom., selaku dosen pembimbing 
+atas bimbingan, arahan, serta kesabaran beliau dalam 
+mendampingi proses penelitian ini.  
+➢ 
+Teman-teman seperjuangan, atas dukungan, 
+semangat 
+dan 
+kebersamaan 
+yang 
+senantiasa 
+menguatkan di setiap tantangan yang dihadapi.  
+Semoga karya sederhana ini dapat memberikan manfaat dan 
+menjadi awal dari langkah-langkah yang lebih baik di masa 
+depan. 
+ 
+ 
+
+
+===== HALAMAN 3 =====
+
+ 
+ii 
+ 
+LEMBAR PENGESAHAN 
+ 
+Pengembangan Soal Latihan Dinamis untuk 
+Pembelajaran Matematika Tingkat SMP Berbasis Web 
+ 
+Development of Dynamic Practice Questions for Web-
+Based Middle School Mathematics Learning 
+ 
+ 
+ 
+ 
+ 
+Penulis 
+Muhammad Zaid Alfatih 
+NIM 607012330007 
+ 
+ 
+ 
+ 
+Dosen Pembimbing 1 
+Dr. Hanung Nindito Prasetyo, S.Si., M.T. 
+NIP 14790020 
+ 
+ 
+ 
+ 
+Dosen Pembimbing 2 
+Hanang Priambodo, S.T., M.Kom. 
+NIP 19910004 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+===== HALAMAN 4 =====
+
+ 
+iii 
+ 
+ 
+ 
+ 
+ 
+Tanggal Pengesahan:   Juli 2026 (tanggal pengumpulan revisi) 
+ 
+KATA PENGANTAR 
+Puji dan syukur penulis panjatkan ke hadirat Allah SWT atas segala rahmat dan 
+karunia-Nya, sehingga penulis dapat menyelesaikan penyusunan laporan Tugas 
+Akhir yang berjudul Pengembangan Soal Latihan Dinamis untuk Pembelajaran 
+Matematika Tingkat SMP Berbasis Web dengan baik. Laporan ini disusun sebagai 
+salah satu syarat untuk memperoleh gelar D3 pada Program Studi Sistem Informasi 
+Fakultas Ilmu Terapan, Telkom University. 
+Penulis menyadari bahwa penyusunan laporan Tugas Akhir ini tidak terlepas dari 
+bimbingan, dukungan, dan bantuan dari berbagai pihak. Oleh karena itu, pada 
+kesempatan ini penulis menyampaikan ucapan terima kasih yang sebesar-besarnya 
+kepada: 
+1. Dr. Hanung Nindito Prasetyo, S.Si., M.T. selaku Dosen Pembimbing I, yang 
+telah meluangkan waktu, tenaga, dan pikiran untuk memberikan bimbingan, 
+arahan, serta masukan yang sangat berharga selama proses penyusunan 
+Tugas Akhir ini; 
+2. Hanang Priambodo, S.T, M.Kom. selaku Dosen Pembimbing II, atas segala 
+bimbingan dan saran yang membangun; 
+3. Kedua orang tua serta seluruh keluarga penulis, atas doa, kasih sayang, dan 
+dukungan yang tiada henti, baik secara moral maupun material; 
+4. Semua pihak yang tidak dapat penulis sebutkan satu per satu, yang telah 
+memberikan kontribusi hingga laporan ini dapat terselesaikan. 
+Penulis menyadari sepenuhnya bahwa laporan Tugas Akhir ini masih memiliki 
+kekurangan, mengingat keterbatasan pengetahuan dan pengalaman penulis. Oleh 
+karena itu, penulis mengharapkan kritik dan saran yang bersifat membangun demi 
+penyempurnaan laporan ini. Akhir kata, penulis berharap semoga laporan Tugas 
+Akhir ini dapat memberikan manfaat bagi pembaca serta menjadi kontribusi yang 
+berguna bagi perkembangan ilmu pengetahuan, khususnya dalam bidang teknologi 
+pendidikan 
+Bandung, 20 Juli 2026 
+
+
+===== HALAMAN 5 =====
+
+ 
+iv 
+ 
+ 
+Muhammad Zaid Alfatih 
+ 
+ 
+ 
+
+
+===== HALAMAN 6 =====
+
+ 
+v 
+ 
+PERNYATAAN 
+  
+Dengan ini saya menyatakan bahwa:  
+1. 
+Karya tulis ini adalah asli dan belum pernah diajukan untuk mendapatkan gelar 
+akademik (Ahli Madya, Sarjana, Magister dan Doktor), baik di Fakultas Ilmu 
+Terapan Universitas Telkom maupun di perguruan tinggi lainnya;  
+2. 
+Karya tulis ini murni gagasan, rumusan, dan penelitian saya sendiri, tanpa 
+bantuan pihak lain, kecuali arahan tim pembimbing atau tim promotor atau 
+penguji;  
+3. 
+dalam karya tulis ini tidak terdapat cuplikan karya atau pendapat yang telah 
+ditulis atau dipublikasikan orang lain, kecuali secara tertulis dengan jelas 
+dicantumkan sebagai acuan dalam naskah dengan menyebutkan nama 
+pengarang dan dicantumkan dalam daftar pustaka;  
+4. 
+saya mengizinkan karya tulis ini dipublikasikan oleh Fakultas Ilmu Terapan 
+Universitas Telkom, dengan tetap mencantumkan saya sebagai penulis; dan  
+Pernyataan ini saya buat dengan sesungguhnya dan apabila pada kemudian hari 
+terdapat penyimpangan dan ketidakbenaran dalam pernyataan ini maka saya 
+bersedia menerima sanksi akademik berupa pencabutan gelar yang telah 
+diperoleh karena karya tulis ini, serta sanksi lainnya sesuai norma yang berlaku 
+di Fakultas Ilmu Terapan Universitas Telkom.  
+ 
+    
+Bandung, 20 Juli 2026 
+ 
+       Muhammad Zaid Alfatih 
+ 
+
+
+===== HALAMAN 7 =====
+
+ 
+vi 
+ 
+ABSTRAK 
+Manajemen evaluasi pembelajaran matematika pada tingkat Sekolah Menengah 
+Pertama (SMP) memerlukan inovasi teknologi yang mampu meningkatkan 
+kemandirian belajar siswa sekaligus mengatasi keterbatasan soal statis. Model 
+evaluasi konvensional saat ini membebani guru dengan penginputan instrumen ujian 
+secara berulang dan membuka peluang terjadinya kecurangan pertukaran jawaban 
+antar peserta didik karena kemiripan konten soal. Guna menyelesaikan 
+permasalahan 
+tersebut, 
+penelitian 
+Tugas 
+Akhir 
+ini 
+merancang 
+dan 
+mengimplementasikan platform Learning Management System (LMS) berbasis web 
+yang mengintegrasikan penyajian materi instruksional dengan modul kuis dinamis. 
+Platform ini diwujudkan menggunakan teknologi framework Laravel dan integrasi 
+pustaka komputasi presisi tinggi BCMath di sisi back-end, HTML, CSS, JavaScript, 
+dan Blade pada sisi front-end, serta MySQL sebagai repositori basis data. Keandalan 
+sistem ini bertumpu pada pembagian kerja tiga aktor, di mana Sistem (engine 
+otomatis) bertindak aktif secara mandiri mendampingi aktor Guru dan Siswa. Melalui 
+pengelolaan template soal berformat JSON, sistem secara otomatis mengacak 
+variabel angka di dalam rumus matematika yang ditentukan guru, sehingga setiap 
+siswa menerima kombinasi soal yang unik pada setiap sesi kuis mandiri. Di sisi 
+pengajar, aplikasi menyediakan integrasi API Groq AI untuk membantu penyusunan 
+draf materi pembelajaran sekaligus merumuskan template soal yang nantinya akan 
+diproses menjadi kuis dinamis oleh back-end. Integritas akademik dan kemandirian 
+siswa didukung penuh oleh fitur auto-grading, di mana sistem akan langsung 
+memproses perolehan nilai dan menyajikan umpan balik (auto-feedback) berupa 
+langkah pembahasan secara instan sesaat setelah siswa selesai mengerjakan kuis. 
+Evaluasi akhir platform divalidasi memanfaatkan metode Black Box Testing. Hasil 
+pengujian fungsionalitas mengonfirmasi bahwa platform terbukti berjalan sukses 
+dan selaras dengan ekspektasi kebutuhan pengguna, menjadikannya sebuah media 
+pembelajaran dan evaluasi yang terpercaya untuk mendukung ekosistem pendidikan 
+digital. 
+Kata Kunci:Learning Management System, Soal Dinamis, Matematika SMP, Auto-
+Grading, Kecerdasan Buatan, BCMath. 
+ 
+
+
+===== HALAMAN 8 =====
+
+ 
+vii 
+ 
+ABSTRACT 
+The management of mathematics learning evaluation at the Junior High School (SMP) 
+level requires technological innovation capable of enhancing students' independent 
+learning while overcoming the limitations of static questions. The current 
+conventional evaluation model burdens teachers with repetitive input of exam 
+instruments and opens up opportunities for cheating, such as exchanging answers 
+among students due to the similarity of question content. To solve these problems, 
+this Final Project research designs and implements a web-based Learning 
+Management System (LMS) platform that integrates the presentation of instructional 
+materials with a dynamic quiz module. This platform is developed using the Laravel 
+framework technology and the integration of the BCMath high-precision computation 
+library on the back-end, HTML, CSS, JavaScript, and Blade on the front-end, along 
+with MySQL as the database repository. The reliability of this system relies on the 
+division of work among three actors, where the System (automated engine) acts 
+actively and independently to assist the Teacher and Student actors. Through the 
+management of JSON-formatted question templates, the system automatically 
+randomizes the numerical variables within the mathematical formulas determined by 
+the teacher, ensuring that each student receives a unique combination of questions 
+in every independent quiz session. On the teacher's side, the application provides 
+Groq AI API integration to assist in drafting learning materials while also formulating 
+question templates that will later be processed into dynamic quizzes by the back-
+end. Academic integrity and student independence are fully supported by the auto-
+grading feature, where the system immediately processes the scores and presents 
+auto-feedback in the form of step-by-step solutions instantly right after the student 
+finishes the quiz. The final evaluation of the platform is validated using the Black Box 
+Testing method. The functionality test results confirm that the platform is proven to 
+run successfully and aligns with user needs expectations, making it a reliable learning 
+and evaluation medium to support the digital education ecosystem. 
+Keywords: Learning Management System, Dynamic Questions, Junior High School 
+Mathematics, Auto-Grading, Artificial Intelligence, BCMath. 
+ 
+
+
+===== HALAMAN 9 =====
+
+ 
+viii 
+ 
+DAFTAR ISI 
+LEMBAR PERSEMBAHAN ................................................................................................. ii 
+LEMBAR PENGESAHAN ............................................................................................... ii 
+KATA PENGANTAR ..................................................................................................... iii 
+ABSTRAK ................................................................................................................... vi 
+ABSTRACT ................................................................................................................ vii 
+DAFTAR ISI .............................................................................................................. viii 
+DAFTAR GAMBAR ....................................................................................................... xi 
+DAFTAR TABEL ......................................................................................................... xiv 
+DAFTAR LAMPIRAN ................................................................................................... xv 
+BAB I PENDAHULUAN ................................................................................................. 1 
+1.1 
+Latar Belakang ................................................................................................ 1 
+1.2 
+Rumusan Masalah .......................................................................................... 2 
+1.3 
+Tujuan ............................................................................................................ 3 
+1.4 
+Cakupan Pengerjaan ....................................................................................... 3 
+1.5 
+Tahapan Pengerjaan ........................................................................................ 6 
+BAB II PERSYARATAN SISTEM ...................................................................................... 8 
+2.1 
+Deskripsi Pengguna ......................................................................................... 8 
+2.2 
+Gambaran Sistem Saat Ini ............................................................................... 8 
+2.2.1 
+BPMN AS-IS Proses Pembelajaran dan Latihan Soal Matematika Saat Ini ....... 9 
+2.2.2 
+BPMN TO-BE Sistem Pembelajaran dan Evaluasi Matematika ...................... 13 
+2.3 
+Produk dan Layanan ....................................................................................... 14 
+2.4 
+Analisis Kebutuhan Sistem ............................................................................. 15 
+2.4.1 
+Analisis Pengguna Sistem .......................................................................... 16 
+2.5 
+Use Case Diagram ......................................................................................... 19 
+2.5.1 
+Use case sisi Guru: .................................................................................... 19 
+2.5.2 
+Use case sisi Siswa: ................................................................................... 20 
+2.5.3 
+Use case bersama: .................................................................................... 20 
+2.6 
+Use Case Skenario ......................................................................................... 21 
+2.6.1 
+Skenario Use Case: Login Akun .................................................................. 21 
+2.6.2 
+Skenario Use Case: Membuat Kelas Baru ................................................... 21 
+
+
+===== HALAMAN 10 =====
+
+ 
+ix 
+ 
+2.6.3 
+Skenario Use Case: Bergabung ke Kelas ..................................................... 22 
+2.6.4 
+Skenario Use Case: Mengelola Materi Pembelajaran ................................... 22 
+2.6.5 
+Skenario Use Case: Menggunakan Asisten AI untuk Draf Materi ................... 23 
+2.6.6 
+Skenario Use Case: Membaca Materi Pembelajaran ................................... 23 
+2.6.7 
+Skenario Use Case: Membuat Soal Kuis ...................................................... 24 
+2.6.8 
+Skenario Use Case: Menggunakan Asisten AI untuk Draf Soal ...................... 24 
+2.6.9 
+Skenario Use Case: Mengerjakan Kuis dan Penilaian Otomatis .................... 25 
+2.6.10 
+Skenario Use Case: Melihat Beranda (Dashboard) dan Riwayat ............... 26 
+2.7 
+Kinerja Sistem ................................................................................................ 26 
+BAB III PEMODELAN DAN PERANCANGAN ................................................................. 28 
+3.1 
+Arsitektur Sistem ............................................................................................ 28 
+3.2 
+Permodelan Sistem dan Data ......................................................................... 29 
+3.2.1 
+Activity Diagram ........................................................................................ 30 
+3.2.2 
+Perancangan Sequence Diagram ............................................................... 39 
+3.2.3 
+Class Diagram ........................................................................................... 53 
+3.2.4 
+Entity Relationship Diagram (ERD) .............................................................. 56 
+3.3 
+Perancangan Antarmuka Pengguna ................................................................ 58 
+3.3.1 
+Wireframe Landing Page ............................................................................ 58 
+3.3.2 
+Wireframe Autentikasi ............................................................................... 59 
+3.3.3 
+Wireframe Modul Guru .............................................................................. 60 
+3.3.4 
+Wireframe Modul Siswa ............................................................................. 67 
+3.4 
+Kebutuhan Perangkat Keras dan Perangkat Lunak ............................................ 71 
+3.4.1 
+Kebutuhan Tahap Pengembangan Sistem ................................................... 72 
+3.4.2 
+Implementasi Sistem ................................................................................. 73 
+BAB IV IMPLEMENTASI DAN PENGUJIAN .................................................................... 75 
+4.1 
+Implementasi ................................................................................................ 75 
+4.2 
+Implementasi Antarmuka ............................................................................... 75 
+4.2.1 
+Antarmuka Landing Page ........................................................................... 75 
+4.2.2 
+Antarmuka Login ....................................................................................... 76 
+4.2.3 
+Antarmuka Register ................................................................................... 76 
+4.2.4 
+Antarmuka Dashboard Guru ...................................................................... 77 
+4.2.5 
+Antarmuka Daftar Kelas ............................................................................. 78 
+4.2.6 
+Antarmuka Buat Kelas ............................................................................... 78 
+4.2.7 
+Antarmuka Detail Kelas ............................................................................. 79 
+4.2.8 
+Antarmuka Edit Kelas ................................................................................. 80 
+4.2.9 
+Antarmuka Buat Bab .................................................................................. 80 
+4.2.10    Antarmuka Detail Pengelolaan Bab ............................................................. 81 
+4.2.11    Antarmuka Tambah Materi ......................................................................... 81 
+4.2.12    Antarmuka Edit Materi ................................................................................ 82 
+4.2.13    Antarmuka Generate Materi dengan AI ........................................................ 83 
+4.2.14    Antarmuka Tambah Soal Dinamis ............................................................... 83 
+
+
+===== HALAMAN 11 =====
+
+ 
+x 
+ 
+4.2.15    Antarmuka Edit Soal .................................................................................. 84 
+4.2.16   Antarmuka Generate Soal dengan AI ........................................................... 84 
+4.2.17   Antarmuka Audit Ujian ................................................................................ 85 
+4.2.18   Antarmuka Gabung Kelas ............................................................................ 86 
+4.2.19   Antarmuka Dashboard Siswa ...................................................................... 86 
+4.2.20   Antarmuka Daftar Bab ................................................................................ 87 
+4.2.21   Antarmuka Detail Bab ................................................................................. 87 
+4.2.22   Antarmuka Fitur Materi ............................................................................... 88 
+4.2.23   Antarmuka Pengerjaan Kuis ........................................................................ 88 
+4.2.24   Antarmuka Hasil Ujian ................................................................................ 89 
+4.2.25 
+Antarmuka Riwayat Ujian ....................................................................... 89 
+4.1 
+Pengujian ...................................................................................................... 90 
+BAB V PENUTUP ....................................................................................................... 96 
+5.1 
+Kesimpulan ........................................ Kesalahan! Bookmark tidak ditentukan. 
+5.2 
+Saran ................................................. Kesalahan! Bookmark tidak ditentukan. 
+DAFTAR PUSTAKA ..................................................................................................... 98 
+LAMPIRAN .............................................................................................................. 100 
+Lampiran 1 Gambar yang Terlalu Besar ...................................................................... 100 
+Lampiran 2 Scan Dokumen .............................. Kesalahan! Bookmark tidak ditentukan. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+===== HALAMAN 12 =====
+
+ 
+xi 
+ 
+DAFTAR GAMBAR 
+Gambar 2. 1 BPMN AS-IS Proses Pembelajaran Konvensional ........................................... 10 
+Gambar 2. 2 BPMN AS-IS Proses Pengerjaan Latihan Soal ................................................. 11 
+Gambar 2. 3 BPMN TO-BE Sistem Pembelajaran dan Evaluasi ........................................... 13 
+Gambar 2. 4 BPMN TO-BE Sistem Pembelajaran ... Kesalahan! Bookmark tidak ditentukan. 
+Gambar 2. 5 BPMN TO-BE Sistem Kuis .................. Kesalahan! Bookmark tidak ditentukan. 
+Gambar 3.1 Arsitektur Sistem .......................................................................................... 29 
+Gambar 3. 2 Activity Diagram Fitur Login/Register ............................................................. 30 
+Gambar 3. 3 Activity Diagram Guru Mengelola Kelas dan Modul Pembelajaran ................... 31 
+Gambar 3. 4 Activity Diagram Siswa Bergabung Kelas ....................................................... 32 
+Gambar 3. 5 Activity Diagram Siswa Mempelajari Materi Pembelajaran ............................. 33 
+Gambar 3. 6 Activity Diagram Siklus Kuis Siswa ................................................................ 34 
+Gambar 3. 7 Acitivity Diagram Pengerjaan Kuis dan Penilaian Otomatis ............................. 35 
+Gambar 3. 8 Activity Diagram Siswa Melihat Feedback dan Nilai ....................................... 36 
+Gambar 3. 9 Diagram Guru Memantau Progres Siswa ....................................................... 36 
+Gambar 3. 10 Activity Diagram Diagram Guru Membuat Draft Materi dengan AI .................. 37 
+Gambar 3. 11 Activity Diagram Guru Membuat Draf Soal dengan AI ................................... 38 
+Gambar 3. 12 Sequence Diagram Login dan Register ........................................................ 40 
+Gambar 3. 13 Sequence Diagram Mengelola Kelas ........................................................... 42 
+Gambar 3. 14 Sequence Diagram Mengelola Fitur Materi .................................................. 43 
+Gambar 3. 15 Sequence Diagram Mengelola Fitur Kuis ..................................................... 44 
+Gambar 3. 16 Sequence Diagram Membuat Draf Materi dengan AI .................................... 45 
+Gambar 3. 17 Sequence Diagram Membuat Template Soal dengan AI ............................... 47 
+Gambar 3. 18 Sequence Diagram Memantau Hasil Kuis Guru ............................................ 48 
+Gambar 3. 19 Sequence Diagram Bergabung ke Kelas ...................................................... 49 
+Gambar 3. 20 Sequence Diagram Mempelajari Materi ....................................................... 50 
+Gambar 3. 21 Sequence Diagram Mengerjakan Kuis ......................................................... 51 
+Gambar 3. 22 Sequence Diagram Siswa Melihat Feedback dan Nilai ................................. 52 
+Gambar 3. 23 Class Diagram ........................................................................................... 53 
+Gambar 3. 24 ERD (Entity Relationship Diagram) .............................................................. 56 
+Gambar 3. 25 Wireframe Halaman Landing Page .............................................................. 58 
+Gambar 3. 26 Wireframe Halaman Login .......................................................................... 59 
+Gambar 3. 27 Wireframe Halaman Registrasi ................................................................... 59 
+Gambar 3. 28 Wireframe Dashboard Utama Guru ............................................................. 60 
+Gambar 3. 29 Wireframe Daftar Kelas Guru ...................................................................... 60 
+Gambar 3. 30 Wireframe Buat Kelas Baru ......................................................................... 61 
+Gambar 3. 31 Wireframe Detail Kelas Guru ...................................................................... 61 
+Gambar 3. 32 Wireframe Edit Kelas Guru .......................................................................... 62 
+Gambar 3. 33 Wireframe Buat Bab Baru Guru ................................................................... 62 
+Gambar 3. 34 Wireframe Detail Pengelolaan Bab ............................................................. 63 
+Gambar 3. 35 Wireframe Tambah Materi Guru .................................................................. 63 
+Gambar 3. 36 Wireframe Tambah Soal Dinamis ................................................................ 64 
+Gambar 3. 37 Wireframe Pop-up Generate Materi Teks  AI ................................................ 64 
+Gambar 3. 38 Wireframe Pop-up GenerateTemplate  Soal AI ............................................. 65 
+Gambar 3. 39 Wireframe Edit Materi Guru ........................................................................ 66 
+Gambar 3. 40 Wireframe Edit Soal Guru ........................................................................... 66 
+Gambar 3. 41 Wireframe Audit Ujian Guru ........................................................................ 67 
+Gambar 3. 42 Wireframe Gabung Kelas Siswa .................................................................. 68 
+Gambar 3. 43 Wireframe Dashboard Utama Siswa ........................................................... 68 
+
+
+===== HALAMAN 13 =====
+
+ 
+xii 
+ 
+Gambar 3. 44 Wireframe Daftar Bab Siswa ....................................................................... 69 
+Gambar 3. 45 Wireframe Detail Bab Siswa ....................................................................... 69 
+Gambar 3. 46 Wireframe Baca Materi Siswa ..................................................................... 70 
+Gambar 3. 47 Wireframe Pengerjaan Soal Kuis ................................................................. 70 
+Gambar 3. 48 Wireframe Hasil Ujian Siswa ....................................................................... 71 
+Gambar 3. 49 Wireframe Riwayat Ujian Siswa ................................................................... 71 
+Gambar 4. 2 Halaman Login ............................................................................................ 76 
+Gambar 4. 3 Halaman Register ........................................................................................ 77 
+Gambar 4. 4 Halaman Dashboard Guru ........................................................................... 77 
+Gambar 4. 5 Halaman daftar Kelas .................................................................................. 78 
+Gambar 4. 6 Halaman Buat Kelas .................................................................................... 79 
+Gambar 4. 7 Halaman Detail Kelas .................................................................................. 79 
+Gambar 4. 8 Halaman Edit Kelas ...................................................................................... 80 
+Gambar 4. 9 Halaman Buat BAB ...................................................................................... 80 
+Gambar 4. 10 Halaman Detail BAB .................................................................................. 81 
+Gambar 4. 11 Halaman Tambah Materi ............................................................................ 82 
+Gambar 4. 12 Halaman Edit Materi .................................................................................. 82 
+Gambar 4. 13 Buat Materi dengan AI ................................................................................ 83 
+Gambar 4. 14 Halaman Tambah Soal ............................................................................... 83 
+Gambar 4. 15 Halaman Edit Soal ..................................................................................... 84 
+Gambar 4. 16 Halaman Generate Soal dengan AI ............................................................. 85 
+Gambar 4. 17 Halaman Audit Ujian Oleh Guru .................................................................. 85 
+Gambar 4. 18 Halaman Gabung Kelas .............................................................................. 86 
+Gambar 4. 19 Halaman Dashboard Siswa ........................................................................ 86 
+Gambar 4. 20 Halaman Daftar BAB .................................................................................. 87 
+Gambar 4. 21 Halaman Detail BAB Siswa ......................................................................... 87 
+Gambar 4. 22 Halaman Fitur Materi Siswa ........................................................................ 88 
+Gambar 4. 23 Halaman Pengerjaan Kuis Siswa ................................................................. 88 
+Gambar 4. 24 Halaman Feedback .................................................................................... 89 
+Gambar 4. 25 Halaman Riwayat Kuis Siswa ...................................................................... 89 
+ 
+ 
+ 
+ 
+ 
+
+
+===== HALAMAN 14 =====
+
+ 
+xiii 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+===== HALAMAN 15 =====
+
+ 
+xiv 
+ 
+DAFTAR TABEL 
+Tabel 2.1 Perbandingan Aplikasi Sejenis ........................................................................... 15 
+Tabel 2.2 Kebutuhan Fungsionalitas ................................................................................ 16 
+Tabel 2.3 Kebutuhan Non-Fungsionalitas ......................................................................... 18 
+Tabel 2.4 Tabel Use case sisi Guru ................................................................................... 19 
+Tabel 2.5 Use case sisi Siswa .......................................................................................... 20 
+Tabel 2.6 Use case bersama ............................................................................................ 20 
+Tabel 2.7 Use case terkait AI ............................................................................................ 20 
+Tabel 2.8 Use Case Scenario Login .................................................................................. 21 
+Tabel 2.9 Use Case Scenario Membuat Kelas ................................................................... 21 
+Tabel 2.10 Use Case Scenario Bergabung ke Kelas ........................................................... 22 
+Tabel 2.11 Use Case Scenario Mengelola Materi Pembelajaran ......................................... 22 
+Tabel 2.12 Use Case Scenario Menggunakan Asisten AI untuk Draf Materi ......................... 23 
+Tabel 2.13 Use Case Membaca Mater Pembelajaran ........................................................ 23 
+Tabel 2.14 Use Case Scenario Membuat Soal Kuis ............................................................ 24 
+Tabel 2.15 Use Case Scenario Menggunakan Asisten AI untuk Draf Soal ............................ 24 
+Tabel 2.16 Use Case Scenario Mengerjakan Kuis .............................................................. 25 
+Tabel 2.17 Use Case Scenario Melihat Beranda dan Riwayat ............................................. 26 
+ 
+ 
+ 
+
+
+===== HALAMAN 16 =====
+
+ 
+xv 
+ 
+DAFTAR LAMPIRAN 
+ 
+Lampiran 1 Notulensi Wawancara ................................................................................. 100 
+Lampiran 2 Notulensi Wawancara ................................................................................. 101 
+ 
+ 
+ 
+
+
+===== HALAMAN 17 =====
+
+ 
+1 
+ 
+ 
+BAB I PENDAHULUAN 
+1.1 Latar Belakang 
+Perkembangan teknologi informasi dan komunikasi pada era revolusi industri 
+modern telah mendorong transformasi pada ekosistem pendidikan melalui 
+implementasi pembelajaran digital (e-learning). Pemanfaatan platform Learning 
+Management System (LMS) telah menjadi instrumen krusial yang menawarkan 
+pendekatan instruksional adaptif, fleksibel, serta interaktif tanpa sekat ruang dan 
+waktu [1]. Data Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi 
+(Kemendikbudristek) mencatat bahwa tingkat adopsi platform digital untuk 
+mendukung manajemen pembelajaran pada jenjang sekolah menengah telah 
+mencapai angka 68% [2]. Namun, statistik tersebut sekaligus mengindikasikan 
+adanya kesenjangan teknologi sebesar 32% pada institusi pendidikan yang masih 
+tertinggal dalam melakukan transisi digital. 
+Kesenjangan teknologi ini terbukti dari fakta di lapangan berdasarkan hasil 
+wawancara dengan tenaga pendidik mata pelajaran matematika tingkat Sekolah 
+Menengah Pertama yang termasuk ke dalam 32% institusi pendidikan yang masih 
+tertinggal dalam melakukan transisi digital. Berdasarkan temuan tersebut, proses 
+pengelolaan kelas masih membebani guru dengan tugas administratif yang berat, 
+mulai dari penyiapan materi pembelajaran, pemantauan nilai siswa, hingga 
+pelaksanaan evaluasi harian. Beban itu meliputi penyusunan materi, pembuatan 
+variasi soal latihan, serta koreksi hasil evaluasi siswa yang seluruhnya masih 
+dilakukan secara manual. Kondisi ini sejalan dengan temuan literatur yang menyoroti 
+perlunya optimalisasi teknologi untuk meningkatkan produktivitas guru [3]. Sebagai 
+langkah awal, migrasi menuju platform LMS open source seperti Moodle maupun 
+platform LMS siap pakai seperti Edmodo, Quizizz, dan Schoology telah banyak dikaji 
+dan direkomendasikan untuk menciptakan lingkungan belajar yang fleksibel dan 
+efisien [4]. Akan tetapi, platform LMS publik tersebut masih memiliki sejumlah 
+keterbatasan dalam pengelolaan variasi soal. Sebagai contoh, Quizizz berupaya 
+meminimalkan kecurangan melalui fitur pengacakan urutan pertanyaan dan posisi 
+pilihan jawaban. Namun, berdasarkan penelusuran terhadap fiturnya, sistem 
+evaluasi yang tersedia masih berformat statis [5]. Ketiadaan fitur template dinamis 
+mengharuskan pendidik menyusun teks soal, opsi jawaban, dan kunci jawaban 
+secara manual satu per satu. Platform tersebut belum menyediakan mekanisme 
+yang 
+memungkinkan 
+guru 
+cukup 
+memasukkan 
+variabel 
+beserta 
+rumus 
+penyelesaiannya agar sistem membangkitkan angka acak sekaligus memvalidasi 
+jawaban secara otomatis. Akibatnya, substansi soal yang diujikan kepada setiap 
+siswa pada praktiknya cenderung identik dan seragam. Keterbatasan ini pada 
+akhirnya memicu celah pelanggaran integritas akademik, karena kerja sama tidak 
+
+
+===== HALAMAN 18 =====
+
+ 
+2 
+ 
+sah antarsiswa rentan terjadi saat kuis daring berlangsung ketika siswa dapat dengan 
+mudah menghafal atau menyalin hasil akhir jawaban. 
+Oleh karena itu, diperlukan sebuah terobosan sistem informasi manajemen 
+pembelajaran berbasis web, yaitu pengembangan soal latihan dinamis untuk 
+pembelajaran matematika tingkat SMP, yang dirancang secara spesifik untuk 
+menjawab tantangan tersebut. Untuk mereduksi beban kerja administratif guru 
+dalam penyusunan materi, pembuatan variasi soal, dan koreksi evaluasi, sistem ini 
+dibangun dengan fitur kelola kelas dan fitur kuis yang mampu membangkitkan variasi 
+soal secara unik berdasarkan template soal dinamis. Fitur kuis ini terintegrasi 
+langsung dengan penilaian otomatis (auto-grading) serta memberikan evaluasi 
+berupa umpan balik (feedback) secara langsung kepada siswa tepat setelah kuis 
+diselesaikan. Melalui mekanisme ini, guru terbebas dari rutinitas koreksi manual, 
+sementara kemandirian belajar siswa dapat meningkat karena adanya akses materi 
+yang fleksibel serta evaluasi yang interaktif[6]. 
+Lebih lanjut, untuk mempercepat proses persiapan instruksional yang selama ini 
+memakan waktu, sistem ini mengintegrasikan layanan kecerdasan buatan (AI) pihak 
+ketiga sebagai aktor sekunder. Melalui Application Programming Interface (API) Groq, 
+asisten cerdas berbasis Large Language Model Llama 3.3 70B Versatile 
+diintegrasikan ke dalam platform untuk memfasilitasi guru dalam menyusun draf 
+materi teks dan merancang template soal secara instan. Integrasi AI ini dibatasi 
+secara ketat sebagai asisten produktivitas, yaitu seluruh komputasi diproses di luar 
+aplikasi dan hasilnya dikirimkan ke dalam sistem untuk ditinjau kembali oleh guru. 
+Adapun ketepatan penilaian pada sisi back-end dijamin melalui pemanfaatan 
+pustaka BCMath yang mendukung komputasi presisi tinggi, sehingga penilaian 
+jawaban numerik terhindar dari galat pembulatan bilangan pecahan (floating-point). 
+Kombinasi antara kemudahan bantuan AI bagi guru, ketepatan komputasi yang 
+menjaga keakuratan penilaian, serta ketersediaan umpan balik otomatis bagi siswa 
+ini diharapkan dapat menciptakan ekosistem pembelajaran matematika yang lebih 
+efisien dan memacu kemandirian siswa. 
+1.2 Rumusan Masalah 
+Berdasarkan latar belakang yang telah dijelaskan sebelumnya, dapat dirumuskan 
+masalah sebagai berikut: 
+1. Bagaimana membantu guru untuk mereduksi beban kerja administratif dalam 
+penyusunan materi pembelajaran, pembuatan variasi soal latihan, dan 
+koreksi hasil evaluasi siswa yang masih dilakukan secara manual? 
+2. Bagaimana meningkatkan kemandirian belajar siswa melalui penyediaan 
+akses materi yang fleksibel serta mekanisme evaluasi interaktif dengan 
+
+
+===== HALAMAN 19 =====
+
+ 
+3 
+ 
+umpan balik otomatis (auto-feedback) secara langsung pada Learning 
+Management System (LMS) berbasis soal latihan dinamis? 
+3. Bagaimana integrasi asisten cerdas Large Language Model Llama 3.3 70B 
+Versatile melalui infrastruktur API Groq dapat membantu guru mempercepat 
+proses penyusunan draf materi pembelajaran dan formulasi template soal? 
+1.3 Tujuan 
+Berdasarkan rumusan masalah yang telah ditetapkan, secara spesifik, tujuan yang 
+ingin dicapai dalam pengembangan sistem ini adalah sebagai berikut: 
+1. Membangun fitur kelola kelas untuk mempermudah guru menyusun kelas, 
+bab, dan materi pembelajaran, serta fitur kuis dengan variasi soal dinamis 
+dan penilaian otomatis (auto-grading), untuk mereduksi beban kerja 
+administratif guru dalam penyusunan materi, pembuatan soal, dan koreksi 
+evaluasi. 
+2. Menyediakan fitur akses materi pembelajaran yang fleksibel serta fitur kuis 
+interaktif dengan umpan balik otomatis (auto-feedback) setelah siswa 
+menyelesaikan kuis, untuk meningkatkan kemandirian belajar siswa. 
+3. Mengintegrasikan layanan kecerdasan buatan (AI) sebagai pihak ketiga 
+melalui Application Programming Interface (API) untuk memfasilitasi guru 
+dalam menyusun draf materi pembelajaran dan template soal secara instan 
+1.4 Cakupan Pengerjaan 
+Untuk memastikan penelitian dan pengembangan sistem pada Tugas Akhir ini tetap 
+terarah, terfokus, dan terhindar dari perluasan ruang lingkup, ditetapkan batasan 
+dan cakupan pengerjaan sebagai berikut: 
+1. Lingkungan dan Objek Sistem: 
+Pengembangan dibatasi pada pembuatan platform Learning Management 
+System (LMS) berbasis web yang dirancang secara spesifik untuk mata 
+pelajaran matematika pada jenjang Sekolah Menengah Pertama (SMP). 
+Aplikasi ini hanya dapat diakses melalui peramban (web browser), dan 
+penelitian ini tidak mencakup pengembangan aplikasi berbasis mobile native 
+seperti Android atau iOS. 
+2. Hak Akses dan Aktor Pengguna:  
+Interaksi dan alur kerja di dalam platform dibatasi secara ketat untuk 
+beroperasi dengan tepat tiga entitas aktor, yaitu Guru sebagai pengelola 
+kelas dan instruksional, Siswa sebagai pengguna akhir, serta layanan AI pihak 
+ketiga sebagai aktor sekunder atau asisten eksternal. Pengaturan hak akses 
+dan kewenangan tiap aktor diterapkan melalui mekanisme Role-Based 
+
+
+===== HALAMAN 20 =====
+
+ 
+4 
+ 
+Access Control (RBAC), tanpa adanya peran, fungsionalitas, maupun dasbor 
+terpisah untuk Administrator (superadmin). 
+3. Manajemen Konten Pembelajaran:  
+Fasilitas pengunggahan dan distribusi materi pembelajaran oleh guru 
+dibatasi pada tiga format utama, yakni teks (rich HTML), dokumen PDF, dan 
+tautan video YouTube. Sistem tidak mendukung format berkas lain ataupun 
+fitur pengunduhan materi untuk akses luring (offline). 
+4. Batasan Mekanisme Dinamis:  
+Fitur pembuatan variasi soal dinamis dibatasi pada metode Rule-Based 
+Variable Randomization. Sistem hanya mengacak komponen angka 
+konstanta atau variabel numerik berdasarkan parameter rumus yang 
+dimasukkan oleh guru, bukan membangkitkan narasi atau teks soal baru 
+secara otomatis menggunakan kecerdasan buatan generatif (Generative AI). 
+5. Batasan Penilaian (Auto-Grading):  
+Evaluasi kuis interaktif dan fitur umpan balik langsung (real-time feedback) 
+dibatasi khusus untuk memeriksa masukan jawaban siswa yang berbentuk 
+numerik atau angka pasti. Pemeriksaan jawaban numerik tersebut dilakukan 
+menggunakan pustaka BCMath dengan toleransi ketelitian dua angka di 
+belakang koma, guna menghindari galat pembulatan bilangan pecahan 
+(floating-point) yang lazim terjadi pada komputasi standar. Sistem 
+menyajikan rumus penyelesaian yang benar sebagai bagian dari umpan balik, 
+tetapi tidak memeriksa atau menilai langkah-langkah pengerjaan yang 
+dituliskan siswa secara tekstual, sehingga sistem belum memfasilitasi 
+pemeriksaan jawaban berbentuk esai panjang (free-text). Selain itu, sistem 
+tidak mencakup fitur pengacakan urutan nomor soal (shuffle), pembatasan 
+waktu pengerjaan (countdown timer), maupun pembobotan nilai soal yang 
+bervariasi. 
+6. Batasan Implementasi Artificial Intelligence (AI):  
+Integrasi Artificial Intelligence (AI) pada platform memiliki ruang lingkup dan 
+batasan fungsional teknis sebagai berikut: 
+a. Penyedia Layanan dan Model Tunggal:  
+Sistem bergantung sepenuhnya pada API tunggal dari penyedia 
+layanan Groq dengan model Llama 3.3 70B Versatile, tanpa 
+mekanisme penyedia cadangan (fallback provider). 
+b. Pembatasan Hak Akses dan Modul:  
+Fungsionalitas AI dikonfigurasi secara eksklusif untuk aktor Guru guna 
+membangkitkan draf materi berformat HTML dan merancang template 
+
+
+===== HALAMAN 21 =====
+
+ 
+5 
+ 
+soal dinamis beserta formula jawabannya. Tidak ada implementasi AI 
+untuk aktor Siswa. 
+c. Karakteristik Pemrosesan Tanpa Status (Stateless):  
+Setiap permintaan (request) bersifat berdiri sendiri tanpa menyimpan 
+riwayat percakapan (conversation history) atau menyertakan konteks 
+kurikulum pembelajaran sebelumnya. 
+d. Batasan Parameter Masukan dan Keluaran:  
+Sistem membatasi panjang masukan draf materi maksimal 2.000 
+karakter, topik soal maksimal 500 karakter, serta batas pembangkitan 
+maksimal 10 butir soal per eksekusi. 
+e. Pembatasan Laju Permintaan (Rate Limiting):  
+Karena sistem diimplementasikan menggunakan satu akun API 
+tunggal secara terpusat, aplikasi menerapkan pembatasan akses 
+pada tingkat pengguna untuk mencegah habisnya kuota penggunaan, 
+dengan setiap aktor Guru hanya diizinkan mengirimkan instruksi 
+(prompt) maksimal lima kali dalam satu hari (24 jam). 
+f. Batasan Format Keluaran Draf:  
+Fungsionalitas AI dibatasi hanya untuk membangkitkan draf materi 
+dalam format teks (rich HTML). Sistem tidak mendukung pembuatan 
+draf materi dalam format dokumen PDF maupun video secara 
+otomatis melalui AI, sehingga konversi ke format tersebut tetap 
+menjadi tanggung jawab manual guru. 
+7. Ketiadaan Fitur Komunikasi dan Kolaborasi:  
+Platform ini tidak menyediakan fungsionalitas komunikasi antarpengguna, 
+seperti forum diskusi, ruang obrolan (live chat), pengumuman massal 
+(broadcast), maupun sistem notifikasi waktu nyata (real-time push 
+notifications). 
+8. Batasan Metode Pengujian:  
+Pengujian kualitas perangkat lunak dibatasi pada metode Black Box Testing 
+yang berfokus untuk memvalidasi fungsionalitas antarmuka dan keluaran 
+sistem tanpa menguji struktur kode program internal (White Box Testing). 
+9. Batasan Lingkungan Pengujian dan Penerapan (Deployment):  
+Penelitian ini dibatasi hingga tahap pengujian fungsional menggunakan 
+metode 
+Black 
+Box 
+Testing 
+pada 
+lingkungan 
+pengembangan 
+(local/development environment). Sistem belum diimplementasikan pada 
+infrastruktur hosting atau server production seperti cloud service, sehingga 
+pengujian performa pada lingkungan nyata (production environment), 
+pengujian beban pengguna (load testing), maupun uji coba lapangan 
+
+
+===== HALAMAN 22 =====
+
+ 
+6 
+ 
+bersama pengguna sesungguhnya, yaitu guru dan siswa di institusi 
+pendidikan, berada di luar cakupan penelitian ini. 
+1.5 Tahapan Pengerjaan  
+Dalam proses pengembangan Learning Management System (LMS) ini, diterapkan 
+pendekatan metodologi Software Development Life Cycle (SDLC) model Waterfall. 
+Model Waterfall dipilih karena merupakan salah satu metode pengembangan 
+perangkat lunak yang paling banyak digunakan dalam pengembangan sistem 
+informasi berbasis web [7], dengan karakteristik utamanya yang sistematis, 
+sekuensial, dan terstruktur, sehingga setiap fase harus diselesaikan terlebih dahulu 
+sebelum melangkah ke tahapan berikutnya agar dokumentasi serta fokus 
+pengembangan tetap terjaga. Berdasarkan metode tersebut, rincian tahapan 
+pengerjaan yang direncanakan mengalir melalui lima tahapan utama. 
+1. Analisis Kebutuhan (Requirements Analysis) 
+Tahap ini bertujuan untuk mengidentifikasi kebutuhan spesifik dari 
+pengembangan sistem yang akan dikerjakan. Pada fase ini, dilakukan proses 
+pemetaan terhadap kebutuhan tiga aktor sistem, yaitu Guru, Siswa, dan 
+layanan AI pihak ketiga, dalam memanfaatkan aplikasi LMS. Analisis 
+dilakukan secara mendalam melalui observasi, wawancara dengan tenaga 
+pendidik, serta pengumpulan informasi mengenai alur pengelolaan 
+parameter soal dinamis. Proses analisis difokuskan pada pemenuhan 
+fungsionalitas utama, seperti distribusi materi pembelajaran, pemanfaatan 
+asisten cerdas AI untuk produktivitas guru, perancangan template soal 
+dinamis pada fitur kuis, hingga sistem evaluasi nilai siswa. 
+2. Perancangan Sistem (System Design) 
+Tahapan ini bertujuan untuk menerjemahkan seluruh spesifikasi kebutuhan 
+menjadi rancangan teknis yang siap diimplementasikan. Aktivitas utama 
+pada fase ini meliputi perancangan struktur alur proses, desain tata letak 
+antarmuka pengguna, serta skema basis data untuk mendukung operasional 
+LMS. Pemodelan sistem dilakukan dengan membuat Use Case Diagram yang 
+melibatkan interaksi ketiga aktor, Activity Diagram, serta Entity Relationship 
+Diagram (ERD). Tahap ini juga mencakup perancangan mockup antarmuka 
+pengguna (User Interface) untuk mendukung operasional sistem bagi aktor 
+Siswa dan Guru. 
+3. Implementasi (Implementation) 
+Tahap ini difokuskan pada implementasi perancangan sistem menjadi 
+perangkat lunak yang operasional melalui penulisan kode program. Proses 
+pengembangannya meliputi pembangunan antarmuka berbasis web, 
+integrasi asisten cerdas melalui API Groq yang bersifat tanpa status 
+
+
+===== HALAMAN 23 =====
+
+ 
+7 
+ 
+(stateless), 
+serta 
+implementasi 
+logika 
+komputasi 
+backend 
+untuk 
+mengeksekusi pembangkitan variasi angka kuis dan auto-grading. Seluruh 
+rangkaian instruksi pemrograman ini dibangun menggunakan Visual Studio 
+Code dengan memanfaatkan ekosistem PHP, JavaScript, serta sistem 
+manajemen basis data MySQL. 
+4. Pengujian Sistem (Testing) 
+Tahap pengujian dilakukan setelah fase implementasi rampung, dengan 
+tujuan memverifikasi bahwa sistem beroperasi tanpa kendala (bug) dan 
+sesuai dengan batasan fungsional. Pengujian menitikberatkan pada fitur-fitur 
+inti aplikasi, di antaranya proses masuk (login), pengelolaan modul materi, 
+fungsionalitas asisten AI bagi guru beserta limitasi penggunaannya, eksekusi 
+pengacakan variabel template soal, serta keakuratan fitur auto-grading. 
+Metode yang digunakan adalah Black Box Testing, yang berfokus pada 
+pengujian fungsional perangkat lunak berdasarkan respons antarmuka dan 
+kebenaran keluaran tanpa meninjau struktur kode internal [8]. 
+5. Dokumentasi dan Penyusunan Laporan (Documentation) 
+Tahap terakhir adalah penyusunan laporan Tugas Akhir secara menyeluruh, 
+mulai dari bab pendahuluan hingga kesimpulan. Dokumentasi ini berfungsi 
+sebagai bentuk pertanggungjawaban ilmiah atas perangkat lunak yang telah 
+dikembangkan dan diuji di lingkungan peladen lokal (local development 
+server). Seluruh hasil pengujian Black Box Testing pada tahap sebelumnya 
+didokumentasikan sebagai bukti bahwa sistem telah memenuhi kebutuhan 
+fungsional yang dirancang. Tools yang digunakan dalam tahap ini adalah 
+aplikasi pengolah kata seperti Microsoft Word untuk penyusunan dokumen 
+laporan akademik. 
+ 
+ 
+ 
+
+
+===== HALAMAN 24 =====
+
+ 
+8 
+ 
+BAB II PERSYARATAN SISTEM 
+2.1 Deskripsi Pengguna 
+Platform Learning Management System (LMS) Soal Latihan Dinamis ini 
+dikembangkan sebagai instrumen pembelajaran digital yang dapat diadopsi secara 
+luas pada institusi Sekolah Menengah Pertama (SMP) yang masih tertinggal dalam 
+melakukan transisi digital. Fokus implementasi sistem ini diarahkan pada ekosistem 
+pendidikan matematika guna mendukung proses pembelajaran dan evaluasi yang 
+adaptif serta fleksibel. Hak akses dan kewenangan pengguna diatur melalui 
+mekanisme Role-Based Access Control (RBAC) [9], dengan dua role utama sebagai 
+berikut: 
+1. Guru: Bertindak sebagai pengajar sekaligus pengelola konten instruksional 
+dan unit kelas virtual. Realitas di lapangan menunjukkan bahwa manajemen 
+kelas dan pelaksanaan evaluasi harian membebani guru dengan tugas 
+administratif yang berat. Hal ini mencakup penyusunan materi, pembuatan 
+variasi soal sebagai langkah mitigasi kecurangan akademik, hingga 
+keharusan mengoreksi lembar jawaban secara manual. Untuk mereduksi 
+beban kerja administratif tersebut, sistem memfasilitasi guru dengan asisten 
+cerdas berbasis Large Language Model (LLM) untuk membantu menyusun 
+draf materi dan template soal secara instan, serta fitur pengelolaan template 
+soal dinamis yang dieksekusi oleh algoritma backend untuk membangkitkan 
+variasi soal secara otomatis. 
+2. Siswa: Bertindak sebagai pengguna akhir (end-user) yang mengakses materi 
+pembelajaran dan menyelesaikan kuis secara mandiri. Dari sisi siswa, 
+platform ini dirancang untuk meningkatkan kemandirian belajar melalui 
+penyediaan akses materi yang fleksibel. Ketidakefisienan proses koreksi 
+manual yang berakibat pada lambatnya siswa menerima umpan balik 
+(feedback) diatasi dengan fitur kuis yang dilengkapi kemampuan penilaian 
+otomatis (auto-grading). Mekanisme ini secara langsung menyajikan umpan 
+balik (auto-feedback) pembahasan dasar tips rumus penyelesaian tepat 
+setelah kuis diselesaikan. 
+2.2 Gambaran Sistem Saat Ini 
+Proses evaluasi dan manajemen pembelajaran matematika di tingkat SMP yang 
+belum menggunakan sistem digital, berdasarkan wawancara sejauh ini masih 
+banyak mengandalkan metode konvensional tanpa dukungan platform digital yang 
+terintegrasi. Pada tahap persiapan, guru dituntut untuk menyusun draf materi 
+pengayaan dan dokumen kuis secara manual. Proses penyusunan konten 
+pembelajaran dan kerangka soal dari awal ini sangat menyita waktu dan menambah 
+
+
+===== HALAMAN 25 =====
+
+ 
+9 
+ 
+beban kerja administratif pendidik, terutama karena belum adanya instrumen 
+asisten cerdas yang dapat mempercepat produktivitas perancangan tersebut. 
+Setelah menyusun soal secara fisik, soal tersebut akan dibagikan kepada seluruh 
+siswa di kelas. Metode konvensional ini menemui kendala utama pada sifat butir soal 
+yang statis. Karena belum menggunakan sistem komputasi yang mampu mengacak 
+atau membangkitkan variasi angka secara otomatis, seluruh siswa menerima paket 
+kuis dengan kombinasi variabel angka yang persis sama. Hal ini menciptakan celah 
+kecurangan akademik yang besar, karena siswa dapat dengan mudah menyalin atau 
+bertukar jawaban, sehingga guru harus melakukan pengawasan ekstra ketat. 
+Lebih lanjut, proses pemeriksaan setelah kuis selesai juga memiliki tingkat efisiensi 
+yang sangat rendah. Guru harus mengumpulkan lembar jawaban fisik dan 
+mengoreksinya satu per satu secara manual menggunakan referensi kunci jawaban 
+tertulis. Selain sangat rentan terhadap salah hitung saat menentukan skor akhir, guru 
+juga terpaksa mengarsipkan riwayat nilai tersebut secara konvensional ke dalam 
+buku nilai fisik atau tabel lembar kerja manual. Ketergantungan pada pencatatan fisik 
+ini menyulitkan pendidik saat ingin melacak kembali progres belajar terdahulu, 
+sekaligus berakibat pada lambatnya siswa menerima umpan balik (feedback) atas 
+hasil pengerjaan mereka. 
+2.2.1 BPMN AS-IS Proses Pembelajaran dan Latihan Soal Matematika  
+Business Process Model and Notation (BPMN) merupakan notasi standar yang 
+digunakan untuk memodelkan dan menggambarkan alur proses bisnis pada 
+suatu organisasi secara visual, sehingga proses tersebut mudah dipahami oleh 
+seluruh pihak yang terlibat serta dapat dievaluasi untuk perbaikan [10]. Pada 
+penelitian ini, BPMN digunakan untuk memetakan proses berjalan (AS-IS) 
+maupun proses usulan (TO-BE) pada sistem pembelajaran dan evaluasi 
+matematika. 
+
+
+===== HALAMAN 26 =====
+
+ 
+10 
+ 
+  
+Gambar 2.1 BPMN AS-IS Proses Pembelajaran Konvensional 
+Berdasarkan Gambar 2.1, merepresentasikan Business Process Model and Notation 
+(BPMN) AS-IS yang menjelaskan alur penyampaian materi pembelajaran secara 
+konvensional. Berdasarkan pemodelan tersebut, proses ini melibatkan dua aktor 
+utama, yaitu Guru dan Siswa, dengan alur kerja yang saling bergantian antar kedua 
+lane dan masih sepenuhnya mengandalkan kehadiran fisik di ruang kelas. 
+Secara garis besar, tahapan penyampaian materi saat ini berjalan melalui alur 
+berikut: 
+1. Menyiapkan Materi: Proses diawali oleh Guru yang menyiapkan materi 
+pembelajaran sebagai bahan ajar yang akan disampaikan di kelas. 
+2. Menuliskan Materi di Papan Tulis: Guru menuliskan poin-poin materi tersebut 
+secara manual di papan tulis sebagai media penyampaian visual. 
+3. Mencatat Materi: Siswa merespons dengan menyalin tulisan di papan tulis 
+tersebut ke dalam buku catatan fisik miliknya masing-masing. 
+4. Menjelaskan Materi: Guru melanjutkan dengan memberikan penjelasan 
+secara lisan atas materi yang telah dituliskan. 
+5. Mendengarkan Penjelasan Materi: Siswa mendengarkan dan menyimak 
+penjelasan lisan tersebut sembari melengkapi catatan yang telah dibuat 
+sebelumnya. 
+
+
+===== HALAMAN 27 =====
+
+ 
+11 
+ 
+6. Guru Menutup Pembelajaran: Setelah seluruh materi disampaikan dan 
+dijelaskan, Guru mengakhiri sesi pembelajaran, menandai berakhirnya 
+proses penyampaian materi pada pertemuan tersebut. 
+Berdasarkan pemetaan alur konvensional pada Gambar 2.1, terdapat beberapa 
+celah kelemahan yang menghambat efektivitas pembelajaran. Pertama, sifat 
+penyampaian materi yang sangat terikat pada ruang dan waktu menyebabkan siswa 
+yang berhalangan hadir ke kelas akan secara otomatis tertinggal pelajaran, karena 
+tidak tersedia akses materi cadangan yang bisa diakses secara mandiri di luar jam 
+sekolah. Kedua, ketergantungan pada pencatatan manual di buku fisik membuat 
+kualitas dan kelengkapan materi yang diterima siswa sangat bergantung pada 
+kecepatan dan ketelitian masing-masing individu saat mencatat, sehingga rawan 
+terjadi informasi yang terlewat atau tidak lengkap. Ketiga, media penyimpanan 
+berupa buku catatan fisik juga rentan terhadap risiko hilang, rusak, atau tertinggal, 
+sehingga menghambat fleksibilitas dan kemandirian siswa dalam mengulang materi 
+pelajaran di kemudian hari. 
+ 
+Gambar 2.2 BPMN AS-IS Proses Pengerjaan Latihan Soal  
+Berdasarkan Gambar 2.2, merepresentasikan pemodelan alur kerja (BPMN AS-IS) 
+dari proses pelaksanaan latihan soal matematika yang saat ini masih berjalan secara 
+
+
+===== HALAMAN 28 =====
+
+ 
+12 
+ 
+konvensional. Diagram ini menguraikan interaksi bolak-balik antara Guru dan Siswa, 
+mulai dari tahap penyusunan soal hingga tahap rekapitulasi nilai akhir. 
+Secara garis besar, tahapan pelaksanaan latihan soal saat ini berjalan melalui alur 
+berikut: 
+1. Menyiapkan Soal: Proses diawali oleh Guru yang menyusun soal latihan 
+secara manual sebagai instrumen evaluasi. 
+2. Guru Memberikan Soal Kepada Siswa: Guru mendistribusikan soal yang telah 
+disiapkan tersebut kepada seluruh siswa di kelas. 
+3. Siswa Mengerjakan Soal: Siswa menerima dan mengerjakan soal latihan yang 
+diberikan. 
+4. Siswa Mengumpulkan Jawaban Soal: Setelah selesai mengerjakan, siswa 
+mengumpulkan lembar jawabannya kepada Guru. 
+5. Menunggu Penilaian (1-3 Hari): Terjadi jeda waktu pemrosesan selama 1 
+hingga 3 hari sebelum jawaban siswa diperiksa, akibat tingginya beban kerja 
+koreksi manual yang harus ditangani Guru. 
+6. Memeriksa Jawaban Siswa: Guru memeriksa jawaban setiap siswa satu per 
+satu menggunakan kunci jawaban manual. 
+7. Memberikan Penilaian: Guru memberikan nilai atas hasil pemeriksaan 
+jawaban tersebut. 
+8. Mendapatkan Nilai: Siswa menerima informasi nilai yang telah diberikan oleh 
+Guru. 
+9. Mengoreksi Kesalahan: Siswa meninjau kembali letak kesalahan dalam 
+jawabannya berdasarkan nilai yang telah diterima. 
+10. Merekap Penilaian: Guru mencatat dan mengarsipkan seluruh nilai siswa ke 
+dalam buku nilai atau tabel lembar kerja manual, menandai berakhirnya 
+siklus pelaksanaan latihan soal tersebut. 
+Berdasarkan pemetaan alur di atas, terlihat jelas bahwa beban administratif terbesar 
+terletak pada tahapan pemeriksaan jawaban dan rekapitulasi nilai yang sepenuhnya 
+mengandalkan tenaga manusia, ditambah jeda waktu 1 hingga 3 hari yang harus 
+dilalui sebelum siswa dapat menerima umpan balik. Keterlambatan ini sangat 
+merugikan karena siswa kehilangan momentum untuk segera mengetahui dan 
+mengevaluasi letak kesalahan perhitungan matematika mereka tepat setelah 
+pengerjaan selesai. Selain itu, karena soal yang dibagikan bersifat statis dan 
+diberikan secara serentak kepada seluruh siswa, praktik kecurangan seperti 
+menyalin atau bertukar jawaban antar siswa menjadi celah yang besar dalam proses 
+ini. 
+
+
+===== HALAMAN 29 =====
+
+ 
+13 
+ 
+2.2.2 BPMN TO-BE Sistem Pembelajaran dan Latihan Soal Matematika  
+  
+Gambar 2.3 BPMN TO-BE Sistem Pembelajaran dan Evaluasi 
+Gambar 2.3 menjelaskan pemodelan Business Process Model and Notation (BPMN) 
+secara umum dari Learning Management System (LMS) yang diusulkan. Diagram ini 
+memvisualisasikan alur kerja utama serta proses interaksi antara dua aktor di dalam 
+sistem, yang direpresentasikan melalui dua swimlane, yaitu Guru dan Siswa. Secara 
+garis besar, alur proses pada sistem berjalan sebagai berikut: 
+1. Inisiasi oleh Guru: Proses bermula di sisi Guru, ditandai dengan simbol Start 
+Event (lingkaran hijau). Langkah pertama yang dilakukan oleh guru adalah 
+mengeksekusi aktivitas "Membuka halaman dashboard". Sistem kemudian 
+menyediakan percabangan kondisi; jika belum ada kelas, guru wajib 
+melakukan proses "Membuat Kelas", sedangkan jika ruang kelas sudah 
+tersedia, guru dapat langsung melanjutkan pada aktivitas "Mengelola Kelas". 
+2. Penyusunan Konten Pembelajaran: Di dalam tahap pengelolaan kelas, guru 
+merancang kegiatan instruksional ke dalam dua aktivitas utama, yaitu 
+"Mengelola BAB dan Materi" serta "Mengelola Kuis". Setelah seluruh ruang 
+lingkup pembelajaran beserta instrumen evaluasinya siap, aktivitas 
+dilanjutkan dengan "Membagikan Kode Kelas" untuk mendistribusikan akses 
+masuk kepada siswa. 
+
+
+===== HALAMAN 30 =====
+
+ 
+14 
+ 
+3. Aktivitas Siswa: Alur instruksi bergerak menuju swimlane Siswa, yang diawali 
+dengan Start Event (lingkaran hijau). Siswa memulainya dengan "Mengakses 
+Dashboard". Sistem melakukan validasi keanggotaan; jika belum tergabung, 
+siswa harus "Masukkan Kode Kelas". Setelah terverifikasi, siswa dapat 
+"Mengakses halaman dashboard" kelas tersebut dan melakukan "Akses 
+Materi" untuk mempelajari bahan ajar yang telah disediakan guru. 
+4. Evaluasi dan Feedback: Rangkaian kegiatan belajar siswa dilanjutkan dengan 
+pengerjaan ujian pada aktivitas "Akses Kuis". Setelah siswa menyelesaikan 
+seluruh soal ujian tersebut, sistem langsung memproses hasilnya sehingga 
+siswa dapat melakukan tahapan "Akses Nilai dan Feedback" sebagai bahan 
+evaluasi mandiri secara instan. 
+5. Rekapitulasi dan Penyelesaian: Dari tahapan penerimaan hasil evaluasi di 
+sisi siswa tersebut, aliran informasi (direpresentasikan dengan garis putus-
+putus) ditransmisikan kembali menuju swimlane Guru. Transmisi data ini 
+memfasilitasi guru untuk mengeksekusi aktivitas terakhirnya, yaitu "Melihat 
+Nilai Siswa" tanpa harus melakukan koreksi manual. Setelah rekam jejak nilai 
+siswa terpantau dengan baik, seluruh siklus pembelajaran pada sistem pun 
+dinyatakan selesai, yang ditandai dengan End Event (lingkaran merah). 
+2.3 Produk dan Layanan 
+Guna mendukung pengembangan platform Learning Management System (LMS) 
+berbasis soal dinamis untuk pembelajaran dan evaluasi matematika ini, dilakukan 
+studi komparatif terhadap beberapa aplikasi serupa yang telah digunakan dalam 
+mengelola kegiatan pembelajaran maupun ujian digital. Berbagai aplikasi terdahulu 
+tersebut dijadikan tolok ukur dalam merancang fitur-fitur yang relevan dengan 
+kebutuhan sistem usulan, khususnya pada aspek pengelolaan template soal 
+dinamis, auto-grading berpresisi tinggi, penyediaan umpan balik otomatis (auto-
+feedback), akses materi terintegrasi, serta integrasi API kecerdasan buatan. Hasil 
+studi komparatif terhadap berbagai produk dan layanan sejenis ini dirangkum pada 
+Tabel 2.1 berikut: 
+ 
+ 
+ 
+
+
+===== HALAMAN 31 =====
+
+ 
+15 
+ 
+Tabel 2.1 Perbandingan Aplikasi Sejenis 
+ 
+2.4 Analisis Kebutuhan Sistem 
+Analisis kebutuhan sistem dilakukan untuk mengetahui kebutuhan yang harus 
+dipenuhi dalam pengembangan aplikasi Learning Management System (LMS) 
+berbasis web untuk sistem Soal Latihan Dinamis. Analisis ini disusun berdasarkan 
+hasil observasi terhadap proses kegiatan belajar mengajar dan pelaksanaan kuis 
+yang sedang berjalan, diskusi dengan pihak instansi/sekolah terkait, serta kebutuhan 
+guru dan siswa dalam melakukan pengelolaan pembelajaran secara online. Hasil 
+Parameter 
+Moodle [4] 
+Google 
+Classroom [11] 
+Edmodo [4] 
+Quizizz[5] 
+Sistem 
+Usulan 
+Ragam format 
+soal 
+Pilihan ganda 
+& ujian daring 
+Umumnya via 
+Google Form 
+Pilihan ganda, isian 
+singkat, uraian 
+Pilihan ganda  
+Soal hitungan 
+berjawaban 
+numerik 
+Pengacakan 
+pada soal 
+Nilai variabel 
+dalam soal 
+diacak 
+otomatis 
+(rule-based), 
+bukan 
+sekadar 
+urutan  
+Urutan/opsi 
+diacak otomatis 
+tiap siswa 
+Statis 
+Urutan/opsi 
+diacak 
+otomatis tiap 
+siswa 
+Nilai variabel 
+dalam soal 
+diacak 
+otomatis (rule-
+based), bukan 
+sekadar urutan 
+Bentuk umpan 
+balik 
+Nilai/hasil 
+ujian 
+Nilai/komentar 
+Nilai (gradebook) 
+Instan; 
+menampilkan 
+jawaban benar 
+bila salah, 
+tanpa rumus 
+Skor, kunci 
+jawaban, dan 
+rumus/langkah 
+penyelesaian 
+Keluwesan 
+penyajian 
+materi 
+Fleksibel 
+(teks, video, 
+SCORM) 
+Fleksibel (file, 
+video, tautan 
+web/YouTube, 
+berbasis cloud) 
+Fleksibel (materi, 
+presentasi, gambar, 
+video) 
+Terbatas 
+(fokus kuis) 
+Fleksibel (teks, 
+video, PDF) 
+Rekap/laporan 
+hasil 
+Penilaian 
+daring 
+Fitur nilai & 
+rekap tugas 
+Gradebook/progress 
+book 
+Laporan dapat 
+diunduh 
+(format Excel) 
+Rekap hasil 
+otomatis 
+Implementasi AI 
+Sudah [12] 
+Sudah 
+menggunakan 
+Gemini AI  
+Belum 
+Sudah 
+Menggunakan 
+API Groq 
+Model Llama 
+3.3 Versatile 
+
+
+===== HALAMAN 32 =====
+
+ 
+16 
+ 
+analisis kebutuhan ini menjadi dasar dalam proses perancangan dan implementasi 
+sistem. 
+2.4.1 Analisis Pengguna Sistem 
+Pengguna utama sistem pada tugas akhir ini terbagi menjadi dua peran (role) 
+utama, yaitu Guru dan Siswa, yang hak aksesnya diatur melalui mekanisme Role-
+Based Access Control (RBAC) [9]. Guru memiliki hak akses untuk mengelola 
+seluruh data kelas sekaligus konten instruksional di dalam platform. Dalam 
+proses pengelolaan sistem dan kelas, guru bertanggung jawab untuk mengelola 
+akun data siswa, mengatur ruangan kelas, mengunggah modul materi pelajaran 
+(baik berupa teks ringkasan, dokumen PDF, maupun tautan video Youtube), 
+menyusun template rumus matematika, memantau kemajuan belajar lewat 
+rekaman timestamp, serta melakukan evaluasi hasil kuis. Sementara itu, siswa 
+merupakan pengguna akhir (end-user) yang menjadi target sasaran utama sistem 
+untuk mengakses modul materi pembelajaran matematika, menginput jawaban 
+numerik pada fitur kuis dengan variasi angka yang di-render secara acak, serta 
+melihat riwayat evaluasi beserta perolehan skor setelah selesai mengerjakan 
+kuis. 
+2.4.2 Kebutuhan Fungsional Sistem 
+Kebutuhan fungsional merupakan kebutuhan yang berkaitan dengan fungsi utama 
+apa saja yang harus tersedia pada sistem. Berdasarkan hasil analisis, kebutuhan 
+fungsional aplikasi Learning Management System (LMS) berbasis web untuk Soal 
+Latihan Dinamis adalah sebagai berikut. 
+Tabel 2.2 Kebutuhan Fungsionalitas 
+Kode 
+Aktor 
+Modul / Fitur 
+Deskripsi Fungsionalitas 
+KF-01 
+Sistem 
+Autentikasi & 
+Otorisasi 
+Mengelola proses login, otentikasi sesi, dan 
+pemisahan hak akses antara Guru dan Siswa 
+menggunakan 
+Role-Based 
+Access 
+Control 
+(RBAC) dan perlindungan middleware. 
+KF-02 
+Guru 
+Manajemen 
+Kelas 
+Menambahkan, mengubah, menghapus data 
+kelas, serta men-generate kode kelas (class 
+code) unik secara otomatis untuk dibagikan ke 
+siswa. Meliputi fitur mengeluarkan (kick) siswa 
+dari kelas. 
+KF-03 
+Guru 
+Manajemen 
+Bab & Materi 
+Mengelola 
+struktur 
+Bab. 
+Menambah 
+dan 
+mengatur urutan materi dengan 3 opsi tipe 
+
+
+===== HALAMAN 33 =====
+
+ 
+17 
+ 
+Kode 
+Aktor 
+Modul / Fitur 
+Deskripsi Fungsionalitas 
+berkas: Teks (HTML), dokumen PDF (unggah ke 
+server lokal), dan tautan ekstensi Video YouTube. 
+KF-04 
+Guru 
+Asisten AI 
+(Generate 
+Materi) 
+Mengintegrasikan model Large Language Model 
+(Llama 
+3.3 
+via 
+Groq) 
+untuk 
+mengubah 
+kerangka/poin inti dari guru menjadi draf paragraf 
+materi 
+HTML 
+secara 
+instan 
+(dibatasi 
+5x 
+request/hari). 
+KF-05 
+Guru 
+Asisten AI 
+(Generate 
+Soal) 
+Memanfaatkan AI untuk merumuskan draf 
+template soal matematika beserta variabel acak 
+dan rumus jawabannya secara otomatis dalam 
+format JSON, berdasarkan topik yang diminta. 
+KF-06 
+Guru 
+Manajemen 
+Soal Dinamis 
+Membuat soal matematika dinamis secara 
+manual. Guru menginput question_template 
+(teks soal), variable_rules (batas minimal & 
+maksimal nilai), serta answer_formula (rumus 
+matematis). Terdapat fitur pratinjau (preview). 
+KF-07 
+Guru 
+Audit Ujian 
+Siswa 
+Mengintai (audit) secara detail pengerjaan soal 
+siswa; menampilkan angka variabel acak spesifik 
+yang didapatkan siswa, jawaban yang diinput 
+siswa, dan kunci jawaban aslinya. 
+KF-08 
+Siswa 
+Pendaftaran 
+Kelas 
+Bergabung ke dalam kelas virtual yang dituju 
+dengan menginputkan class code yang telah 
+diberikan oleh guru. 
+KF-09 
+Siswa 
+Akses & 
+Riwayat 
+Materi 
+Membaca materi, menonton video, mengunduh 
+PDF, serta merekam progres bacaan (timestamp 
+riwayat belajar) menggunakan tombol "Tandai 
+Sudah Dibaca". 
+KF-10 
+Siswa 
+Pelaksanaan 
+Ujian Dinamis 
+Mengerjakan kuis interaktif. Sistem otomatis 
+membangkitkan set angka acak (random_int) 
+secara spesifik untuk masing-masing siswa pada 
+tiap butir soal saat kuis dimulai. 
+KF-11 
+Sistem 
+Evaluasi 
+Otomatis 
+Memproses kalkulasi rumus matematis dari 
+template soal dan mengevaluasi kecocokan 
+
+
+===== HALAMAN 34 =====
+
+ 
+18 
+ 
+Kode 
+Aktor 
+Modul / Fitur 
+Deskripsi Fungsionalitas 
+(Auto-
+Grading) 
+dengan 
+inputan 
+siswa 
+secara 
+real-time 
+menggunakan komputasi presisi (BCMath). 
+KF-12 
+Siswa 
+Hasil & 
+Pembahasan 
+(Auto-
+Feedback) 
+Menerima umpan balik seketika berupa skor 
+akhir dan rekap jawaban. Sistem menampilkan 
+fitur yang berisi template rumus dan angka 
+variabel asli bagi siswa yang menjawab salah. 
+ 
+2.4.3 Kebutuhan Non-Fungsional Sistem 
+Kebutuhan non-fungsional merupakan kebutuhan yang berkaitan dengan kualitas 
+sistem yang dikembangkan. Kebutuhan ini digunakan untuk memastikan sistem 
+dapat digunakan dengan baik oleh guru maupun siswa. Adapun kebutuhan non-
+fungsional sistem adalah sebagai berikut: 
+Tabel 2.3 Kebutuhan Non-Fungsionalitas 
+Kode 
+Kategori NFR 
+Kebutuhan Non-Fungsional 
+KNF-01 Portability 
+Sistem berbasis web dan dapat diakses melalui browser 
+pada perangkat komputer, laptop, maupun smartphone 
+selama terhubung ke jaringan internet. 
+KNF-02 Usability 
+Sistem dibangun dengan framework CSS (Tailwind) sehingga 
+memiliki antarmuka (user interface) yang responsif, adaptif 
+terhadap ukuran layar, dan intuitif bagi Guru maupun Siswa. 
+KNF-03 Usability 
+Sistem mampu menyajikan visualisasi data statistik 
+rekapitulasi nilai dan catatan waktu (timestamp) 
+penyelesaian materi dengan tata letak yang informatif. 
+KNF-04 Security 
+Sistem menjamin keamanan data pengguna melalui enkripsi 
+password (Bcrypt) dan memiliki perlindungan routing 
+berlapis berdasarkan metode RBAC hak akses masing-
+masing role (Guru dan Siswa). 
+KNF-05 Accuracy 
+Sistem menjamin presisi tingkat tinggi dan meminimalisir 
+error pembulatan desimal dengan menggunakan komputasi 
+fungsi BCMath pada algoritma evaluasi nilai otomatis (auto-
+grading). 
+KNF-06 Performance 
+Sistem mampu memproses instruksi integrasi asisten AI ke 
+endpoint eksternal (Groq API) dengan latensi yang rendah 
+dan responsif saat mengeksekusi generate materi atau soal. 
+KNF-07 Reliability 
+Sistem memiliki mekanisme pembatasan beban sumber 
+daya (rate limiting) dengan membatasi request generasi AI 
+
+
+===== HALAMAN 35 =====
+
+ 
+19 
+ 
+maksimal 5 kali per hari untuk setiap guru guna menjaga 
+stabilitas aplikasi. 
+ 
+2.5 Use Case Diagram 
+Use case diagram digunakan untuk menggambarkan secara visual interaksi antara 
+aktor dengan fungsionalitas utama yang disediakan oleh sistem Learning 
+Management System (LMS) Soal Latihan Dinamis. Diagram ini memetakan seluruh 
+kebutuhan fungsional yang telah dijabarkan pada Tabel 2.2 (Kebutuhan 
+Fungsionalitas) ke dalam bentuk hubungan aktor dan use case. 
+ 
+Gambar 2.4 Use Case Diagram 
+Sistem ini melibatkan tiga aktor, yaitu dua aktor primer (pengguna langsung) dan satu 
+aktor sekunder (sistem eksternal): 
+1. Guru — aktor primer yang bertindak sebagai pengelola kelas, materi, dan soal 
+kuis. 
+2. Siswa — aktor primer yang bertindak sebagai pengguna akhir yang 
+mempelajari materi dan mengerjakan kuis. 
+3. Groq LLama — aktor sekunder yang merepresentasikan layanan kecerdasan 
+buatan pihak ketiga Large Language Model Llama 3.3 70B Versatile, yang 
+dipanggil oleh sistem untuk menghasilkan draf materi dan draf soal atas 
+permintaan Guru. 
+2.5.1 Use case sisi Guru: 
+Tabel 2.4 Tabel Use case sisi Guru 
+Use Case 
+Deskripsi 
+
+
+===== HALAMAN 36 =====
+
+ 
+20 
+ 
+Mengelola Kelas 
+Guru dapat membuat, mengubah, dan mengelola ruang kelas 
+virtual beserta daftar siswa di dalamnya. 
+Memantau Hasil 
+Kuis Siswa 
+Guru dapat melihat rekapitulasi nilai dan riwayat pengerjaan 
+kuis seluruh siswa dalam suatu kelas. 
+Mengelola Fitur 
+Kuis 
+Guru dapat membuat, mengubah, dan menghapus template 
+soal kuis dinamis beserta formula jawabannya secara 
+manual. 
+Mengelola Fitur 
+Materi 
+Guru dapat menambah, mengubah, dan menghapus materi 
+pembelajaran dalam format teks, video YouTube, atau PDF. 
+ 
+2.5.2 Use case sisi Siswa: 
+Tabel 2.5 Use case sisi Siswa 
+Use Case 
+Deskripsi 
+Bergabung ke 
+Kelas 
+Siswa dapat mendaftarkan diri ke suatu kelas menggunakan 
+kode akses yang diberikan Guru. 
+Mempelajari 
+Materi 
+Siswa dapat mengakses dan membaca materi 
+pembelajaran yang telah disediakan Guru. 
+Mengerjakan Kuis 
+Siswa dapat mengerjakan soal kuis dengan variasi angka 
+acak dan mengirimkan jawaban numerik. 
+Melihat Feedback 
+dan Nilai 
+Siswa dapat melihat hasil evaluasi otomatis (auto-grading) 
+beserta umpan balik (auto-feedback) segera setelah kuis 
+diselesaikan. 
+ 
+2.5.3 Use case bersama: 
+Tabel 2.6 Use case bersama 
+Use Case 
+Deskripsi 
+Login & 
+Register 
+Guru maupun Siswa dapat mendaftar dan masuk ke dalam sistem 
+sesuai peran (role) masing-masing melalui mekanisme RBAC. 
+ 
+2.5.4 Use case terkait AI: 
+Tabel 2.7 Use case terkait AI 
+Use Case 
+Deskripsi 
+Membuat Draf 
+Materi dengan AI 
+Guru dapat menghasilkan draf materi pembelajaran secara 
+instan menggunakan asisten AI, sebagai alternatif dari 
+penulisan manual. 
+Membuat Draf 
+Soal dengan AI 
+Guru dapat menghasilkan draf template soal beserta formula 
+jawaban secara instan menggunakan asisten AI, sebagai 
+alternatif dari penyusunan manual. 
+
+
+===== HALAMAN 37 =====
+
+ 
+21 
+ 
+ 
+2.6 Use Case Skenario 
+Use case scenario digunakan untuk menjelaskan alur interaksi antara Guru atau 
+Siswa dengan sistem pada fitur-fitur utama, sesuai hak akses masing-masing role 
+yang diatur melalui Role-Based Access Control (RBAC). Berikut adalah beberapa use 
+case scenario yang digunakan pada sistem Learning Management System (LMS) Soal 
+Latihan Dinamis. 
+2.6.1 Skenario Use Case: Login Akun 
+Tabel 2.8 Use Case Scenario Login 
+Elemen 
+Keterangan 
+Nama Use Case 
+Login Akun 
+Aktor 
+Guru, Siswa 
+Tujuan 
+Aktor dapat masuk ke dalam sistem untuk mengakses fitur 
+sesuai dengan hak akses perannya. 
+Kondisi Awal 
+Aktor berada di halaman utama (login page) aplikasi dan belum 
+memiliki sesi akses. 
+Alur Utama 
+1. Aktor memasukkan email dan kata sandi (password).  
+2. Aktor menekan tombol "Login".  
+3. Sistem memvalidasi kredensial tersebut dengan data di 
+basis data. 
+4. Sistem membuat sesi login dan mengarahkan aktor ke 
+halaman beranda (dashboard) sesuai perannya. 
+ 
+ 
+2.6.2 Skenario Use Case: Membuat Kelas Baru 
+Tabel 2.9 Use Case Scenario Membuat Kelas 
+Elemen 
+Keterangan 
+Nama Use Case 
+Membuat Kelas Baru 
+Aktor 
+Guru 
+Tujuan 
+Guru dapat membuat ruang kelas baru untuk mendistribusikan 
+materi dan kuis kepada siswanya. 
+Kondisi Awal 
+Guru sudah login ke dalam sistem dan berada di halaman 
+beranda. 
+Alur Utama 
+1. Guru memilih menu pengelolaan "Kelas". 
+2. Sistem menampilkan daftar kelas. 
+3. Guru menekan tombol "Buat Kelas".  
+4. Sistem menampilkan formulir pembuatan kelas. 
+5. Guru mengisi data kelas seperti nama kelas dan deskripsi.  
+6. Guru menyimpan data.  
+
+
+===== HALAMAN 38 =====
+
+ 
+22 
+ 
+7. Sistem memvalidasi dan menyimpan data kelas ke basis 
+data. 
+ 
+ 
+ 
+ 
+ 
+2.6.3 Skenario Use Case: Bergabung ke Kelas 
+Tabel 2.10 Use Case Scenario Bergabung ke Kelas 
+Elemen 
+Keterangan 
+Nama Use Case 
+Bergabung Kelas 
+Aktor 
+Siswa 
+Tujuan 
+Siswa mendaftarkan akunnya ke dalam kelas tertentu agar 
+bisa mengakses materi dan kuis. 
+Kondisi Awal 
+Siswa sudah login ke dalam sistem. 
+Alur Utama 
+1. Siswa memilih menu "Gabung Kelas".  
+2. Sistem menampilkan halaman pencarian atau formulir 
+kode kelas.  
+3. Siswa memasukkan kode kelas yang diberikan oleh Guru.  
+4. Siswa menekan tombol "Gabung".  
+5. Sistem memvalidasi kode tersebut dan mendaftarkan 
+siswa ke kelas terkait 
+6. Sistem mengarahkan siswa ke halaman detail kelas. 
+ 
+2.6.4 Skenario Use Case: Mengelola Materi Pembelajaran 
+Tabel 2.11 Use Case Scenario Mengelola Materi Pembelajaran 
+Elemen 
+Keterangan 
+Nama Use Case 
+Mengelola Materi Pembelajaran 
+Aktor 
+Guru 
+Tujuan 
+Guru dapat menambahkan, mengubah, atau menghapus 
+materi bacaan/pelajaran di dalam suatu kelas. 
+Kondisi Awal 
+Guru sudah login dan berada di halaman detail "Bab" dari 
+suatu kelas. 
+Alur Utama 
+1. Guru menekan tombol "Tambah Materi" atau "Edit Materi".  
+2. Sistem menampilkan formulir unggah materi beserta 
+pilihan jenis materi (teks, tautan video YouTube, atau 
+berkas PDF).  
+3. Guru memasukkan judul materi, lalu memilih salah satu 
+jenis materi: 
+
+
+===== HALAMAN 39 =====
+
+ 
+23 
+ 
+a. menulis teks isi materi secara langsung 
+b. menempelkan tautan video YouTube 
+c. mengunggah berkas PDF 
+4. Guru menekan tombol simpan.  
+5. Sistem menyimpan materi tersebut ke basis data agar siap 
+diakses oleh siswa. 
+ 
+ 
+ 
+ 
+ 
+2.6.5 Skenario Use Case: Menggunakan Asisten AI untuk Draf Materi 
+Tabel 2.12 Use Case Scenario Menggunakan Asisten AI untuk Draf Materi 
+Elemen 
+Keterangan 
+Nama Use Case 
+Menggunakan Asisten AI untuk Draf Materi 
+Aktor 
+Guru 
+Tujuan 
+Guru dapat menghasilkan draf materi pembelajaran secara 
+instan menggunakan asisten cerdas berbasis Large Language 
+Model (LLM), untuk mempercepat proses penyusunan konten. 
+Kondisi Awal 
+Guru 
+sudah 
+login 
+dan 
+berada 
+di 
+halaman 
+pembuatan/pengeditan materi pada suatu bab. 
+Alur Utama 
+1. Guru menekan tombol "Buat dengan AI".  
+2. Guru mengetikkan topik atau instruksi materi (maksimal 
+2.000 karakter).  
+3. Guru menekan tombol "Generate".  
+4. Sistem mengirimkan permintaan ke Groq API dengan 
+model Large Language Model Llama 3.3 70B Versatile.  
+5. Sistem menerima dan menampilkan draf materi berformat 
+HTML dari hasil AI.  
+6. Guru meninjau, mengedit seperlunya, dan menyimpan 
+materi tersebut ke basis data. 
+ 
+2.6.6 Skenario Use Case: Membaca Materi Pembelajaran 
+Tabel 2.13 Use Case Membaca Mater Pembelajaran 
+Elemen 
+Keterangan 
+Nama Use Case 
+Membaca Materi Pembelajaran 
+Aktor 
+Siswa 
+Tujuan 
+Siswa dapat membuka, membaca materi yang diberikan guru, 
+dan menandainya jika telah selesai dipelajari. 
+
+
+===== HALAMAN 40 =====
+
+ 
+24 
+ 
+Kondisi Awal 
+Siswa sudah login, sudah bergabung di kelas terkait, dan 
+berada di halaman detail bab. 
+Alur Utama 
+1. Siswa memilih salah satu judul materi pembelajaran 
+2. Sistem menampilkan isi halaman materi tersebut.  
+3. Siswa membaca/mempelajari materi.  
+4. Siswa menekan tombol "Tandai Sudah Dibaca".  
+5.  Sistem mencatat progres siswa di basis data dan 
+memperbarui status materi menjadi selesai dipelajari. 
+ 
+2.6.7 Skenario Use Case: Membuat Soal Kuis 
+Tabel 2.14 Use Case Scenario Membuat Soal Kuis 
+Elemen 
+Keterangan 
+Nama Use Case 
+Membuat Soal Kuis 
+Aktor 
+Guru 
+Tujuan 
+Guru dapat menambahkan paket soal kuis baru beserta kunci 
+jawabannya ke dalam suatu bab pelajaran. 
+Kondisi Awal 
+Guru sudah login dan berada di halaman detail "Bab". 
+Alur Utama 
+1. Guru memilih menu untuk menambah/mengedit "Soal".  
+2. Sistem menampilkan formulir pembuatan soal.  
+3. Guru memasukkan teks pertanyaan, aturan rumus, serta 
+menentukan formula kunci jawaban numerik.  
+4. Guru menekan tombol simpan.  
+5. Sistem menyimpan data soal ke dalam basis data dan 
+memperbarui daftar soal di bab tersebut. 
+ 
+2.6.8 Skenario Use Case: Menggunakan Asisten AI untuk Draf Soal 
+Tabel 2.15 Use Case Scenario Menggunakan Asisten AI untuk Draf Soal 
+Elemen 
+Keterangan 
+Nama Use Case 
+Menggunakan Asisten AI untuk Draf Soal 
+Aktor 
+Guru 
+Tujuan 
+Guru dapat menghasilkan draf template soal beserta formula 
+jawabannya secara instan menggunakan asisten cerdas, 
+untuk mempercepat proses penyusunan soal dinamis. 
+Kondisi Awal 
+Guru sudah login dan berada di halaman pembuatan soal pada 
+suatu bab. 
+Alur Utama 
+1. Guru menekan tombol "Buat Soal dengan AI".  
+2. Guru mengetikkan topik soal (maksimal 500 karakter) dan 
+jumlah soal yang diinginkan (maksimal 10 butir).  
+3. Guru menekan tombol "Generate".  
+
+
+===== HALAMAN 41 =====
+
+ 
+25 
+ 
+4. Sistem mengirimkan permintaan ke Groq API dengan 
+model Large Language Model Llama 3.3 70B Versatile.  
+5. Sistem menerima dan menampilkan draf template soal 
+beserta formula jawaban dari hasil AI 
+6. Guru meninjau, mengedit template /rumus jika diperlukan, 
+dan menyimpan soal tersebut ke basis data. 
+ 
+ 
+ 
+2.6.9 Skenario Use Case: Mengerjakan Kuis dan Penilaian Otomatis 
+Tabel 2.16 Use Case Scenario Mengerjakan Kuis 
+Elemen 
+Keterangan 
+Nama Use Case 
+Mengerjakan Kuis 
+Aktor 
+Siswa 
+Tujuan 
+Siswa dapat melaksanakan kuis matematika secara online 
+dengan variasi angka yang unik, mengirimkan jawaban 
+numerik, dan langsung melihat hasil evaluasi presisi secara 
+instan. 
+Kondisi Awal 
+Siswa sudah login, berada di halaman detail kelas, dan 
+membuka suatu "Bab" yang berisi soal kuis aktif. 
+Alur Utama 
+1. Siswa menekan tombol "Mulai Kuis".  
+2. Sistem membaca template rumus dari basis data, 
+mengeksekusi generator acak untuk mengubah variabel 
+angka secara unik bagi siswa tersebut, dan menampilkan 
+antarmuka kuis.  
+3. Siswa membaca soal, menghitung, lalu menginput 
+jawaban numerik ke kolom yang disediakan.  
+4. Siswa menekan tombol "Kirim Jawaban" untuk beralih ke 
+soal berikutnya.  
+5. Setelah semua soal selesai dijawab, siswa menekan 
+tombol "Selesaikan Kuis".  
+6. Sistem mengunci lembar kuis, lalu mengeksekusi 
+komputasi presisi tinggi menggunakan pustaka BCMath 
+untuk mencocokkan jawaban numerik siswa dengan 
+kunci formula matematika (auto-grading).  
+7. Sistem mencatat skor akhir ke basis data dan langsung 
+menampilkan 
+halaman 
+rekapitulasi 
+nilai 
+beserta 
+timestamp aktivitas siswa. 
+ 
+
+
+===== HALAMAN 42 =====
+
+ 
+26 
+ 
+2.6.10 Skenario Use Case: Melihat Beranda (Dashboard) dan Riwayat 
+Tabel 2.17 Use Case Scenario Melihat Beranda dan Riwayat 
+Elemen 
+Keterangan 
+Nama Use Case 
+Melihat Dashboard dan Riwayat 
+Aktor 
+Guru, Siswa 
+Tujuan 
+Aktor dapat melihat ringkasan statistik aktivitas (seperti total 
+kelas, rata-rata nilai, dan riwayat kuis terbaru). 
+Kondisi Awal 
+Aktor baru saja berhasil login atau menekan tombol menu 
+"Beranda". 
+Alur Utama 
+1. Aktor mengakses halaman /beranda. 
+2.  Sistem melakukan kalkulasi otomatis terhadap data 
+kuis, jumlah siswa/kelas, dan nilai rata-rata dari basis 
+data.  
+3. Sistem menampilkan hasil rekapitulasi statistik dan 
+grafik/tabel riwayat aktivitas terbaru kepada aktor di layar 
+utama. 
+ 
+2.7  Kinerja Sistem 
+Kinerja sistem mendefinisikan parameter respons, efisiensi komputasi, serta 
+batasan operasional yang harus dipenuhi oleh perangkat lunak agar dapat melayani 
+aktivitas instruksional dan evaluasi tanpa mengalami kegagalan teknis. Aspek kinerja 
+ini menitikberatkan pada kemampuan platform dalam memproses data formula dan 
+menguji jawaban komputasi secara simultan. Spesifikasi target kinerja sistem 
+dijabarkan ke dalam beberapa parameter berikut: 
+1. Kemampuan Manajemen Data Kelas dan Siswa 
+Sistem mampu melakukan pencatatan (input), penyimpanan, dan pembaruan 
+data kelas beserta daftar siswa yang bergabung di dalamnya secara lengkap dan 
+valid. Hal ini mencakup kemampuan sistem untuk memastikan siswa dapat 
+masuk ke kelas yang tepat melalui kode kelas, serta kemampuan guru untuk 
+mengeluarkan siswa dari kelas jika diperlukan. 
+2. Kemampuan Pengelolaan Materi dan Soal Kuis 
+Sistem mampu memfasilitasi pengelolaan konten pembelajaran secara real-
+time. Kinerja yang diukur meliputi kemampuan sistem untuk menambah, 
+mengedit, dan menghapus materi pelajaran dalam tiga format (teks, tautan 
+video YouTube, dan berkas PDF), serta pembuatan paket soal kuis lengkap 
+dengan template rumus dan kunci jawaban numeriknya. 
+3. Kemampuan Integrasi Asisten AI 
+
+
+===== HALAMAN 43 =====
+
+ 
+27 
+ 
+Sistem mampu memproses permintaan (request) dari guru ke layanan Groq API 
+dengan model Large Language Model Llama 3.3 70B Versatile, serta 
+menampilkan hasil draf materi atau draf template soal dari AI ke antarmuka 
+pengguna dalam waktu yang wajar, tanpa mengganggu proses lain yang sedang 
+berjalan pada sistem. 
+4. Kemampuan Evaluasi dan Penyajian Laporan (Reporting) 
+Sistem mampu mengolah jawaban siswa dan menyajikan laporan rekapitulasi 
+nilai kuis secara otomatis. Kinerja ini meliputi: 
+a. Sistem mampu mengkalkulasi dan menilai jawaban numerik kuis siswa 
+secara presisi menggunakan komputasi BCMath, langsung setelah siswa 
+menekan tombol selesai. 
+b. Sistem mampu menampilkan statistik ringkasan, seperti jumlah kelas, 
+rata-rata skor, dan riwayat aktivitas kuis di halaman beranda (dashboard). 
+c. Sistem mampu menampilkan daftar rekapitulasi nilai seluruh siswa di 
+suatu kelas agar dapat dipantau oleh guru pengajar. 
+5. Kemampuan Kontrol Akses (Autentikasi) 
+Sistem mampu membatasi hak akses fitur berdasarkan peran pengguna melalui 
+mekanisme Role-Based Access Control (RBAC). Secara spesifik, sistem mampu 
+membedakan menu yang dapat diakses oleh Guru (akses untuk mengelola 
+materi, soal, dan asisten AI) dan Siswa (akses terbatas hanya untuk membaca 
+materi dan mengerjakan kuis), serta mampu mengenkripsi kata sandi 
+(password) pengguna untuk keamanan saat login
+ 
+ 
+ 
+
+
+===== HALAMAN 44 =====
+
+ 
+28 
+ 
+BAB III PEMODELAN DAN PERANCANGAN 
+3.1 Arsitektur Sistem 
+Arsitektur sistem memetakan bagaimana setiap komponen dari aplikasi Learning 
+Management System (LMS) saling terhubung dan berinteraksi. Aplikasi ini dirancang 
+dengan mengadopsi pendekatan klien-peladen (client-server). Melalui pendekatan 
+ini, pengguna dapat berinteraksi dengan sistem secara mudah melalui antarmuka 
+berbasis web yang dikelola dan terhubung langsung dengan sisi peladen (backend). 
+Pengguna sistem ini mencakup Guru dan Siswa, yang hak akses dan kewenangannya 
+diatur melalui mekanisme Role-Based Access Control (RBAC). Kedua pengguna 
+cukup menggunakan peramban web (web browser) di sisi klien (client) untuk 
+mengakses aplikasi. Halaman web yang tampil bertugas menyajikan informasi, 
+seperti daftar materi, kelas, dan halaman kuis. Selain itu, halaman ini juga berfungsi 
+untuk menerima masukan secara langsung, misalnya saat guru mengelola data kelas 
+dan membuat soal baru, atau saat siswa memasukkan jawaban kuis. Seluruh 
+masukan dari pengguna tersebut kemudian dikirimkan ke backend untuk diproses 
+lebih lanjut. 
+Pengolahan data dan aturan bisnis utama pada sistem ini ditangani sepenuhnya oleh 
+kerangka kerja (framework) Laravel di sisi backend. Bagian ini memvalidasi masukan 
+data, mengatur hak akses autentikasi pengguna melalui RBAC, serta mengontrol 
+komunikasi dengan basis data. Pada tahap ini, proses pengacakan variabel angka 
+untuk kuis dilakukan secara dinamis oleh komponen Math Engine sehingga potensi 
+kecurangan dapat diminimalkan karena soal yang diterima oleh setiap siswa 
+dipastikan bervariasi. Sistem kemudian memproses koreksi jawaban numerik secara 
+otomatis (auto-grading) menggunakan komputasi presisi tinggi dari pustaka BCMath 
+agar hasil penilaian terjamin keakuratannya. 
+Seluruh data yang mengalir di dalam aplikasi disimpan dan dikelola secara terpusat 
+menggunakan basis data MySQL. Basis data ini menyimpan entitas informasi 
+penting, seperti data kredensial akun, daftar kelas, modul materi, template rumus 
+soal, hingga rekam jejak aktivitas belajar dan riwayat nilai kuis siswa. Setiap kali 
+pengguna melakukan aktivitas melalui antarmuka web, backend Laravel akan secara 
+otomatis memperbarui, menyimpan, atau mengambil data dari MySQL sesuai 
+dengan instruksi fungsional yang diberikan. 
+Lebih lanjut, untuk mempercepat proses persiapan instruksional guru, sistem ini 
+terintegrasi dengan layanan kecerdasan buatan (AI) pihak ketiga, yaitu Groq API 
+dengan model Large Language Model Llama 3.3 70B Versatile. Integrasi ini bersifat 
+eksklusif hanya dapat diakses oleh aktor Guru untuk menghasilkan draf materi 
+
+
+===== HALAMAN 45 =====
+
+ 
+29 
+ 
+pembelajaran dan draf template soal secara instan, sebagaimana telah dijelaskan 
+pada use case 2.5.5 dan 2.5.8. Backend Laravel bertindak sebagai perantara yang 
+mengirimkan permintaan (request) ke Groq API dan menerima hasilnya untuk 
+ditampilkan kembali kepada guru. 
+Penerapan arsitektur client-server ini menjamin pengelolaan kuis dinamis dapat 
+berjalan secara terpusat, aman, dan mempermudah skalabilitas sistem pada masa 
+mendatang. Melalui pemrosesan data yang konsisten di sisi peladen, seluruh 
+pembaruan materi pembelajaran dan rekapitulasi nilai kuis siswa dapat 
+tersinkronisasi secara akurat. 
+ 
+Gambar 3.1 Arsitektur Sistem 
+Gambar 3.1 mengilustrasikan alur komunikasi arsitektur client-server secara visual 
+dari ujung ke ujung. Pada sisi paling kiri, komponen Web Client mewakili titik akses 
+bagi pengguna sistem, yaitu Guru dan Siswa, yang terhubung melalui jaringan 
+internet. Permintaan (request) dari klien tersebut mengalir melintasi jaringan menuju 
+lingkungan peladen yang ditandai dengan kotak pembatas. Di dalam area peladen, 
+layanan Frontend menjembatani instruksi untuk diproses lebih lanjut oleh bagian 
+Backend yang ditenagai oleh kerangka kerja Laravel beserta modul Math Engine. 
+Selanjutnya, Backend berinteraksi langsung dengan sistem basis data MySQL yang 
+terletak di sisi paling kanan guna mengeksekusi operasi penyimpanan dan 
+pembacaan data. Tanda panah dua arah yang menyambungkan seluruh komponen 
+tersebut merepresentasikan proses pertukaran data dan respons yang berjalan 
+secara dua arah dan berkesinambungan. Selain itu, Backend juga terhubung dengan 
+layanan eksternal Groq LLama 3.3 API AI Platform yang berfungsi sebagai asisten 
+kecerdasan buatan bagi Guru dalam menyusun draf materi dan template soal. 
+3.2  Permodelan Sistem dan Data 
+Pemodelan sistem digunakan untuk menggambarkan secara visual bagaimana 
+proses bisnis dan alur kerja berjalan di dalam Learning Management System (LMS) 
+
+
+===== HALAMAN 46 =====
+
+ 
+30 
+ 
+Soal Latihan Dinamis, baik dari sisi interaksi pengguna maupun logika internal yang 
+dijalankan oleh sistem. Pemodelan ini disusun berdasarkan kebutuhan fungsional 
+dan use case scenario yang telah dijabarkan pada BAB II, sehingga setiap alur yang 
+digambarkan memiliki keterkaitan langsung dengan kebutuhan sistem yang telah 
+ditetapkan sebelumnya. 
+ 
+ 
+3.2.1 Activity Diagram  
+Activity diagram digunakan untuk memodelkan alur kerja (workflow) dari suatu 
+proses atau fungsi tertentu di dalam sistem, mencakup urutan aktivitas, titik 
+percabangan keputusan (decision node), maupun titik penggabungan (merge 
+node) yang terjadi selama interaksi antara aktor (Guru atau Siswa) dengan sistem 
+berlangsung. Berikut adalah activity diagram yang menggambarkan proses-
+proses utama pada sistem. 
+3.2.1.1 Activity Diagram Login/Register 
+ 
+Gambar 3. 2 Activity Diagram Fitur Login/Register 
+Berdasarkan gambar 3.2 activity Diagram Login dan Register digunakan untuk 
+menggambarkan alur autentikasi pengguna pada platform Learning Management 
+System (LMS) Soal Latihan Dinamis. Proses ini menjadi tahapan awal yang harus 
+dilakukan sebelum pengguna dapat mengakses fitur-fitur yang tersedia pada 
+sistem.Proses dimulai ketika pengguna membuka aplikasi web LMS Matematika. 
+Sistem secara adaptif akan mengecek kondisi awal melalui sebuah percabangan 
+(decision) untuk memastikan apakah pengguna sudah memiliki akun terdaftar atau 
+belum. 
+Jika pengguna sudah memiliki akun (pilihan "Ya"), proses akan diarahkan untuk 
+membuka halaman login. Pada tahapan ini, pengguna diminta untuk menginput 
+alamat email dan password. Setelah data dikirimkan, sistem LMS akan melakukan 
+validasi kredensial melalui fungsi LoginRequest di tingkat backend. Apabila 
+kredensial terbukti cocok, sistem akan segera membuat sesi autentikasi yang valid, 
+
+
+===== HALAMAN 47 =====
+
+ 
+31 
+ 
+melakukan tindakan redirect menuju halaman dashboard utama sesuai dengan 
+peran (role) masing-masing pengguna, dan proses dinyatakan selesai. Sebaliknya, 
+apabila kredensial ditemukan tidak cocok, sistem akan mengembalikan alur ke 
+halaman login agar pengguna dapat mengulangi pengisian data dengan benar. 
+Di sisi lain, apabila pengguna belum memiliki akun (pilihan "Tidak"), sistem akan 
+mengarahkan alur untuk membuka halaman register. Pengguna kemudian 
+diwajibkan untuk menginput data diri beserta menentukan peran (role) yang sesuai. 
+Setelah data diinput, sistem akan memproses validasi format dokumen beserta 
+pemeriksaan keunikan email (email unik) di dalam basis data. Jika data dinyatakan 
+valid, sistem akan langsung menyimpan informasi akun baru tersebut ke dalam 
+database, menciptakan sesi akses baru, dan mengakhiri alur registrasi menuju 
+status selesai. Namun, jika hasil validasi menyatakan data tidak valid, alur akan 
+dikembalikan secara otomatis ke halaman register untuk diperbaiki. 
+Melalui proses autentikasi terintegrasi ini, sistem dapat memastikan bahwa hanya 
+pengguna terdaftar dengan hak akses yang tervalidasi yang diizinkan untuk 
+mengelola konten instruksional maupun melaksanakan kuis matematika dinamis di 
+dalam sistem. 
+3.2.1.2 Activity Diagram Guru Mengelola Kelas dan Modul Pembelajaran 
+ 
+ 
+Gambar 3. 3 Activity Diagram Guru Mengelola Kelas dan Modul Pembelajaran 
+Activity Diagram Guru Mengelola Kelas dan Modul Pembelajaran digunakan untuk 
+menggambarkan urutan interaksi terstruktur ketika seorang guru membangun ruang 
+lingkup pembelajaran digital di dalam sistem. Alur ini mencakup tiga tahapan 
+integratif, yaitu pembuatan kelas baru, penambahan bab baru, hingga pengisian 
+berbagai variasi konten instruksional maupun evaluasi. 
+Proses diawali pada swimlane Guru dengan melakukan pengisian formulir 
+pembuatan kelas baru. Setelah data dikirimkan, Sistem secara otomatis akan 
+mengeksekusi fungsi untuk menghasilkan kode unik kelas (generate kode unik) serta 
+
+
+===== HALAMAN 48 =====
+
+ 
+32 
+ 
+menyimpan data identitas kelas tersebut ke dalam database. Langkah selanjutnya, 
+Sistem menampilkan halaman detail kelas beserta kode unik yang telah dibuat ke 
+layar peramban agar dapat dibagikan kepada siswa. Setelah menerima kode kelas 
+tersebut, Guru dapat melanjutkan alur dengan menekan opsi untuk menambah bab 
+baru di dalam kelas terkait. Begitu data judul bab dimasukkan, Sistem akan langsung 
+memproses tindakan penyimpanan data bab tersebut ke dalam basis data. 
+Setelah bab berhasil terbentuk, alur memasuki tahapan percabangan (decision) di 
+mana Guru harus memilih jenis konten yang ingin ditambahkan ke dalam bab. Sistem 
+menyediakan tiga jalur konten yang dapat dipilih secara fleksibel: 
+ 
+1. Menambahkan Konten Materi (Teks-Video-PDF): Apabila jalur ini dipilih, Guru 
+mengunggah materi pendukung, lalu Sistem akan merespons dengan 
+mengeksekusi perintah untuk menyimpan berkas fisik beserta metadata 
+materi tersebut ke dalam storage dan database. 
+2. Input Template Pertanyaan dan Jawaban: Jalur ini digunakan khusus untuk 
+menyusun evaluasi kuis dinamis. Setelah Guru menginput rumusan 
+pertanyaan, alur beralih ke Sistem untuk melakukan eksekusi pratinjau atau 
+uji rumus terlebih dahulu. Hasil uji tersebut kemudian melewati gerbang 
+validasi. Jika validasi sukses (pilihan "Ya"), Sistem akan menyimpan bank 
+soal tersebut secara permanen ke database. Sebaliknya, jika validasi gagal 
+atau tidak sukses (pilihan "Tidak"), alur akan dikembalikan ke kolom input 
+agar Guru dapat memperbaiki kesalahan formula. 
+Seluruh ujung dari ketiga pilihan aktivitas konten tersebut akan bermuara pada satu 
+titik penggabungan (merge node). Pada tahap akhir ini, Sistem secara dinamis 
+menampilkan kembali halaman detail bab yang telah diperbarui dengan konten-
+konten baru tersebut, dan seluruh rangkaian proses pengelolaan dinyatakan selesai. 
+3.2.1.3 Activity Diagram Siswa Bergabung Kelas 
+  
+Gambar 3. 4 Activity Diagram Siswa Bergabung Kelas 
+Activity Diagram Siswa Bergabung Kelas digunakan untuk menggambarkan alur 
+interaksi operasional ketika seorang siswa mendaftarkan diri ke dalam suatu kelas 
+
+
+===== HALAMAN 49 =====
+
+ 
+33 
+ 
+digital tertentu agar dapat mengakses materi pembelajaran dan kuis yang disediakan 
+oleh guru. Proses ini mengandalkan validasi kode unik sebagai kunci otorisasi masuk 
+ke dalam ekosistem kelas. 
+Proses diawali pada swimlane Siswa, di mana siswa mengakses menu "Gabung 
+Kelas" pada antarmuka aplikasi dan memasukkan kode kelas yang telah diberikan 
+oleh guru sebelumnya. Setelah kode tersebut dikirimkan, alur berpindah ke 
+swimlane Sistem. Sistem akan merespons dengan melakukan pencarian terhadap 
+kode kelas tersebut di dalam basis data, tepatnya pada database tabel Kelas. 
+Hasil pencarian tersebut kemudian melewati gerbang keputusan atau percabangan 
+(decision node) untuk mengevaluasi kondisi "Kode Kelas Valid & Ditemukan?". Dari 
+titik evaluasi ini, alur dibagi menjadi dua jalur alternatif: 
+1. Jalur "Tidak" (Kode Tidak Valid / Tidak Ditemukan): Jika kode yang dimasukkan 
+salah atau tidak terdaftar di database, sistem akan mengarahkan alur 
+kembali ke swimlane Siswa untuk menampilkan pesan eror. Proses 
+pendaftaran pada jalur ini tertahan hingga siswa memasukkan kembali kode 
+yang valid. 
+2. Jalur "Ya" (Kode Valid & Ditemukan): Jika kode kelas terbukti valid dan 
+terdaftar, Sistem akan mengeksekusi perintah untuk menyimpan relasi 
+antara data Siswa dan data Kelas ke dalam tabel enrollment. Setelah data 
+relasi berhasil tersimpan, Sistem melakukan redirect dan menampilkan 
+halaman Dashboard Kelas Siswa. 
+Pada tahap akhir, alur kembali ke swimlane Siswa yang kini telah berhasil masuk dan 
+dapat melihat daftar Bab serta Modul materi yang tersedia di dalam kelas tersebut. 
+Aktivitas ini diakhiri pada titik final state (selesai). 
+3.2.1.4 Activity Diagram Siswa Mempelajari Materi Pembelajaran 
+ 
+Gambar 3. 5 Activity Diagram Siswa Mempelajari Materi Pembelajaran 
+Activity Diagram Siswa Mempelajari Materi Pembelajaran digunakan untuk 
+memetakan alur interaksi sistem saat siswa mengakses konten instruksional serta 
+bagaimana sistem melakukan pencatatan kemajuan membaca secara otomatis. 
+
+
+===== HALAMAN 50 =====
+
+ 
+34 
+ 
+Proses ini krusial untuk memastikan keaktifan siswa terekam dengan valid sebelum 
+mereka melangkah ke tahap evaluasi kuis dinamis. 
+Proses dimulai pada swimlane Siswa, di mana siswa membuka menu ruang kelas 
+dan dilanjutkan dengan memilih salah satu Bab atau Modul Pembelajaran yang ingin 
+dipelajari. Aksi pemilihan modul ini mengirimkan request ke swimlane Sistem untuk 
+melakukan validasi hak akses sekaligus mengambil data materi dari database. Alur 
+kemudian melewati gerbang keputusan untuk memeriksa kondisi apakah data valid. 
+Jika data tidak valid atau siswa tidak terdaftar di kelas tersebut (jalur "Tidak"), sistem 
+akan mengarahkan kembali siswa ke antarmuka pemilihan bab kelas. Jika data 
+dinyatakan valid (jalur "Ya"), sistem akan mengeksekusi fungsi untuk menampilkan 
+konten pembelajaran baik yang berbasis teks maupun video ke layar peramban 
+siswa. 
+Setelah konten materi sukses di-render, alur berpindah kembali ke swimlane Siswa 
+yang melakukan aktivitas membaca dan mempelajari materi tersebut. Di sini 
+terdapat 
+komponen 
+percabangan 
+internal 
+melalui 
+decision 
+node 
+untuk 
+mengevaluasi status "Selesai Membaca?". Selama siswa masih dalam proses 
+mempelajari dokumen (jalur "Tidak"), alur akan tetap bertahan di aktivitas membaca. 
+Namun, setelah siswa menyelesaikan seluruh materi pembelajaran (jalur "Ya"), 
+siswa dapat menekan tombol "Tandai Selesai" pada antarmuka aplikasi. Tindakan ini 
+memicu swimlane Sistem untuk menjalankan perintah update data progres siswa ke 
+dalam database, sehingga persentase kemajuan belajar siswa langsung diperbarui 
+ke dalam sistem hingga mencapai titik final state (selesai). 
+3.2.1.5 Activity Diagram Siklus Kuis Siswa 
+ 
+ 
+Gambar 3. 6 Activity Diagram Siklus Kuis Siswa 
+Activity Diagram Siklus Kuis Siswa digunakan untuk memetakan siklus hidup 
+pengerjaan kuis oleh siswa dari awal sesi hingga lembar evaluasi akhir diterbitkan 
+oleh sistem. Diagram ini berfokus pada manajemen sesi (session management) dan 
+alur makro pelaksanaan kuis secara daring. 
+
+
+===== HALAMAN 51 =====
+
+ 
+35 
+ 
+Proses dimulai ketika siswa menekan tombol "Mulai Kuis" pada bab yang dipilih. 
+Sistem kemudian merespons dengan membuat record baru pada tabel SesiKuis di 
+dalam basis data. Setelah sesi terbentuk, sistem menjalankan fungsi looping pra-
+generate untuk membangkitkan angka acak bagi seluruh butir soal yang ada dan 
+langsung menyimpannya ke dalam tabel jawaban. Sistem selanjutnya menampilkan 
+layar kuis yang memuat teks soal matematika yang telah di-parsing menggunakan 
+kombinasi angka acak tersebut. Ketika siswa menginput angka jawaban dan 
+menekan tombol "Kirim", sistem akan mengeksekusi kalkulasi berdasarkan variabel 
+acak dari database, membandingkan hasilnya dengan input siswa untuk 
+menetapkan status benar atau salah (True/False), serta memeriksa apakah masih 
+ada soal tersisa yang belum dijawab melalui sebuah decision node. Jika seluruh soal 
+telah selesai dikerjakan, sistem akan memperbarui dan mengalkulasi persentase 
+nilai total untuk kemudian ditampilkan pada Halaman Hasil Kuis & Nilai Siswa. 
+3.2.1.6 Activity Diagram Pengerjaan Kuis dan Penilaian Otomatis 
+ 
+Gambar 3. 7 Acitivity Diagram Pengerjaan Kuis dan Penilaian Otomatis 
+Activity Diagram Pengerjaan Kuis dan Kalkulasi Matematis digunakan untuk 
+menggambarkan logika backend secara mikro dan mendalam setiap kali siswa 
+mengirimkan satu butir jawaban tunggal. Fokus dari diagram ini adalah pada aspek 
+validasi data input serta mekanisme substitusi formula matematika di dalam sistem. 
+Alur dimulai saat siswa memasukkan input jawaban numerik pada lembar soal yang 
+sedang di-render di layar. Sistem secara instan akan menangani input tersebut 
+dengan melakukan validasi ketat guna memastikan bahwa data tidak kosong 
+(required) dan menggunakan format angka (numeric). Hasil pemeriksaan ini 
+dilewatkan pada decision node validasi lolos. Jika input tidak memenuhi syarat, 
+sistem akan memicu tampilan peringatan pada layar siswa. Namun, jika validasi 
+lolos, sistem akan mengambil data dari sesi aktif saat ini, mengeksekusi fungsi 
+substitusi variabel acak ke dalam string formula (answer_formula), dan menghitung 
+hasil pastinya. Nilai komputasi dari sistem tersebut kemudian dibandingkan dengan 
+jawaban numerik milik siswa untuk menentukan status kebenaran jawaban. Pada 
+tahap akhir, sistem menyimpan status jawaban tersebut ke dalam database dan 
+langsung me-render butir soal berikutnya kepada siswa. 
+
+
+===== HALAMAN 52 =====
+
+ 
+36 
+ 
+3.2.1.7 Activity Diagram Siswa Melihat Feedback dan Nilai 
+ 
+Gambar 3. 8 Activity Diagram Siswa Melihat Feedback dan Nilai 
+Berdasarkan Gambar 3.8, Activity Diagram Siswa Melihat Feedback dan Nilai 
+digunakan untuk memetakan alur ketika siswa mengakses hasil evaluasi kuis yang 
+telah dikerjakan, sebagai bahan evaluasi mandiri secara instan. Diagram ini 
+merepresentasikan implementasi fitur umpan balik otomatis (auto-feedback) yang 
+menjadi salah satu keunggulan utama sistem, sesuai dengan tujuan penelitian untuk 
+meningkatkan kemandirian belajar siswa. 
+Proses dimulai pada swimlane Siswa dengan mengakses menu "Riwayat" atau 
+membuka halaman hasil kuis secara langsung setelah menyelesaikan sesi kuis. Alur 
+berpindah ke swimlane Sistem yang mengambil data sesi kuis terkait dari basis data, 
+mencakup skor akhir, jumlah jawaban benar, jumlah jawaban salah, serta detail per 
+butir soal. Sistem kemudian menampilkan halaman hasil kuis yang komprehensif 
+kepada siswa. 
+Alur kembali ke swimlane Siswa yang dapat meninjau nilai akhir beserta detail 
+jawaban per butir soal. Pada tahap ini, siswa dapat melewati decision node "Lihat 
+Pembahasan?". Jika siswa memilih untuk tidak melihat pembahasan (jalur "Tidak"), 
+alur langsung menuju titik final state. Namun, jika siswa memilih untuk melihat 
+pembahasan (jalur "Ya"), sistem menampilkan pembahasan otomatis untuk setiap 
+soal yang mencakup soal asli beserta angka yang di-render, jawaban siswa, kunci 
+jawaban dari hasil kalkulasi formula, serta status benar/salah untuk masing-masing 
+soal. Setelah siswa selesai meninjau pembahasan, proses dinyatakan selesai. 
+3.2.1.8 Activity Diagram Guru Memantau Progres Siswa 
+ 
+ 
+Gambar 3. 9 Diagram Guru Memantau Progres Siswa 
+
+
+===== HALAMAN 53 =====
+
+ 
+37 
+ 
+Berdasarkan Gambar 3.9, Activity Diagram Guru Memantau Progres Siswa digunakan 
+untuk memetakan alur pengawasan instruksional dan evaluasi berkala yang 
+dilakukan oleh guru terhadap seluruh siswa yang terdaftar di dalam kelas. Selain 
+fungsi pemantauan, diagram ini juga mencakup aspek tata kelola keanggotaan kelas 
+digital secara adaptif. 
+Proses diawali pada swimlane Guru dengan memilih salah satu kelas yang aktif dan 
+menekan opsi "Lihat Detail Kelas". Aksi tersebut langsung direspon oleh swimlane 
+Sistem dengan mengeksekusi penarikan data relasi antara Kelas, daftar Bab, dan 
+daftar Siswa dari basis data. Sistem kemudian menampilkan halaman detail kelas 
+beserta kode unik ke layar peramban guru. Secara otomatis, sistem melakukan 
+komputasi latar belakang untuk menghitung jumlah bab yang telah dibaca beserta 
+persentase kemajuan (progress) belajar per individu siswa, lalu menyajikannya ke 
+dalam bentuk halaman rekapitulasi nilai dan progres siswa yang komprehensif pada 
+antarmuka guru. 
+Setelah informasi tersebut tersaji, alur memasuki gerbang keputusan (decision 
+node) "Tindakan Guru?" di mana guru menentukan apakah perlu melakukan tindakan 
+administratif atau tidak. Jika guru memilih jalur "Selesai Memantau", alur akan 
+langsung diarahkan menuju titik final state. Namun, jika guru mendeteksi adanya 
+kejanggalan atau perlu melakukan penataan keanggotaan kelas (jalur "Keluarkan 
+Siswa"), guru dapat menekan tombol "Keluarkan Siswa" pada baris nama siswa yang 
+bersangkutan. Tindakan ini direspon oleh swimlane Sistem dengan melakukan 
+penghapusan relasi data siswa tersebut dari tabel pivot (enrollment) di dalam basis 
+data dan melakukan tindakan redirect ulang halaman untuk memperbarui status 
+daftar siswa di layar guru hingga proses dinyatakan selesai. 
+3.2.1.9 Activity Diagram Guru Membuat Draf Materi dengan AI 
+ 
+Gambar 3. 10 Activity Diagram Diagram Guru Membuat Draft Materi dengan AI 
+Berdasarkan Gambar 3.10, Activity Diagram ini menggambarkan alur ketika Guru 
+memanfaatkan asisten cerdas berbasis Large Language Model (LLM) untuk 
+menghasilkan draf materi pembelajaran secara instan, sebagai jalur alternatif dari 
+penulisan manual. Alur ini secara khusus memperhitungkan batasan teknis integrasi 
+
+
+===== HALAMAN 54 =====
+
+ 
+38 
+ 
+AI, yaitu pembatasan laju permintaan (rate limiting) dan batasan panjang masukan, 
+sesuai dengan cakupan pengerjaan yang telah ditetapkan. 
+Proses diawali pada swimlane Guru dengan menekan tombol "Buat dengan AI" pada 
+halaman pembuatan materi. Alur berpindah ke swimlane Sistem yang kemudian 
+memeriksa kuota permintaan (prompt) harian Guru yang bersangkutan melalui 
+decision node "Kuota Harian Tersisa?". Jika kuota lima prompt per hari telah habis, 
+sistem akan menampilkan pesan pemberitahuan batas tercapai dan proses 
+dihentikan. Apabila kuota masih tersedia, alur kembali ke Guru yang dapat 
+menginput topik atau instruksi materi dengan batas maksimal 2.000 karakter. Sistem 
+melakukan validasi panjang masukan melalui decision node "Panjang Sesuai 
+Batas?"; jika melebihi batas, sistem menampilkan pesan peringatan dan 
+mengembalikan alur ke kolom input. 
+Setelah masukan dinyatakan valid, Guru menekan tombol "Generate". Sistem 
+kemudian mengirimkan permintaan (request) tunggal dan berdiri sendiri (stateless, 
+tanpa riwayat percakapan sebelumnya) ke Groq API dengan model Large Language 
+Model Llama 3.3 70B Versatile. Alur melewati decision node "Respons Berhasil?"; 
+jika permintaan gagal (misalnya karena kendala jaringan atau provider), sistem 
+menampilkan pesan kegagalan dan mengembalikan Guru ke opsi untuk mencoba 
+kembali. Jika respons berhasil diterima, sistem menampilkan draf materi berformat 
+HTML tersebut kepada Guru untuk ditinjau. Guru kemudian dapat mengedit isi draf 
+sesuai kebutuhan sebelum menekan tombol simpan. Pada tahap akhir, sistem 
+menyimpan materi yang telah difinalisasi ke dalam database sekaligus memperbarui 
+penghitung kuota prompt harian Guru tersebut, dan proses dinyatakan selesai. 
+3.2.1.10 
+Activity Diagram Guru Membuat Draf Soal dengan AI 
+ 
+Gambar 3. 11 Activity Diagram Guru Membuat Draf Soal dengan AI 
+Berdasarkan Gambar 3.11, Activity Diagram ini menggambarkan alur ketika Guru 
+memanfaatkan asisten cerdas untuk menghasilkan draf template soal beserta 
+formula jawabannya secara instan, sebagai jalur alternatif dari penyusunan manual. 
+Sama seperti pembuatan draf materi, alur ini tetap tunduk pada batasan kuota 
+harian, batas karakter topik, serta batas jumlah soal per eksekusi. 
+Proses diawali pada swimlane Guru dengan menekan tombol "Buat Soal dengan AI" 
+pada halaman pembuatan soal di suatu bab. Alur berpindah ke swimlane Sistem 
+
+
+===== HALAMAN 55 =====
+
+ 
+39 
+ 
+yang memeriksa kuota prompt harian Guru melalui decision node "Kuota Harian 
+Tersisa?"; jika telah habis, sistem menampilkan pesan batas tercapai dan proses 
+dihentikan. Apabila kuota tersedia, alur kembali ke Guru yang menginput topik soal 
+dengan batas maksimal 500 karakter beserta jumlah soal yang diinginkan dengan 
+batas maksimal 10 butir per eksekusi. Sistem memvalidasi kedua masukan tersebut 
+melalui decision node "Masukan Sesuai Batas?"; jika salah satu melebihi batas, 
+sistem menampilkan peringatan dan mengembalikan alur ke kolom input. 
+Setelah masukan valid, Guru menekan tombol "Generate". Sistem mengirimkan 
+permintaan tunggal (stateless) ke Groq API dengan model Large Language Model 
+Llama 3.3 70B Versatile. Melalui decision node "Respons Berhasil?", jika permintaan 
+gagal, sistem menampilkan pesan kegagalan dan mengembalikan Guru ke opsi coba 
+kembali. Jika berhasil, sistem menampilkan draf template soal beserta formula 
+jawaban hasil AI tersebut kepada Guru. Guru kemudian meninjau dan dapat 
+mengedit template maupun rumus jawaban sebelum menekan tombol simpan. 
+Sistem selanjutnya menyimpan soal tersebut ke dalam bank soal pada database 
+serta memperbarui kuota prompt harian Guru, dan proses dinyatakan selesai. 
+3.2.2 Perancangan Sequence Diagram 
+Sequence diagram digunakan untuk menggambarkan interaksi antarobjek di dalam 
+sistem berdasarkan urutan waktu terjadinya. Diagram ini memperlihatkan pesan 
+(message) yang dipertukarkan antara aktor dan objek, mulai dari permintaan awal 
+hingga respons yang dikembalikan sistem, sehingga alur eksekusi setiap fungsi dapat 
+dipahami secara runtut. Pada penelitian ini disusun sebelas sequence diagram yang 
+merepresentasikan sebelas use case pada sistem Learning Management System 
+(LMS) Matematika, yaitu Login dan Register, Mengelola Kelas, Mengelola Fitur Materi, 
+Mengelola Fitur Kuis, Membuat Draft Materi dengan AI, Membuat Template Soal 
+dengan AI, Memantau Hasil Kuis Siswa, Bergabung ke Kelas, Mempelajari Materi, 
+Mengerjakan Kuis, serta Melihat Feedback dan Nilai. Objek yang terlibat mengacu 
+pada arsitektur Model-View-Controller (MVC) framework Laravel, meliputi Browser, 
+Middleware, Controller, Form Request, Policy, Model, dan basis data. 
+
+
+===== HALAMAN 56 =====
+
+ 
+40 
+ 
+3.2.2.1 Sequence Diagram Login dan Register 
+ 
+Gambar 3. 12 Sequence Diagram Login dan Register 
+Sequence diagram Login dan Register ditunjukkan pada Gambar 3.12. Diagram ini 
+terbagi menjadi dua rangkaian proses, yaitu registrasi dan login. Pada proses 
+registrasi, pengguna mengeklik menu "Daftar" sehingga Browser mengirimkan 
+permintaan GET /register yang terlebih dahulu melewati Middleware guest untuk 
+memastikan pengguna belum terautentikasi. Selanjutnya AuthController memanggil 
+method create() dan menampilkan halaman formulir registrasi. Setelah pengguna 
+mengisi nama, surel, kata sandi, serta memilih peran (Guru atau Siswa) dan 
+menekan tombol kirim, Browser mengirimkan permintaan POST /register. 
+AuthController kemudian meneruskan data ke Validator untuk memeriksa format 
+masukan, keunikan surel, dan kesesuaian peran. Apabila validasi gagal, sistem 
+mengembalikan halaman sebelumnya beserta pesan kesalahan. Apabila validasi 
+berhasil, AuthController memerintahkan User Model untuk membuat data pengguna 
+baru dengan kata sandi yang telah dienkripsi menggunakan Hash::make(), kemudian 
+menyimpannya ke dalam tabel users. Setelah data tersimpan, sistem menjalankan 
+
+
+===== HALAMAN 57 =====
+
+ 
+41 
+ 
+event Registered dan Auth::login() untuk membuat sesi autentikasi, lalu 
+mengarahkan pengguna ke halaman beranda. 
+Pada proses login, pengguna mengeklik menu "Masuk" sehingga Browser 
+mengirimkan permintaan GET /login dan AuthController menampilkan halaman 
+formulir login melalui method create(). Setelah pengguna memasukkan surel dan 
+kata sandi lalu menekan tombol kirim, Browser mengirimkan permintaan POST 
+/login. AuthController meneruskan proses ke LoginRequest melalui method 
+authenticate(), yang kemudian memanggil Auth::attempt() untuk memverifikasi 
+kredensial. Apabila kredensial tidak cocok, sistem melempar ValidationException 
+dan mengembalikan pengguna ke halaman login disertai pesan "Email atau 
+password salah". Apabila kredensial cocok, AuthController menjalankan session()-
+>regenerate() untuk memperbarui identitas sesi demi keamanan, kemudian 
+memeriksa peran pengguna. Jika pengguna berperan sebagai Guru, sistem 
+mengarahkannya ke Dashboard Guru; jika berperan sebagai Siswa, sistem 
+mengarahkannya ke Dashboard Siswa. Pada akhirnya Browser menampilkan 
+dashboard yang sesuai dengan peran pengguna. 
+
+
+===== HALAMAN 58 =====
+
+ 
+42 
+ 
+3.2.2.2 Sequence Diagram Mengelola Kelas (Guru) 
+ 
+Gambar 3. 13 Sequence Diagram Mengelola Kelas 
+Sequence diagram Mengelola Kelas ditunjukkan pada Gambar 3.13 dan hanya dapat 
+diakses oleh aktor Guru melalui Middleware role:guru. Diagram ini mencakup empat 
+proses, yaitu membuat, menyunting, menghapus kelas, dan mengeluarkan siswa. 
+Pada proses pembuatan kelas, Guru mengeklik menu "Buat Kelas" sehingga sistem 
+menampilkan formulir berisi kolom nama, deskripsi, dan tahun ajaran. Setelah Guru 
+mengisi data dan mengirimkannya melalui POST /guru/kelas, KelasController 
+meneruskan permintaan ke PermintaanSimpanKelas untuk melakukan otorisasi 
+sekaligus validasi. Apabila validasi berhasil, sistem membangkitkan kode kelas unik 
+sepanjang enam karakter huruf kapital. Pembangkitan kode ini dilakukan secara 
+berulang selama kode yang dihasilkan masih terdapat pada basis data, sehingga 
+terjamin keunikannya. Setelah kode unik diperoleh, Kelas Model menyimpan data 
+kelas beserta identitas Guru ke dalam tabel kelas, dan sistem menampilkan halaman 
+detail kelas beserta pesan agar Guru membagikan kode kelas kepada siswa. 
+
+
+===== HALAMAN 59 =====
+
+ 
+43 
+ 
+Pada proses penyuntingan, Guru mengeklik menu "Edit Kelas" sehingga 
+KelasController memeriksa kepemilikan kelas melalui KelasPolicy dengan 
+mencocokkan identitas Guru terhadap pemilik kelas, kemudian menampilkan 
+formulir penyuntingan. Setelah data diperbarui dan dikirim, Kelas Model melakukan 
+pembaruan pada basis data dan sistem mengarahkan Guru kembali ke halaman 
+detail kelas. Pada proses penghapusan, permintaan DELETE diproses setelah 
+otorisasi melalui KelasPolicy, dan penghapusan dilaksanakan di dalam sebuah 
+transaksi basis data yang sekaligus melepaskan keterkaitan siswa dari kelas 
+sebelum menghapus data kelas. Adapun pada proses mengeluarkan siswa, setelah 
+otorisasi berhasil, sistem melepaskan relasi antara siswa dan kelas pada tabel 
+kelas_user menggunakan operasi detach(), lalu menampilkan pesan bahwa siswa 
+telah dikeluarkan. 
+3.2.2.3 Sequence Diagram Mengelola Fitur Materi (Guru) 
+ 
+Gambar 3. 14 Sequence Diagram Mengelola Fitur Materi 
+Sequence diagram Mengelola Fitur Materi ditunjukkan pada Gambar 3.17 dan 
+diakses oleh aktor Guru. Diagram ini terdiri atas proses membuat, menyunting, dan 
+menghapus materi. Pada proses pembuatan, Guru mengeklik menu "Tambah Materi" 
+pada halaman bab sehingga MateriController memeriksa bahwa bab tersebut 
+merupakan milik Guru yang bersangkutan, kemudian menampilkan formulir berisi 
+judul, ringkasan, tipe, dan konten materi. Setelah Guru mengisi data, memilih tipe 
+materi, 
+dan 
+mengirimkannya, 
+MateriController 
+meneruskan 
+proses 
+ke 
+PermintaanSimpanMateri untuk otorisasi dan validasi masukan sesuai tipe yang 
+dipilih. Selanjutnya sistem memproses konten berdasarkan tipenya: untuk tipe Teks, 
+
+
+===== HALAMAN 60 =====
+
+ 
+44 
+ 
+konten HTML diambil dari editor Trix; untuk tipe Video, tautan diproses oleh Youtube 
+Helper melalui method extractVideoId() guna memperoleh identitas video dan URL 
+yang bersih; sedangkan untuk tipe PDF, berkas diunggah dan disimpan pada 
+penyimpanan publik. 
+Setelah konten diproses, sistem membangkitkan slug unik dari judul materi. 
+Sebagaimana pembangkitan kode kelas, proses ini dilakukan berulang selama slug 
+masih terdapat pada basis data, dengan menambahkan sufiks angka hingga 
+diperoleh nilai yang unik. Materi Model kemudian menyimpan data materi ke dalam 
+tabel materi, dan sistem menjalankan method reorderMateriDalamBab() untuk 
+menata ulang urutan materi di dalam bab, lalu mengarahkan Guru ke halaman detail 
+bab. Pada proses penyuntingan, otorisasi dilakukan melalui MateriPolicy dengan izin 
+kelola, kemudian data diperbarui, slug disesuaikan apabila judul berubah, dan 
+urutan materi ditata ulang kembali. Pada proses penghapusan, apabila materi 
+bertipe PDF, sistem terlebih dahulu menghapus berkas terkait dari penyimpanan 
+sebelum menghapus data materi dari basis data dan menata ulang urutan materi 
+yang tersisa. 
+3.2.2.4 Sequence Diagram Mengelola Fitur Kuis (Guru) 
+ 
+Gambar 3. 15 Sequence Diagram Mengelola Fitur Kuis 
+Sequence diagram Mengelola Fitur Kuis ditunjukkan pada Gambar 3.8 dan diakses 
+oleh aktor Guru untuk menyusun soal dinamis berbasis variabel. Diagram ini 
+mencakup proses membuat, meninjau (pratinjau), menyunting, dan menghapus 
+soal. Pada proses pembuatan, Guru mengeklik menu "Tambah Soal" pada halaman 
+
+
+===== HALAMAN 61 =====
+
+ 
+45 
+ 
+bab sehingga SoalController memeriksa kepemilikan bab dan menampilkan formulir 
+soal dinamis. Guru kemudian mengisi template soal, aturan variabel (variable rules), 
+dan rumus jawaban (answer formula), misalnya template "Berapa {x} + {y}?" dengan 
+variabel x dan y bernilai antara satu hingga sepuluh serta rumus "x + y". Setelah 
+dikirim, SoalController meneruskan proses ke PermintaanSimpanSoal untuk 
+otorisasi dan validasi. Apabila validasi berhasil, sistem mengonversi format aturan 
+variabel, kemudian Soal Model menyimpan data soal ke dalam tabel soal, dan sistem 
+mengarahkan Guru ke halaman detail bab. 
+Proses pratinjau berlangsung secara asinkron (AJAX). Ketika Guru mengeklik tombol 
+"Pratinjau", SoalController memanggil EvaluasiSoalService untuk membangkitkan 
+nilai variabel acak melalui method hasilkanVariabel(), menguraikan template soal 
+melalui uraiTemplatSoal(), serta menghitung kunci jawaban melalui hitungRumus() 
+yang pada gilirannya mengeksekusi rumus menggunakan MathExecutor. Hasilnya 
+dikembalikan dalam format JSON dan ditampilkan sebagai pratinjau soal beserta 
+jawabannya tanpa memuat ulang halaman. Pada proses penyuntingan, data soal 
+diperbarui setelah melalui validasi, sedangkan pada proses penghapusan, sistem 
+memeriksa kepemilikan kelas sebelum menghapus data soal dari basis data dan 
+mengarahkan Guru kembali ke halaman detail bab. 
+3.2.2.5 Sequence Diagram Membuat Draf Materi dengan AI (Guru) 
+ 
+Gambar 3. 16 Sequence Diagram Membuat Draf Materi dengan AI 
+
+
+===== HALAMAN 62 =====
+
+ 
+46 
+ 
+Sequence diagram Membuat Draf Materi dengan AI ditunjukkan pada Gambar 3.9. 
+Diagram ini melibatkan aktor Guru dan layanan eksternal Groq LLaMA 3.3 70B 
+sebagai penyedia model kecerdasan buatan. Proses diawali ketika Guru membuka 
+formulir pembuatan materi dan mengeklik tombol "Generate dengan AI", sehingga 
+Browser menampilkan modal untuk memasukkan poin-poin inti materi. Setelah Guru 
+menuliskan poin-poin tersebut dan mengirimkannya melalui permintaan asinkron 
+POST /guru/ai/generate-materi, AiGuruController meneruskan masukan ke Validator 
+untuk memastikan poin inti tidak kosong dan tidak melampaui batas panjang. 
+Apabila validasi gagal, sistem mengembalikan pesan kesalahan dalam format JSON. 
+Apabila validasi berhasil, AiGuruController menyusun prompt instruksi yang 
+memerintahkan model untuk mengembangkan poin inti menjadi materi berformat 
+HTML yang siap dirender pada editor Trix, kemudian mengirimkannya ke Groq LLaMA 
+melalui endpoint chat completions. Apabila layanan mengembalikan galat, misalnya 
+kesalahan server atau timeout, sistem menampilkan pesan kesalahan kepada Guru. 
+Apabila layanan berhasil merespons, AiGuruController membersihkan pembungkus 
+markdown dari keluaran model, lalu mengembalikan konten HTML dalam format 
+JSON. Konten tersebut dimuat ke dalam editor Trix pada Browser sehingga Guru 
+dapat meninjau dan menyunting draf sebelum menyimpannya sebagai materi. 
+Dengan demikian, keluaran AI tidak langsung tersimpan, melainkan tetap berada 
+dalam kendali Guru. 
+
+
+===== HALAMAN 63 =====
+
+ 
+47 
+ 
+3.2.2.6 Sequence Diagram Membuat Template Soal dengan AI (Guru) 
+ 
+Gambar 3. 17 Sequence Diagram Membuat Template Soal dengan AI 
+ 
+Sequence diagram Membuat Template Soal dengan AI ditunjukkan pada Gambar 
+3.17 dan juga melibatkan aktor Guru serta layanan Groq LLaMA 3.3 70B. Proses 
+diawali ketika Guru membuka halaman bab dan mengeklik tombol "Generate Soal 
+AI", sehingga Browser menampilkan modal untuk memasukkan topik dan jumlah 
+soal. Setelah Guru mengisi topik serta jumlah soal antara satu hingga sepuluh dan 
+mengirimkannya melalui POST /guru/ai/generate-soal/{bab}, AiGuruController 
+memeriksa apakah Guru merupakan pemilik kelas terkait. Apabila bukan, sistem 
+mengembalikan respons 403 Forbidden. 
+Apabila Guru merupakan pemilik kelas, sistem memvalidasi topik dan jumlah soal, 
+kemudian menyusun prompt yang memerintahkan model untuk menghasilkan 
+sejumlah soal dinamis lengkap dengan template soal, aturan variabel, dan rumus 
+jawaban dalam format JSON murni. Prompt tersebut dikirim ke Groq LLaMA dengan 
+format JSON. Apabila layanan mengembalikan eror, sistem menampilkan pesan 
+kesalahan. Apabila layanan berhasil merespon, AiGuruController membersihkan 
+pembungkus markdown dan melakukan penguraian JSON. Bila hasil penguraian 
+tidak valid, sistem menampilkan pesan kegagalan pemrosesan. Bila valid, sistem 
+
+
+===== HALAMAN 64 =====
+
+ 
+48 
+ 
+melakukan perulangan terhadap setiap soal yang dihasilkan: untuk setiap soal, 
+sistem memeriksa kelengkapan komponen (template, aturan variabel, dan rumus). 
+Soal dengan komponen lengkap disimpan ke dalam tabel soal melalui Soal Model, 
+sedangkan soal yang tidak lengkap dilewati. Setelah seluruh soal diproses, sistem 
+menampilkan notifikasi berisi jumlah soal yang berhasil dibuat. 
+3.2.2.7 Sequence Diagram Memantau Hasil Kuis (Guru) 
+ 
+Gambar 3. 18 Sequence Diagram Memantau Hasil Kuis Guru 
+Sequence diagram Memantau Hasil Kuis Siswa ditunjukkan pada Gambar 3.18 dan 
+diakses oleh aktor Guru. Proses diawali ketika Guru membuka Dashboard, sehingga 
+sistem melakukan kueri terhadap sesi ujian yang telah selesai dari kelas milik Guru 
+dan menampilkan ringkasan berupa rata-rata skor, total ujian, serta aktivitas terbaru. 
+Untuk menelaah suatu sesi secara mendalam, Guru mengeklik menu "Audit" pada 
+sesi ujian tertentu sehingga Browser mengirimkan permintaan GET /guru/sesi-
+ujian/{sesi_id}/audit. AuditUjianController kemudian memuat data sesi secara 
+lengkap, meliputi bab, kelas, pengguna, serta daftar jawaban beserta soalnya. 
+Setelah data dimuat, AuditUjianController memeriksa apakah Guru merupakan 
+pemilik kelas dari sesi tersebut. Apabila bukan, sistem mengembalikan respons 403 
+Forbidden. Apabila pemeriksaan berhasil, sistem menghitung jumlah soal, jumlah 
+jawaban benar, dan nilai akhir, kemudian melakukan perulangan terhadap setiap 
+jawaban siswa. Pada setiap iterasi, sistem menguraikan template soal menggunakan 
+EvaluasiSoalService dengan nilai variabel yang telah dibangkitkan pada saat siswa 
+mengerjakan, serta menghitung kunci jawaban menggunakan MathExecutor. Hasil 
+setiap iterasi dikumpulkan menjadi butir audit yang memuat soal asli, soal terurai, 
+variabel yang dibangkitkan, kunci jawaban, jawaban siswa, dan status benar atau 
+
+
+===== HALAMAN 65 =====
+
+ 
+49 
+ 
+salah. Setelah seluruh jawaban diproses, sistem menampilkan halaman audit yang 
+memuat rincian lengkap tiap jawaban, sehingga Guru dapat menilai kebenaran 
+jawaban siswa secara transparan. 
+3.2.2.8 Sequence Diagram Bergabung ke Kelas (Siswa) 
+ 
+Gambar 3. 19 Sequence Diagram Bergabung ke Kelas 
+Sequence diagram Bergabung ke Kelas ditunjukkan pada Gambar 3.19 dan diakses 
+oleh aktor Siswa melalui Middleware role:siswa. Proses diawali ketika Siswa 
+membuka halaman Gabung Kelas, sehingga GabungKelasController menampilkan 
+formulir masukan kode kelas. Setelah Siswa memasukkan kode kelas yang diperoleh 
+dari Guru dan mengirimkannya melalui POST /siswa/gabung-kelas, sistem 
+memvalidasi format kode kelas. Apabila format tidak valid, sistem menampilkan 
+pesan validasi dan Siswa diminta memasukkan kembali kode yang benar. 
+Apabila format valid, sistem mengubah kode menjadi huruf kapital dan mencari kelas 
+yang bersesuaian pada tabel kelas. Apabila kode tidak ditemukan, sistem 
+menampilkan pesan bahwa kode kelas tidak dikenali. Apabila kode ditemukan, 
+sistem memeriksa apakah Siswa telah terdaftar pada kelas tersebut dengan 
+menelusuri tabel kelas_user. Bila Siswa sudah terdaftar, sistem mengarahkannya ke 
+daftar ujian disertai pesan bahwa ia telah berada di kelas tersebut. Bila belum 
+terdaftar, sistem menautkan Siswa ke kelas melalui operasi attach() yang 
+menyisipkan data baru pada tabel kelas_user, kemudian mengarahkan Siswa ke 
+daftar ujian disertai pesan bahwa ia berhasil bergabung ke kelas. 
+
+
+===== HALAMAN 66 =====
+
+ 
+50 
+ 
+3.2.2.9 Sequence Diagram Mempelajari Materi (Siswa) 
+ 
+Gambar 3. 20 Sequence Diagram Mempelajari Materi 
+Sequence diagram Mempelajari Materi ditunjukkan pada Gambar 3.20 dan diakses 
+oleh aktor Siswa melalui Middleware yang memastikan Siswa berada di dalam kelas 
+terkait. Proses diawali ketika Siswa memilih kelas dan bab, sehingga Middleware 
+memeriksa keterdaftaran Siswa pada kelas tersebut. Apabila Siswa tidak terdaftar, 
+akses ditolak. Apabila terdaftar, BabController memuat teks bab beserta seluruh 
+materi di dalamnya, kemudian memeriksa materi yang telah dibaca Siswa pada tabel 
+kemajuan_materi, lalu menampilkan daftar materi lengkap dengan status 
+keterbacaannya. 
+Ketika Siswa mengeklik salah satu materi, MateriController memuat data materi 
+beserta relasi kelas dan babnya, serta memeriksa bahwa Siswa memang terdaftar 
+pada kelas materi tersebut. Selanjutnya sistem menampilkan konten sesuai tipe 
+materi: untuk tipe Teks, konten HTML dirender langsung; untuk tipe Video, sistem 
+menampilkan pemutar video YouTube tersemat; dan untuk tipe PDF, sistem 
+menampilkan penampil dokumen PDF. Apabila Siswa mengeklik tombol "Tandai 
+Sudah Dibaca", Browser mengirimkan permintaan POST /siswa/materi/{slug}/baca 
+sehingga MateriController menyimpan kemajuan belajar Siswa menggunakan 
+operasi syncWithoutDetaching() yang mencatat waktu pembacaan pada tabel 
+
+
+===== HALAMAN 67 =====
+
+ 
+51 
+ 
+kemajuan_materi, kemudian menampilkan pesan bahwa modul telah ditandai 
+selesai. 
+3.2.2.10 Sequence Diagram Mengerjakan Kuis 
+ 
+Gambar 3. 21 Sequence Diagram Mengerjakan Kuis 
+ 
+Sequence diagram Mengerjakan Kuis ditunjukkan pada Gambar 3.21 dan diakses 
+oleh aktor Siswa. Diagram ini mencakup tiga tahap, yaitu memulai kuis, menjawab 
+soal, dan menyelesaikan kuis. Pada tahap memulai kuis, Siswa mengeklik tombol 
+"Mulai Kuis" pada suatu bab sehingga UjianController memeriksa apakah Siswa telah 
+pernah lulus dengan nilai sekurang-kurangnya delapan puluh persen. Apabila sudah 
+
+
+===== HALAMAN 68 =====
+
+ 
+52 
+ 
+pernah lulus, sistem mengarahkan Siswa ke halaman riwayat disertai pesan bahwa 
+bab tersebut telah dilalui. Apabila belum, sistem memeriksa keberadaan sesi aktif 
+yang belum diselesaikan. Bila sesi aktif ditemukan, Siswa diarahkan untuk 
+melanjutkan sesi tersebut. Bila tidak ada sesi aktif, SesiUjian Model membuat sesi 
+baru, dan sistem melakukan perulangan terhadap setiap soal dalam bab untuk 
+membangkitkan nilai variabel acak melalui EvaluasiSoalService, kemudian 
+menyimpannya sebagai data jawaban awal pada tabel jawaban. Setelah itu, sistem 
+menampilkan soal pertama. 
+Pada tahap menjawab soal, sistem mengambil seluruh jawaban terurut, 
+menguraikan template soal menggunakan uraiTemplatSoal() beserta nilai 
+variabelnya, lalu menampilkan soal beserta navigasi dan indikator kemajuan. 
+Setelah Siswa memasukkan jawaban berupa angka dan mengirimkannya, 
+UjianController memvalidasi bahwa jawaban bersifat numerik, kemudian 
+menghitung kunci jawaban melalui hitungRumus() yang dieksekusi oleh 
+MathExecutor, dan membandingkan jawaban Siswa dengan kunci jawaban 
+menggunakan jawabanNumerikSama() yang menerapkan toleransi dua angka 
+desimal. Hasil perbandingan berupa status benar atau salah disimpan pada tabel 
+jawaban. Apabila masih terdapat soal yang belum dijawab, sistem mengarahkan 
+Siswa ke soal berikutnya; apabila seluruh soal telah dijawab, sistem menampilkan 
+pesan agar Siswa memeriksa kembali jawabannya lalu menyelesaikan kuis. Pada 
+tahap menyelesaikan kuis, setelah Siswa mengeklik tombol "Selesaikan Kuis", 
+UjianController memverifikasi kepemilikan sesi, menandai waktu penyelesaian pada 
+tabel sesi_ujian, kemudian mengarahkan Siswa ke halaman hasil. 
+3.2.2.11 Sequence Diagram Melihat Feedback dan Nilai (Siswa) 
+ 
+Gambar 3. 22 Sequence Diagram Siswa Melihat Feedback dan Nilai 
+Sequence diagram Melihat Feedback dan Nilai ditunjukkan pada Gambar 3.22 dan 
+diakses oleh aktor Siswa. Diagram ini terdiri atas dua alur, yaitu melihat hasil satu 
+
+
+===== HALAMAN 69 =====
+
+ 
+53 
+ 
+sesi ujian dan melihat riwayat seluruh nilai. Pada alur melihat hasil satu sesi, Siswa 
+mengeklik menu "Lihat Hasil" sehingga Browser mengirimkan permintaan GET 
+/siswa/ujian/sesi/{id}/hasil. UjianController memeriksa apakah sesi tersebut benar-
+benar milik Siswa yang bersangkutan. Apabila bukan, akses ditolak. Apabila sesuai, 
+sistem memuat data sesi secara lengkap beserta jawaban, soal, bab, dan kelasnya, 
+kemudian menghitung jumlah soal, jumlah jawaban benar, serta nilai akhir dengan 
+rumus jumlah jawaban benar dibagi jumlah soal dikalikan seratus. Selanjutnya 
+sistem menampilkan skor, perbandingan jumlah benar terhadap total soal, serta 
+rincian setiap jawaban sebagai umpan balik bagi Siswa. 
+Pada alur melihat riwayat seluruh nilai, Siswa membuka halaman "Riwayat Ujian" 
+sehingga UjianController mengambil seluruh sesi ujian milik Siswa beserta relasi bab 
+dan kelasnya. Sistem kemudian melakukan perulangan terhadap setiap sesi: untuk 
+sesi yang telah selesai dan memiliki jawaban, sistem menghitung nilainya; 
+sedangkan untuk sesi yang belum selesai, nilai ditetapkan kosong dengan status 
+sedang berlangsung. Setelah seluruh sesi diproses, sistem menampilkan tabel 
+riwayat yang memuat informasi bab, kelas, tanggal, status, dan nilai, sehingga Siswa 
+dapat memantau perkembangan hasil belajarnya secara menyeluruh. 
+3.2.3 Class Diagram 
+ 
+Gambar 3. 23 Class Diagram 
+
+
+===== HALAMAN 70 =====
+
+ 
+54 
+ 
+Class diagram menggambarkan struktur statis sistem berupa kelas-kelas yang 
+menyusun perangkat lunak beserta atribut, method, dan hubungan antarkelasnya. 
+Sebagai bagian dari perancangan berorientasi objek, class diagram berada pada 
+tingkat konsep, yaitu memodelkan objek beserta perilakunya (behavior) sebelum 
+diturunkan menjadi rancangan basis data. Kelas-kelas pada sistem Learning 
+Management System (LMS) Matematika ini dibangun mengikuti pola Model Eloquent 
+pada framework Laravel, ditambah satu kelas service yang menampung logika bisnis 
+khusus. Class Diagram sistem ditunjukkan pada Gambar 3.23. 
+Kelas User merepresentasikan seluruh pengguna sistem. Kelas ini memiliki atribut 
+privat id, name, email, password, dan role. Method relasinya meliputi kelasDiajar(), 
+kelasDiikuti(), sesiUjian(), dan kemajuanMateri(), sedangkan method bisnisnya 
+adalah isGuru() dan isSiswa() yang digunakan untuk memeriksa peran pengguna 
+sebagai dasar penentuan hak akses.Kelas Kelas menyimpan data kelas yang dikelola 
+guru, dengan atribut id, guru_id, class_code, name, dan tahun. Method yang 
+dimilikinya adalah guru(), siswa(), bab(), materi(), serta generateClassCode() yang 
+berfungsi membangkitkan kode kelas unik. Kelas Bab menyimpan data bab 
+pembelajaran dengan atribut id, kelas_id, title, dan order, serta menyediakan method 
+kelas(), materi(), teksBab(), soal(), dan sesiUjian() sebagai penghubung ke kelas-
+kelas konten dan aktivitas. 
+Kelas Materi menyimpan materi ajar dan memuat atribut yang menyesuaikan tipe 
+materi, yaitu id, kelas_id, bab_id, judul, slug, tipe, konten_teks, link_video, file_path, 
+dan order. Method yang dimilikinya adalah kelas(), bab(), dibacaOleh(), dan 
+reorderDalamBab() untuk menata ulang urutan materi di dalam bab. Kelas TeksBab 
+menyimpan ringkasan bab dengan atribut id, bab_id, dan content, serta method 
+bab(). Kelas Soal menyimpan soal dinamis berbasis variabel dengan atribut id, 
+bab_id, variable_rules, question_template, dan answer_formula, serta method bab() 
+dan jawaban(). 
+Pada bagian aktivitas siswa, kelas KemajuanMateri mencatat materi yang telah 
+dibaca siswa melalui atribut id, user_id, materi_id, dan read_at, dengan method 
+user() dan materi(). Kelas SesiUjian menyimpan data sesi pengerjaan kuis dengan 
+atribut id, user_id, bab_id, started_at, dan finished_at, serta method user(), bab(), 
+jawaban(), ditambah method bisnis hitungNilai() dan sudahSelesai(). Kelas Jawaban 
+menyimpan jawaban tiap soal pada suatu sesi melalui atribut id, sesi_ujian_id, 
+soal_id, generated_variables, student_answer, dan is_correct, dengan method 
+sesiUjian() dan soal(). 
+Selain 
+kelas-kelas 
+Model 
+di 
+atas, 
+terdapat 
+kelas 
+service 
+bernama 
+EvaluasiSoalService yang tidak dipetakan ke tabel basis data. Kelas ini memuat 
+atribut executor bertipe MathExecutor dan menyediakan method hasilkanVariabel(), 
+
+
+===== HALAMAN 71 =====
+
+ 
+55 
+ 
+uraiTemplatSoal(), hitungRumus(), serta jawabanNumerikSama() yang menjadi inti 
+logika pembangkitan variabel acak, penguraian template soal, penghitungan kunci 
+jawaban, dan pembandingan jawaban siswa dengan toleransi desimal.Hubungan 
+antarkelas dinyatakan menggunakan asosiasi bermultiplicity. Kelas User memiliki 
+asosiasi satu-ke-banyak dengan Kelas (mengajar), banyak-ke-banyak dengan Kelas 
+(mengikuti, yang pada tingkat basis data diwujudkan melalui tabel pivot kelas_user), 
+serta satu-ke-banyak dengan SesiUjian dan KemajuanMateri. Kelas Kelas 
+berasosiasi satu-ke-banyak dengan Bab dan Materi. Kelas Bab menjadi pusat 
+domain konten karena berasosiasi satu-ke-banyak dengan Materi, Soal, dan 
+SesiUjian, serta satu-ke-nol-atau-satu dengan TeksBab. Kelas Materi berasosiasi 
+satu-ke-banyak dengan KemajuanMateri, sedangkan SesiUjian dan Soal masing-
+masing 
+berasosiasi 
+satu-ke-banyak 
+dengan 
+Jawaban. 
+Adapun 
+kelas 
+EvaluasiSoalService dihubungkan melalui relasi ketergantungan (dependency), yang 
+ditandai dengan garis putus-putus, ke kelas Soal dan Jawaban. Relasi ini 
+menandakan bahwa layanan tersebut memanfaatkan kedua kelas itu dalam proses 
+evaluasi soal tanpa menyimpannya sebagai atribut permanen. 
+
+
+===== HALAMAN 72 =====
+
+ 
+56 
+ 
+3.2.4 Entity Relationship Diagram (ERD) 
+ 
+Gambar 3. 24 ERD (Entity Relationship Diagram) 
+  
+Entity Relationship Diagram (ERD) menggambarkan struktur data sistem berupa 
+entitas (tabel), atribut yang dimiliki setiap entitas, serta relasi antarentitas beserta 
+kardinalitasnya. ERD merupakan penurunan dari class diagram pada tingkat 
+implementasi basis data, sehingga kelas-kelas Model pada perancangan 
+berorientasi objek diwujudkan menjadi tabel-tabel fisik yang dilengkapi kunci primer 
+(primary key) sebagai penanda unik dan kunci tamu (foreign key) sebagai 
+penghubung antartabel. ERD sistem ditunjukkan pada Gambar 3.24 dan terdiri atas 
+sepuluh entitas yang dikelompokkan ke dalam empat domain, yaitu domain 
+pengguna, domain kelas, domain konten pembelajaran, dan domain aktivitas siswa. 
+Entitas USERS merupakan tabel inti yang menyimpan data seluruh pengguna, baik 
+guru maupun siswa. Atributnya meliputi id sebagai kunci primer, name, email, 
+password, dan role bertipe enum dengan nilai "guru" atau "siswa" yang menjadi dasar 
+pembedaan hak akses. Entitas KELAS menyimpan data kelas dengan atribut id 
+
+
+===== HALAMAN 73 =====
+
+ 
+57 
+ 
+sebagai kunci primer, guru_id sebagai kunci tamu ke USERS, class_code sebagai 
+kode unik kelas, name, dan tahun. Entitas KELAS_USER merupakan tabel 
+penghubung yang merepresentasikan relasi banyak-ke-banyak antara siswa dan 
+kelas melalui dua kunci tamu, yaitu kelas_id dan user_id. 
+Pada domain konten pembelajaran, entitas BAB menyimpan data bab dengan atribut 
+id sebagai kunci primer, kelas_id sebagai kunci tamu, title, dan order. Entitas MATERI 
+menyimpan materi ajar dan memiliki kunci tamu kelas_id serta bab_id, ditambah 
+atribut judul, slug, tipe (bernilai teks, video, atau pdf), konten_teks, link_video, 
+file_path, dan order, sehingga satu tabel mampu menampung tiga jenis materi 
+sekaligus. Entitas TEKS_BAB menyimpan ringkasan bab dengan atribut id, bab_id 
+sebagai kunci tamu, dan content. Entitas SOAL menyimpan soal dinamis berbasis 
+variabel dengan atribut id, bab_id sebagai kunci tamu, variable_rules bertipe json, 
+question_template, dan answer_formula. 
+Pada domain aktivitas siswa, entitas KEMAJUAN_MATERI mencatat materi yang telah 
+dibaca siswa melalui atribut id, user_id dan materi_id sebagai kunci tamu, serta 
+read_at untuk mencatat waktu pembacaan. Entitas SESI_UJIAN menyimpan data 
+sesi pengerjaan kuis dengan atribut id, user_id dan bab_id sebagai kunci tamu, 
+started_at, dan finished_at. Entitas JAWABAN menyimpan jawaban tiap soal pada 
+suatu sesi dengan atribut id, sesi_ujian_id dan soal_id sebagai kunci tamu, 
+generated_variables bertipe json untuk menyimpan variabel yang dibangkitkan, 
+student_answer untuk jawaban siswa, dan is_correct untuk status benar atau salah. 
+Adapun relasi antarentitas dijelaskan sebagai berikut. Entitas USERS memiliki relasi 
+satu-ke-banyak dengan KELAS (mengajar) melalui guru_id, yang berarti seorang guru 
+dapat mengelola banyak kelas. Selain itu, USERS berelasi dengan KELAS_USER 
+(enroll) dan KELAS berelasi dengan KELAS_USER (memiliki siswa); kedua relasi satu-
+ke-banyak ini bersama-sama membentuk relasi banyak-ke-banyak antara siswa dan 
+kelas. Entitas KELAS juga memiliki relasi satu-ke-banyak dengan BAB (memiliki) dan 
+dengan MATERI (memiliki modul) melalui kelas_id. 
+Entitas BAB menjadi pusat domain konten karena memiliki relasi satu-ke-banyak 
+dengan MATERI (dikelompokkan) melalui bab_id, relasi satu-ke-satu dengan 
+TEKS_BAB (punya ringkasan), relasi satu-ke-banyak dengan SOAL (punya daftar 
+soal), dan relasi satu-ke-banyak dengan SESI_UJIAN (sumber ujian). Pada domain 
+aktivitas, entitas USERS berelasi satu-ke-banyak dengan SESI_UJIAN (mengerjakan) 
+dan dengan KEMAJUAN_MATERI (membaca), sedangkan MATERI berelasi satu-ke-
+banyak dengan KEMAJUAN_MATERI (dibaca). Terakhir, entitas SESI_UJIAN berelasi 
+satu-ke-banyak dengan JAWABAN (punya jawaban) dan entitas SOAL berelasi satu-
+ke-banyak dengan JAWABAN (dijawab). Dengan struktur ini, setiap jawaban yang 
+
+
+===== HALAMAN 74 =====
+
+ 
+58 
+ 
+tersimpan selalu tertaut ke sesi ujian tertentu sekaligus ke soal yang dijawab, 
+sehingga penilaian dan audit hasil kuis dapat dilakukan secara akurat. 
+3.3 
+ Perancangan Antarmuka Pengguna 
+Perancangan antarmuka pengguna (user interface design) menggambarkan tata 
+letak visual setiap halaman aplikasi yang menjembatani interaksi antara aktor 
+dengan sistem Learning Management System (LMS) Soal Latihan Dinamis. 
+Rancangan disusun dalam bentuk wireframe dan hanya mencakup halaman-
+halaman yang memiliki keterkaitan langsung dengan alur yang telah dimodelkan 
+sebelumnya, yaitu BPMN TO-BE, Activity Diagram, dan Sequence Diagram, sehingga 
+setiap rancangan antarmuka dapat ditelusuri kembali ke kebutuhan fungsional pada 
+Bab II dan pemodelan pada Subbab 3.2. Rancangan dikelompokkan menjadi empat 
+bagian, yaitu antarmuka landing page, antarmuka autentikasi, antarmuka modul 
+Guru, dan antarmuka modul Siswa. 
+3.3.1 Wireframe Landing Page 
+ 
+Gambar 3. 25 Wireframe Halaman Landing Page 
+Gambar 3.25 menampilkan rancangan antarmuka landing page yang menjadi titik 
+akses awal sistem sebagaimana digambarkan pada Activity Diagram Login/Register. 
+Halaman ini bersifat publik sehingga dapat diakses tanpa proses masuk (login) 
+terlebih dahulu. Tata letaknya sederhana, memuat elemen navigasi autentikasi 
+berupa tombol "Masuk" dan "Daftar", pesan sambutan, serta segmen Fitur Unggulan 
+yang merangkum tiga kapabilitas utama sistem, yaitu Soal Dinamis, Asisten AI, dan 
+Belajar Terstruktur. 
+
+
+===== HALAMAN 75 =====
+
+ 
+59 
+ 
+3.3.2 Wireframe Autentikasi 
+ 
+Gambar 3. 26 Wireframe Halaman Login 
+Gambar 3.26 menampilkan rancangan antarmuka halaman login yang berfungsi 
+sebagai pintu masuk pengguna terdaftar sesuai perannya (role-based login), selaras 
+dengan Sequence Diagram Login dan Register. Antarmuka didesain minimalis di 
+tengah layar (centered card) dengan dua bidang masukan, yaitu alamat surel dan 
+kata sandi, serta dilengkapi tombol aksi "Masuk" dan tautan pemulihan kata sandi. 
+ 
+Gambar 3. 27 Wireframe Halaman Registrasi 
+Gambar 3.27 menampilkan rancangan halaman registrasi yang digunakan pengguna 
+baru, baik Guru maupun Siswa, untuk mendaftarkan akun. Selain kolom nama 
+lengkap, surel, dan kata sandi, antarmuka ini dilengkapi menu pilihan peran 
+(dropdown role) yang menentukan hak akses pengguna, sesuai percabangan 
+pemilihan peran pada Activity Diagram Login/Register. 
+
+
+===== HALAMAN 76 =====
+
+ 
+60 
+ 
+3.3.3 Wireframe Modul Guru 
+Modul Guru memuat rancangan halaman bagi Guru untuk mengelola kelas, bab, 
+materi, dan bank soal, memanfaatkan asisten AI, serta memantau hasil belajar 
+siswa. 
+ 
+Gambar 3. 28 Wireframe Dashboard Utama Guru 
+Gambar 3.28 menampilkan rancangan dashboard Guru yang muncul setelah masuk, 
+sesuai kondisi awal pada Sequence Diagram Memantau Hasil Kuis. Halaman ini 
+menyajikan tiga kartu ringkasan, yaitu jumlah kelas aktif, jumlah siswa terdaftar, dan 
+nilai rata-rata ujian, serta tabel aktivitas kuis terbaru dari seluruh kelas. 
+ 
+Gambar 3. 29 Wireframe Daftar Kelas Guru 
+Gambar 3.29 menampilkan rancangan halaman daftar kelas milik Guru sebagai titik 
+masuk pengelolaan kelas pada Sequence Diagram Mengelola Kelas. Antarmuka ini 
+
+
+===== HALAMAN 77 =====
+
+ 
+61 
+ 
+menampilkan kelas dalam grid card yang memuat judul kelas, tahun ajaran, jumlah 
+siswa, kode kelas unik enam karakter, dan tombol menuju detail kelas. 
+ 
+Gambar 3. 30 Wireframe Buat Kelas Baru 
+Gambar 3.30 menampilkan rancangan formulir pembuatan kelas baru sesuai tahap 
+awal Activity Diagram Mengelola Kelas. Formulir memuat kolom nama kelas, 
+deskripsi, dan tahun ajaran, yang diperlukan sistem untuk menghasilkan kode kelas 
+unik secara otomatis. 
+ 
+Gambar 3. 31 Wireframe Detail Kelas Guru 
+Gambar 3.31 menampilkan rancangan halaman detail kelas, sejalan dengan 
+aktivitas "Lihat Detail Kelas" pada Activity Diagram Memantau Progres Siswa. 
+Halaman ini terbagi menjadi dua kolom, yaitu kolom kiri berisi kurikulum daftar bab 
+dan kolom kanan berisi tabel siswa yang telah bergabung beserta progres belajarnya. 
+
+
+===== HALAMAN 78 =====
+
+ 
+62 
+ 
+ 
+Gambar 3. 32 Wireframe Edit Kelas Guru 
+Gambar 3.32 menampilkan rancangan formulir penyuntingan detail kelas, sesuai 
+proses menyunting pada Sequence Diagram Mengelola Kelas. Melalui halaman ini 
+Guru dapat memperbarui nama, deskripsi, dan tahun ajaran, atau menghapus kelas 
+secara permanen. 
+ 
+Gambar 3. 33 Wireframe Buat Bab Baru Guru 
+Gambar 3.33 menampilkan rancangan antarmuka pembuatan bab baru sesuai tahap 
+penambahan bab pada Activity Diagram Mengelola Kelas. Guru mengisi judul bab 
+dan menentukan nomor urutan tampil (order field) untuk menyusun materi secara 
+sekuensial. 
+
+
+===== HALAMAN 79 =====
+
+ 
+63 
+ 
+ 
+Gambar 3. 34 Wireframe Detail Pengelolaan Bab 
+Gambar 3.34 menampilkan rancangan halaman detail pengelolaan bab yang 
+menjadi pusat kontrol kurikulum, sebagaimana dirujuk sebagai "halaman bab" pada 
+Sequence Diagram Mengelola Fitur Materi dan Kuis. Dari halaman ini Guru dapat 
+mengelola materi dan bank soal bab yang bersangkutan. 
+ 
+Gambar 3. 35 Wireframe Tambah Materi Guru 
+Gambar 3.35 menampilkan rancangan halaman tambah materi, sesuai proses 
+pembuatan materi pada Sequence Diagram Mengelola Fitur Materi. Antarmuka 
+
+
+===== HALAMAN 80 =====
+
+ 
+64 
+ 
+memuat kolom judul materi dan pilihan tipe konten, yaitu Teks HTML, Berkas PDF, 
+atau Video YouTube, serta pintasan pembuatan materi dengan AI. 
+ 
+ 
+Gambar 3. 36 Wireframe Tambah Soal Dinamis 
+Gambar 3.36 menampilkan rancangan halaman tambah soal dinamis, sesuai proses 
+pembuatan dan pratinjau pada Sequence Diagram Mengelola Fitur Kuis. Kolom kiri 
+memuat template kalimat soal dan rumus solusi, sedangkan kolom kanan memuat 
+panel pratinjau instan (live preview) hasil render soal. 
+ 
+Gambar 3. 37 Wireframe Pop-up Generate Materi Teks  AI 
+
+
+===== HALAMAN 81 =====
+
+ 
+65 
+ 
+Gambar 3.37 menampilkan rancangan modal dialog generate materi teks dengan AI, 
+sesuai Activity Diagram dan Sequence Diagram Membuat Draf Materi dengan AI. 
+Guru memasukkan poin-poin singkat materi pada kolom teks, kemudian AI 
+memformulasikan konten materi secara otomatis untuk ditinjau. 
+ 
+Gambar 3. 38 Wireframe Pop-up GenerateTemplate  Soal AI 
+Gambar 3.38 menampilkan rancangan modal dialog generate template soal dengan 
+AI, sesuai Activity Diagram dan Sequence Diagram Membuat Draf Soal dengan AI. 
+Guru memasukkan topik soal dan jumlah soal, kemudian AI merancang template 
+ soal dinamis secara otomatis. 
+
+
+===== HALAMAN 82 =====
+
+ 
+66 
+ 
+ 
+Gambar 3. 39 Wireframe Edit Materi Guru 
+Gambar 3.39 menampilkan rancangan antarmuka penyuntingan materi, sesuai 
+proses menyunting pada Sequence Diagram Mengelola Fitur Materi. Guru dapat 
+memperbarui judul, mengubah tipe format modul, atau menghapus materi. 
+ 
+ 
+Gambar 3. 40 Wireframe Edit Soal Guru 
+Gambar 3.40 menampilkan rancangan halaman penyuntingan soal dinamis, sesuai 
+proses menyunting pada Sequence Diagram Mengelola Fitur Kuis. Guru dapat 
+
+
+===== HALAMAN 83 =====
+
+ 
+67 
+ 
+memperbaiki template kalimat soal, memodifikasi formula solusi, serta menyetel 
+ulang rentang nilai variabel. 
+ 
+Gambar 3. 41 Wireframe Audit Ujian Guru 
+Gambar 3.41 menampilkan rancangan halaman audit sesi ujian siswa, sesuai proses 
+audit pada Sequence Diagram Memantau Hasil Kuis. Antarmuka menyajikan 
+rekapitulasi lengkap lembar ujian secara transparan, meliputi kalimat soal dengan 
+angka acak, jawaban siswa, dan kunci jawaban sistem. 
+3.3.4 Wireframe Modul Siswa 
+Modul Siswa memuat rancangan halaman bagi Siswa untuk bergabung ke kelas, 
+membaca materi terstruktur, mengerjakan kuis, serta melihat hasil evaluasi. 
+
+
+===== HALAMAN 84 =====
+
+ 
+68 
+ 
+ 
+Gambar 3. 42 Wireframe Gabung Kelas Siswa 
+Gambar 3.42 menampilkan rancangan halaman gabung kelas, sesuai Activity 
+Diagram dan Sequence Diagram Bergabung ke Kelas. Tampilan ini muncul di tengah 
+layar ketika siswa belum bergabung ke kelas mana pun, dan siswa memasukkan 
+kode kelas unik untuk bergabung. 
+ 
+Gambar 3. 43 Wireframe Dashboard Utama Siswa 
+Gambar 3.43 menampilkan rancangan dashboard Siswa yang menjadi tujuan 
+pengarahan (redirect) setelah masuk pada Sequence Diagram Login dan Register. 
+Halaman ini memuat statistik ringkas belajar, yaitu jumlah kelas yang diikuti, kuis 
+yang selesai, dan rata-rata skor, disertai daftar kelas aktif. 
+
+
+===== HALAMAN 85 =====
+
+ 
+69 
+ 
+ 
+Gambar 3. 44 Wireframe Daftar Bab Siswa 
+Gambar 3.44 menampilkan rancangan halaman daftar bab di kelas bagi siswa, 
+sesuai tahap penampilan daftar materi pada Sequence Diagram Mempelajari Materi. 
+Halaman ini dilengkapi persentase kemajuan (progress) membaca pada setiap bab. 
+ 
+Gambar 3. 45 Wireframe Detail Bab Siswa 
+Gambar 3.45 mengilustrasikan Halaman Detail Bab Siswa. Menyajikan daftar materi 
+belajar sekuensial. Tombol 'Mulai Ujian Evaluasi' aktif otomatis setelah status 
+seluruh materi tercentang 'Sudah Dibaca'. 
+
+
+===== HALAMAN 86 =====
+
+ 
+70 
+ 
+ 
+Gambar 3. 46 Wireframe Baca Materi Siswa 
+Gambar 3.46 menampilkan rancangan halaman baca materi. Area tengah 
+menampilkan konten ajar berupa Teks, PDF, atau Video YouTube, dilengkapi tombol 
+"Tandai Sudah Dibaca" untuk memperbarui kemajuan belajar. 
+a. Halaman Pengerjaan Soal Kuis: 
+ 
+Gambar 3. 47 Wireframe Pengerjaan Soal Kuis 
+Gambar 3.47 menampilkan rancangan antarmuka pengerjaan soal kuis. Halaman ini 
+menampilkan nomor soal aktif, angka yang dibangkitkan secara acak, bidang 
+masukan isian numerik, serta tombol navigasi antarsoal. 
+
+
+===== HALAMAN 87 =====
+
+ 
+71 
+ 
+ 
+Gambar 3. 48 Wireframe Hasil Ujian Siswa 
+ 
+Gambar 3.48 menampilkan rancangan halaman hasil ujian siswa. Halaman ini 
+menampilkan persentase skor akhir, status kelulusan, serta tabel koreksi lembar 
+jawaban. 
+ 
+Gambar 3. 49 Wireframe Riwayat Ujian Siswa 
+Gambar 3.49 menampilkan rancangan halaman riwayat ujian siswa. Halaman ini 
+memuat riwayat pengerjaan kuis yang telah diselesaikan beserta skor, status 
+kelulusan, dan tanggal pengerjaan. 
+3.4 
+Kebutuhan Perangkat Keras dan Perangkat Lunak 
+Kebutuhan perangkat keras dan perangkat lunak pada tugas akhir ini dibagi menjadi 
+dua bagian, yaitu kebutuhan pada tahap pengembangan sistem dan kebutuhan pada 
+tahap implementasi sistem. Kebutuhan pengembangan sistem digunakan selama 
+
+
+===== HALAMAN 88 =====
+
+ 
+72 
+ 
+proses perancangan, pembuatan, dan pengujian platform Learning Management 
+System (LMS) Latihan Soal Dinamis. Sementara itu, kebutuhan implementasi sistem 
+digunakan sebagai spesifikasi minimal agar aplikasi dapat dijalankan oleh pengguna, 
+baik Guru maupun Siswa. 
+3.4.1 Kebutuhan Tahap Pengembangan Sistem 
+Tahap pengembangan sistem memerlukan spesifikasi perangkat keras dan 
+perangkat lunak tertentu agar proses pengodean komponen backend (Laravel) 
+dan pengujian basis data dapat berjalan lancar. 
+Tabel 3. 1 Kebutuhan Perangkat Keras Tahap Pengembangan Sistem 
+No 
+Perangkat Keras 
+Spesifikasi Minimal 
+1 
+Laptop/Komputer/HP Intel Core i3 / prosesor smartphone setara 
+2 
+RAM 
+Minimal 4 GB 
+3 
+Penyimpanan 
+Minimal tersedia ruang kosong 1 GB 
+4 
+Koneksi Internet 
+Digunakan untuk mengakses platform LMS kuis 
+dinamis 
+5 
+Monitor/Layar 
+Resolusi minimal 1366 x 768 piksel (menyesuaikan 
+layar perangkat) 
+ 
+Tabel 3. 2 Kebutuhan Perangkat Lunak Tahap Pengembangan Sistem 
+No Perangkat Lunak 
+Spesifikasi / Keterangan 
+1 
+Sistem Operasi 
+Windows 10/11 64-bit atau macOS 
+2 
+Text Editor / IDE 
+Visual Studio Code 
+3 
+Bahasa 
+Pemrograman 
+PHP 8.x (dengan ekstensi BCMath untuk komputasi 
+presisi tinggi) dan JavaScript 
+4 
+Kerangka Kerja 
+Backend 
+Laravel 
+5 
+Basis Data 
+MySQL / MariaDB 
+6 
+Lingkungan Server 
+Lokal 
+Laravel Herd / Laragon / XAMPP (PHP 8.x dan 
+MySQL) 
+7 
+Manajer Paket PHP 
+Composer 
+8 
+Lingkungan 
+JavaScript 
+Node.js dan NPM (manajemen aset front-end) 
+9 
+Kerangka Kerja CSS 
+Tailwind CSS 
+10 
+Editor Teks Kaya 
+(WYSIWYG) 
+Trix Editor (penyusunan materi bertipe teks) 
+11 
+Layanan AI Eksternal 
+Groq API dengan model Large Language Model 
+Llama 3.3 (draf materi dan draf soal) 
+12 
+Alat Manajemen 
+Basis Data 
+phpMyAdmin / TablePlus / Beekeeper Studio 
+13 
+Kontrol Versi 
+Git dan GitHub 
+
+
+===== HALAMAN 89 =====
+
+ 
+73 
+ 
+14 
+Peramban Web 
+Google Chrome atau Mozilla Firefox (pengujian 
+antarmuka) 
+15 
+Perancangan 
+Antarmuka 
+Figma 
+16 
+Pemodelan Diagram 
+draw.io 
+ 
+3.4.2 Implementasi Sistem  
+Dalam tahap implementasi, penentuan spesifikasi minimum perangkat keras dan 
+perangkat lunak sangat penting agar platform dapat dioperasikan secara optimal 
+oleh pengguna. Mengingat platform ini dikembangkan dengan arsitektur berbasis 
+web, pengguna akhir tidak perlu melakukan instalasi aplikasi tambahan; cukup 
+menggunakan perangkat yang memiliki peramban (browser) modern serta terkoneksi 
+ke jaringan internet atau server lokal tempat sistem dijalankan. 
+Tabel 3. 3 Kebutuhan Perangkat Keras Tahap Implementasi Sistem 
+No 
+Perangkat Keras 
+Spesifikasi Minimal 
+1 
+Laptop/Komputer/HP Intel Core i3 / prosesor smartphone setara 
+2 
+RAM 
+Minimal 4 GB 
+3 
+Penyimpanan 
+Minimal tersedia ruang kosong 1 GB 
+4 
+Koneksi Internet 
+Digunakan untuk mengakses platform LMS kuis 
+dinamis 
+5 
+Monitor/Layar 
+Resolusi minimal 1366 x 768 piksel (menyesuaikan 
+layar perangkat) 
+ 
+Tabel 3. 4 Kebutuhan Perangkat Lunak Tahap Implementasi Sistem 
+No Perangkat Lunak 
+Keterangan 
+1 
+Sistem Operasi 
+Windows dan macOS  
+2 
+Peramban Web 
+Google Chrome, Microsoft Edge, Mozilla Firefox, 
+atau peramban modern lainnya (sisi pengguna) 
+3 
+Server Web 
+Apache atau Nginx untuk menjalankan aplikasi web 
+di server (sisi peladen) 
+4 
+PHP 
+PHP 8.2 dengan ekstensi BCMath untuk 
+menjalankan Laravel dan menjamin akurasi 
+penilaian (sisi peladen) 
+5 
+Basis Data 
+MySQL sebagai basis data utama sistem (sisi 
+peladen) 
+6 
+Kerangka Kerja 
+Backend 
+Laravel, mengelola logika bisnis, pengacakan 
+variabel, dan auto-grading (sisi peladen) 
+
+
+===== HALAMAN 90 =====
+
+ 
+74 
+ 
+7 
+Koneksi Layanan AI 
+Akses ke Groq API untuk fitur asisten AI Guru;  
+ 
+Melalui pemenuhan spesifikasi perangkat keras dan perangkat lunak tersebut, 
+platform Learning Management System (LMS) bank soal matematika dinamis ini 
+dapat diterapkan dan dioperasikan sesuai dengan rancangan kebutuhan sistem 
+ 
+ 
+ 
+
+
+===== HALAMAN 91 =====
+
+ 
+75 
+ 
+BAB IV IMPLEMENTASI DAN PENGUJIAN 
+4.1 
+Implementasi 
+Bagian ini menjelaskan hasil implementasi sistem Learning Management System 
+(LMS) Soal Latihan Dinamis yang telah dirancang pada Bab III. Sistem dibangun 
+menggunakan kerangka kerja Laravel dengan basis data MySQL dan diakses melalui 
+peramban web. Sistem melayani dua peran pengguna, yaitu Guru dan Siswa, serta 
+merealisasikan seluruh use case dan proses bisnis TO-BE yang telah dimodelkan 
+pada Bab II. Hasil implementasi antarmuka sistem diuraikan pada subbab berikut. 
+4.2 
+Implementasi Antarmuka 
+Implementasi antarmuka merupakan realisasi rancangan antarmuka menjadi 
+tampilan sistem yang berfungsi. Antarmuka diurutkan mengikuti alur use case dari 
+autentikasi, modul Guru, hingga modul Siswa, sebagaimana dijabarkan berikut. 
+4.2.1 Antarmuka Landing Page 
+Bagian ini memaparkan halaman utama publik yang menjadi titik akses awal 
+sistem, yang direpresentasikan melalui Gambar 4.1 berikut. 
+ 
+Gambar 4. 1Halaman Landing Page 
+Gambar 4.1 menampilkan halaman utama yang memuat tombol navigasi "Masuk" 
+dan "Daftar" serta ringkasan fitur unggulan sistem. Halaman ini menjadi titik awal 
+sebelum aktor melakukan proses autentikasi dan dapat diakses tanpa perlu masuk 
+terlebih dahulu. 
+
+
+===== HALAMAN 92 =====
+
+ 
+76 
+ 
+4.2.2 Antarmuka Login 
+Bagian ini memaparkan halaman masuk bagi pengguna terdaftar, yang 
+direpresentasikan melalui Gambar 4.2 berikut. 
+ 
+Gambar 4. 2 Halaman Login 
+ 
+Gambar 4.2 menampilkan formulir login berisi kolom surel dan kata sandi. Setelah 
+kredensial diverifikasi, sistem mengarahkan pengguna ke dashboard sesuai 
+perannya, dan menampilkan pesan kesalahan apabila kredensial tidak sesuai. 
+4.2.3 Antarmuka Register 
+Bagian ini memaparkan halaman pendaftaran akun baru, yang direpresentasikan 
+melalui Gambar 4.3 berikut. 
+
+
+===== HALAMAN 93 =====
+
+ 
+77 
+ 
+ 
+Gambar 4. 3 Halaman Register 
+Gambar 4.3 menampilkan formulir registrasi berisi kolom nama, surel, kata sandi, 
+dan pilihan peran sebagai Guru atau Siswa. Setelah data lolos validasi, sistem 
+membuat akun baru dan langsung membentuk sesi autentikasi. 
+4.2.4 Antarmuka Dashboard Guru 
+Bagian ini memaparkan halaman utama Guru, yang direpresentasikan melalui 
+Gambar 4.4 berikut. 
+ 
+Gambar 4. 4 Halaman Dashboard Guru 
+Gambar 4.4 menampilkan tiga kartu ringkasan, yaitu jumlah kelas aktif, jumlah siswa 
+terdaftar, dan rata-rata nilai ujian, serta tabel aktivitas kuis terbaru dari seluruh kelas. 
+
+
+===== HALAMAN 94 =====
+
+ 
+78 
+ 
+4.2.5 Antarmuka Daftar Kelas 
+Bagian ini memaparkan daftar kelas milik Guru, yang direpresentasikan melalui 
+Gambar 4.5 berikut. 
+ 
+Gambar 4. 5 Halaman daftar Kelas 
+ 
+Gambar 4.5 menampilkan kelas dalam bentuk kartu yang memuat judul kelas, tahun 
+ajaran, jumlah siswa, kode kelas unik, dan tombol menuju detail kelas. 
+4.2.6 Antarmuka Buat Kelas 
+Bagian ini memaparkan formulir pembuatan kelas baru, yang direpresentasikan 
+melalui Gambar 4.6 berikut. 
+
+
+===== HALAMAN 95 =====
+
+ 
+79 
+ 
+ 
+Gambar 4. 6 Halaman Buat Kelas 
+Gambar 4.6 menampilkan formulir berisi kolom nama kelas, deskripsi, dan tahun 
+ajaran. Setelah disimpan, sistem membangkitkan kode kelas unik enam karakter 
+secara otomatis. 
+4.2.7 Antarmuka Detail Kelas 
+Bagian ini memaparkan halaman detail kelas, yang direpresentasikan melalui 
+Gambar 4.7 berikut. 
+ 
+Gambar 4. 7 Halaman Detail Kelas 
+Gambar 4.7 menampilkan struktur kelas yang terbagi menjadi kolom daftar bab dan 
+kolom daftar siswa beserta progres belajarnya. 
+
+
+===== HALAMAN 96 =====
+
+ 
+80 
+ 
+4.2.8 Antarmuka Edit Kelas 
+Bagian ini memaparkan formulir penyuntingan kelas, yang direpresentasikan 
+melalui Gambar 4.8 berikut. 
+ 
+Gambar 4. 8 Halaman Edit Kelas 
+Gambar 4.8 menampilkan formulir penyuntingan data kelas. Melalui halaman ini 
+Guru dapat memperbarui data atau menghapus kelas setelah melalui pemeriksaan 
+kepemilikan. 
+4.2.9 Antarmuka Buat Bab 
+Bagian ini memaparkan antarmuka pembuatan bab, yang direpresentasikan 
+melalui Gambar 4.9 berikut. 
+ 
+Gambar 4. 9 Halaman Buat BAB 
+
+
+===== HALAMAN 97 =====
+
+ 
+81 
+ 
+Gambar 4.9 menampilkan formulir pengisian judul bab dan nomor urutan tampil 
+untuk menyusun materi secara sekuensial. 
+4.2.10 Antarmuka Detail Pengelolaan Bab 
+Bagian ini memaparkan pusat kontrol kurikulum bab yang menjadi kondisi awal 
+pengelolaan materi dan soal, yang direpresentasikan melalui Gambar 4.10 
+berikut. 
+ 
+Gambar 4. 10 Halaman Detail BAB 
+Gambar 4.10 menampilkan halaman tempat Guru mengelola materi dan bank soal 
+bab yang bersangkutan. 
+4.2.11 Antarmuka Tambah Materi 
+Bagian ini memaparkan halaman penambahan materi, yang direpresentasikan 
+melalui Gambar 4.11 berikut. 
+
+
+===== HALAMAN 98 =====
+
+ 
+82 
+ 
+ 
+Gambar 4. 11 Halaman Tambah Materi 
+Gambar 4.11 menampilkan formulir pengisian judul dan pemilihan tipe konten, yaitu 
+teks, video, atau PDF, disertai pintasan pembuatan materi dengan AI. 
+4.2.12 Antarmuka Edit Materi 
+Bagian ini memaparkan halaman penyuntingan materi, yang direpresentasikan 
+melalui Gambar 4.12 berikut. 
+ 
+Gambar 4. 12 Halaman Edit Materi 
+Gambar 4.12 menampilkan formulir pembaruan judul dan tipe materi, disertai 
+penataan ulang urutan materi dalam bab. 
+
+
+===== HALAMAN 99 =====
+
+ 
+83 
+ 
+4.2.13 Antarmuka Generate Materi dengan AI 
+Bagian 
+ini 
+memaparkan 
+modal 
+pembuatan 
+materi 
+dengan 
+AI, 
+yang 
+direpresentasikan melalui Gambar 4.13 berikut. 
+ 
+Gambar 4. 13 Buat Materi dengan AI 
+Gambar 4.13 menampilkan kolom masukan poin inti materi. Sistem mengirimkan 
+poin tersebut ke Groq API dan menampilkan draf materi berformat HTML untuk 
+ditinjau sebelum disimpan. 
+4.2.14 Antarmuka Tambah Soal Dinamis 
+Bagian 
+ini 
+memaparkan 
+halaman 
+penambahan 
+soal 
+dinamis, 
+yang 
+direpresentasikan melalui Gambar 4.14 berikut. 
+ 
+Gambar 4. 14 Halaman Tambah Soal 
+
+
+===== HALAMAN 100 =====
+
+ 
+84 
+ 
+Gambar 4.14 menampilkan formulir pengisian template soal, aturan variabel, dan 
+rumus jawaban, dilengkapi panel pratinjau instan hasil render soal. 
+4.2.15 Antarmuka Edit Soal 
+Bagian ini memaparkan halaman penyuntingan soal, yang direpresentasikan 
+melalui Gambar 4.15 berikut. 
+ 
+Gambar 4. 15 Halaman Edit Soal 
+Gambar 4.15 menampilkan formulir perbaikan template soal, rumus jawaban, dan 
+rentang nilai variabel. 
+4.2.16 Antarmuka Generate Soal dengan AI 
+Bagian 
+ini 
+memaparkan 
+modal 
+pembuatan 
+soal 
+dengan 
+AI, 
+yang 
+direpresentasikan melalui Gambar 4.16 berikut. 
+
+
+===== HALAMAN 101 =====
+
+ 
+85 
+ 
+ 
+Gambar 4. 16 Halaman Generate Soal dengan AI 
+Gambar 4.16 menampilkan kolom masukan topik dan jumlah soal. Sistem 
+menghasilkan sejumlah template soal dinamis secara otomatis dan menyimpan soal 
+yang datanya lengkap. 
+4.2.17 Antarmuka Audit Ujian 
+Bagian ini memaparkan halaman audit sesi ujian siswa, yang direpresentasikan 
+melalui Gambar 4.17 berikut. 
+ 
+Gambar 4. 17 Halaman Audit Ujian Oleh Guru 
+Gambar 4.17 menampilkan rekapitulasi lembar ujian siswa secara transparan, 
+meliputi soal dengan angka acak, jawaban siswa, dan kunci jawaban yang dihitung 
+ulang oleh sistem. 
+
+
+===== HALAMAN 102 =====
+
+ 
+86 
+ 
+4.2.18 Antarmuka Gabung Kelas 
+Bagian ini memaparkan halaman gabung kelas, yang direpresentasikan melalui 
+Gambar 4.18 berikut. 
+ 
+Gambar 4. 18 Halaman Gabung Kelas 
+Gambar 4.18 menampilkan kolom masukan kode kelas. Sistem memvalidasi kode, 
+memeriksa keterdaftaran, lalu menautkan siswa ke kelas apabila belum terdaftar. 
+4.2.19 Antarmuka Dashboard Siswa 
+Bagian ini memaparkan halaman utama Siswa, yang direpresentasikan melalui 
+Gambar 4.19 berikut. 
+ 
+Gambar 4. 19 Halaman Dashboard Siswa 
+
+
+===== HALAMAN 103 =====
+
+ 
+87 
+ 
+Gambar 4.19 menampilkan statistik ringkas belajar, yaitu jumlah kelas yang diikuti, 
+kuis yang selesai, dan rata-rata skor, disertai daftar kelas aktif. 
+4.2.20 Antarmuka Daftar Bab 
+Bagian ini memaparkan halaman daftar bab bagi siswa, yang direpresentasikan 
+melalui Gambar 4.20 berikut. 
+ 
+Gambar 4. 20 Halaman Daftar BAB 
+Gambar 4.20 menampilkan daftar bab beserta persentase kemajuan membaca pada 
+setiap bab. 
+4.2.21 Antarmuka Detail Bab 
+Bagian ini memaparkan halaman detail bab bagi siswa, yang direpresentasikan 
+melalui Gambar 4.21 berikut. 
+ 
+Gambar 4. 21 Halaman Detail BAB Siswa 
+
+
+===== HALAMAN 104 =====
+
+ 
+88 
+ 
+Gambar 4.21 menampilkan daftar materi secara sekuensial. Tombol "Mulai Ujian 
+Evaluasi" aktif otomatis setelah seluruh materi berstatus telah dibaca. 
+4.2.22 Antarmuka Fitur Materi 
+Bagian ini memaparkan halaman baca materi, yang direpresentasikan melalui 
+Gambar 4.22 berikut. 
+ 
+Gambar 4. 22 Halaman Fitur Materi Siswa 
+Gambar 4.22 menampilkan konten materi sesuai tipenya, yaitu teks, PDF, atau video, 
+dilengkapi tombol "Tandai Sudah Dibaca" untuk memperbarui kemajuan belajar. 
+4.2.23 Antarmuka Pengerjaan Kuis 
+Bagian ini memaparkan antarmuka pengerjaan kuis, yang direpresentasikan 
+melalui Gambar 4.23 berikut. 
+ 
+Gambar 4. 23 Halaman Pengerjaan Kuis Siswa 
+
+
+===== HALAMAN 105 =====
+
+ 
+89 
+ 
+Gambar 4.23 menampilkan soal dengan angka yang dibangkitkan acak, bidang 
+masukan numerik, dan tombol navigasi antarsoal. Jawaban siswa dibandingkan 
+dengan kunci jawaban menggunakan toleransi desimal. 
+4.2.24 Antarmuka Hasil Ujian 
+Bagian ini memaparkan halaman hasil ujian, yang direpresentasikan melalui 
+Gambar 4.24 berikut. 
+ 
+Gambar 4. 24 Halaman Feedback 
+Gambar 4.24 menampilkan persentase skor akhir, status kelulusan, dan tabel 
+koreksi lembar jawaban sebagai umpan balik. 
+4.2.25 Antarmuka Riwayat Ujian 
+Bagian ini memaparkan halaman riwayat ujian, yang direpresentasikan melalui 
+Gambar 4.25 berikut. 
+ 
+Gambar 4. 25 Halaman Riwayat Kuis Siswa 
+
+
+===== HALAMAN 106 =====
+
+ 
+90 
+ 
+Gambar 4.25 menampilkan seluruh sesi kuis yang telah diselesaikan beserta skor, 
+status kelulusan, dan tanggal pengerjaan. 
+4.3 Pengujian 
+Pengujian sistem dilakukan menggunakan metode black box testing sesuai 
+dengan batasan metode pengujian yang telah ditetapkan pada Bab I. Metode 
+ini berfokus pada validasi fungsionalitas sistem dengan cara memberikan 
+masukan tertentu dan membandingkan keluaran aktual terhadap keluaran 
+yang diharapkan, tanpa memeriksa struktur kode internal. Skenario pengujian 
+disusun berdasarkan use case pada Bab II serta alur normal dan alternatif 
+yang dimodelkan pada Sequence Diagram Bab III. Hasil pengujian ditunjukkan 
+pada Tabel 4.1. 
+Tabel 4. 1 Hasil Pengujian Black Box 
+Kode 
+Nama Pengujian 
+Tujuan Pengujian 
+Skenario 
+Hasil yang 
+Diharapkan 
+Hasil 
+Pengujian 
+Kesimpulan 
+PB-01 
+Registrasi akun 
+Memastikan 
+pengguna baru 
+dapat mendaftar 
+Mengisi nama, 
+surel unik, kata 
+sandi, dan 
+memilih peran, 
+lalu menekan 
+daftar 
+Akun 
+tersimpan dan 
+pengguna 
+diarahkan ke 
+beranda 
+Sesuai 
+Valid 
+PB-02 
+Registrasi surel 
+ganda 
+Memastikan 
+validasi keunikan 
+surel berfungsi 
+Mendaftar 
+menggunakan 
+surel yang 
+sudah terdaftar 
+ 
+Sistem 
+menolak dan 
+menampilkan 
+pesan 
+kesalahan 
+validasi 
+Sesuai 
+Valid 
+PB-03 
+Login kredensial 
+benar 
+Memastikan 
+autentikasi dan 
+pengarahan peran 
+(RBAC) berfungsi 
+Masuk dengan 
+surel dan kata 
+sandi yang 
+benar sebagai 
+Guru dan 
+sebagai Siswa 
+Pengguna 
+masuk dan 
+diarahkan ke 
+dashboard 
+sesuai 
+perannya 
+Sesuai 
+Valid 
+PB-04 
+Login kredensial 
+salah 
+Memastikan 
+penanganan 
+kegagalan 
+autentikasi 
+Masuk dengan 
+kata sandi yang 
+salah 
+Sistem 
+menampilkan 
+pesan "Email 
+atau password 
+salah" 
+Sesuai 
+Valid 
+
+
+===== HALAMAN 107 =====
+
+ 
+91 
+ 
+Kode 
+Nama Pengujian 
+Tujuan Pengujian 
+Skenario 
+Hasil yang 
+Diharapkan 
+Hasil 
+Pengujian 
+Kesimpulan 
+PB-05 
+Membuat kelas 
+Memastikan Guru 
+dapat membuat 
+kelas dengan 
+kode unik 
+Mengisi nama, 
+deskripsi, dan 
+tahun ajaran, 
+lalu 
+menyimpan 
+Kelas 
+tersimpan dan 
+kode unik 
+enam karakter 
+terbentuk 
+otomatis 
+Sesuai 
+Valid 
+PB-06 
+Validasi formulir 
+kelas 
+Memastikan 
+validasi masukan 
+kelas berfungsi 
+Menyimpan 
+formulir 
+dengan kolom 
+nama kosong 
+Sistem 
+menolak dan 
+menampilkan 
+pesan validasi 
+Sesuai 
+Valid 
+PB-07 
+Menyunting kelas 
+Memastikan 
+pembaruan data 
+kelas berfungsi 
+Guru pemilik 
+mengubah 
+nama dan 
+tahun ajaran, 
+lalu 
+menyimpan 
+Data kelas 
+diperbarui 
+Sesuai 
+Valid 
+PB-08 
+Otorisasi 
+kepemilikan kelas 
+Memastikan 
+Policy menolak 
+akses bukan 
+pemilik 
+Guru lain 
+mencoba 
+membuka 
+halaman 
+penyuntingan 
+kelas 
+Sistem 
+menolak akses 
+Sesuai 
+Valid 
+PB-09 
+Mengeluarkan 
+siswa 
+Memastikan Guru 
+dapat 
+mengeluarkan 
+siswa dari kelas 
+Menekan 
+tombol 
+keluarkan pada 
+salah satu 
+siswa 
+Relasi siswa 
+pada kelas 
+terhapus 
+Sesuai 
+Valid 
+PB-10 
+Membuat bab 
+Memastikan Guru 
+dapat menambah 
+bab 
+Mengisi judul 
+dan urutan 
+bab, lalu 
+menyimpan 
+Bab baru 
+tersimpan 
+pada kelas 
+Sesuai 
+Valid 
+PB-11 
+Menambah materi 
+teks 
+Memastikan 
+materi tipe teks 
+tersimpan 
+Memilih tipe 
+teks, mengisi 
+konten pada 
+editor, lalu 
+menyimpan 
+Materi 
+tersimpan 
+dengan slug 
+unik 
+Sesuai 
+Valid 
+PB-12 
+Menambah materi 
+video 
+Memastikan 
+tautan YouTube 
+diproses benar 
+Memilih tipe 
+video dan 
+Identitas video 
+terekstrak dan 
+Sesuai 
+Valid 
+
+
+===== HALAMAN 108 =====
+
+ 
+92 
+ 
+Kode 
+Nama Pengujian 
+Tujuan Pengujian 
+Skenario 
+Hasil yang 
+Diharapkan 
+Hasil 
+Pengujian 
+Kesimpulan 
+menempelkan 
+tautan YouTube 
+materi 
+tersimpan 
+PB-13 
+Menambah materi 
+PDF 
+Memastikan 
+unggahan berkas 
+berfungsi 
+Memilih tipe 
+PDF dan 
+mengunggah 
+berkas 
+Berkas 
+tersimpan 
+pada 
+penyimpanan 
+publik 
+Sesuai 
+Valid 
+PB-14 
+Menyunting materi 
+Memastikan 
+pembaruan 
+materi berfungsi 
+Mengubah 
+judul dan tipe 
+materi, lalu 
+menyimpan 
+Materi 
+diperbarui dan 
+urutan dalam 
+bab tertata 
+ulang 
+Sesuai 
+Valid 
+PB-15 
+Menghapus 
+materi 
+Memastikan 
+penghapusan 
+materi beserta 
+berkasnya 
+Menghapus 
+materi bertipe 
+PDF 
+Berkas dan 
+data materi 
+terhapus 
+Sesuai 
+Valid 
+PB-16 
+Membuat soal 
+dinamis 
+Memastikan 
+template soal 
+tersimpan 
+Mengisi 
+template soal, 
+aturan variabel, 
+dan rumus 
+jawaban, lalu 
+menyimpan 
+Soal dinamis 
+tersimpan 
+pada bab 
+Sesuai 
+Valid 
+PB-17 
+Pratinjau soal 
+Memastikan 
+pengacakan 
+variabel dan 
+perhitungan 
+rumus benar 
+Menekan 
+tombol 
+pratinjau pada 
+formulir soal 
+Soal tampil 
+dengan angka 
+acak beserta 
+kunci jawaban 
+yang benar 
+Sesuai 
+Valid 
+PB-18 
+Menyunting soal 
+Memastikan 
+pembaruan soal 
+berfungsi 
+Mengubah 
+template 
+ dan rumus 
+jawaban, lalu 
+menyimpan 
+Soal diperbarui 
+Sesuai 
+Valid 
+PB-19 
+Generate materi 
+dengan AI 
+Memastikan 
+integrasi AI untuk 
+draf materi 
+berfungsi 
+Memasukkan 
+poin inti materi 
+dan menekan 
+tombol 
+generate 
+Draf materi 
+berformat 
+HTML tampil 
+pada editor 
+untuk ditinjau 
+Sesuai 
+Valid 
+PB-20 
+Penanganan galat 
+AI 
+Memastikan 
+kegagalan 
+Menjalankan 
+generate saat 
+Sistem 
+menampilkan 
+Sesuai 
+Valid 
+
+
+===== HALAMAN 109 =====
+
+ 
+93 
+ 
+Kode 
+Nama Pengujian 
+Tujuan Pengujian 
+Skenario 
+Hasil yang 
+Diharapkan 
+Hasil 
+Pengujian 
+Kesimpulan 
+layanan AI 
+tertangani 
+layanan AI tidak 
+merespons 
+pesan 
+kesalahan 
+tanpa 
+menyimpan 
+data 
+PB-21 
+Generate soal 
+dengan AI 
+Memastikan 
+integrasi AI untuk 
+draf soal 
+berfungsi 
+Memasukkan 
+topik dan 
+jumlah soal, 
+lalu menekan 
+generate 
+Sejumlah 
+template soal 
+dinamis 
+tersimpan 
+sesuai jumlah 
+yang valid 
+Sesuai 
+Valid 
+PB-22 
+Otorisasi fitur AI 
+Memastikan fitur 
+AI hanya untuk 
+Guru pemilik 
+kelas 
+Guru bukan 
+pemilik kelas 
+memanggil 
+generate soal 
+Sistem 
+menolak 
+dengan 
+respons 403 
+Sesuai 
+Valid 
+PB-23 
+Memantau hasil 
+kuis 
+Memastikan 
+rekapitulasi pada 
+dashboard Guru 
+tampil 
+Membuka 
+dashboard 
+Guru setelah 
+terdapat sesi 
+ujian selesai 
+Rata-rata skor 
+dan aktivitas 
+kuis terbaru 
+tampil 
+Sesuai 
+Valid 
+PB-24 
+Audit sesi ujian 
+Memastikan 
+transparansi 
+penilaian 
+Membuka 
+halaman audit 
+pada salah 
+satu sesi ujian 
+siswa 
+Soal dengan 
+angka acak, 
+jawaban siswa, 
+dan kunci 
+jawaban tampil 
+Sesuai 
+Valid 
+PB-25 
+Gabung kelas 
+kode benar 
+Memastikan 
+siswa dapat 
+bergabung ke 
+kelas 
+Memasukkan 
+kode kelas 
+yang benar 
+Siswa 
+tergabung dan 
+diarahkan ke 
+halaman 
+berikutnya 
+Sesuai 
+Valid 
+PB-26 
+Gabung kelas 
+kode salah 
+Memastikan 
+validasi kode 
+kelas berfungsi 
+Memasukkan 
+kode kelas 
+yang tidak 
+terdaftar 
+Sistem 
+menampilkan 
+pesan kode 
+tidak 
+ditemukan 
+Sesuai 
+Valid 
+PB-27 
+Gabung kelas 
+ganda 
+Memastikan 
+pencegahan 
+pendaftaran 
+ganda 
+Memasukkan 
+kode kelas 
+yang sudah 
+diikuti 
+Sistem 
+menampilkan 
+pesan bahwa 
+Sesuai 
+Valid 
+
+
+===== HALAMAN 110 =====
+
+ 
+94 
+ 
+Kode 
+Nama Pengujian 
+Tujuan Pengujian 
+Skenario 
+Hasil yang 
+Diharapkan 
+Hasil 
+Pengujian 
+Kesimpulan 
+siswa sudah 
+berada di kelas 
+PB-28 
+Membaca materi 
+Memastikan 
+konten tampil 
+sesuai tipe 
+Membuka 
+materi bertipe 
+teks, video, dan 
+PDF secara 
+bergantian 
+Konten tampil 
+sesuai tipenya 
+masing-masing 
+Sesuai 
+Valid 
+PB-29 
+Menandai materi 
+dibaca 
+Memastikan 
+perekaman 
+kemajuan belajar 
+Menekan 
+tombol "Tandai 
+Sudah Dibaca" 
+pada materi 
+Kemajuan 
+tersimpan 
+beserta 
+timestamp 
+pembacaan 
+Sesuai 
+Valid 
+PB-30 
+Otorisasi akses 
+materi 
+Memastikan 
+materi hanya 
+untuk anggota 
+kelas 
+Siswa bukan 
+anggota kelas 
+membuka 
+tautan materi 
+Sistem 
+menolak akses 
+Sesuai 
+Valid 
+PB-31 
+Memulai kuis 
+Memastikan 
+pembuatan sesi 
+dan pengacakan 
+per siswa 
+Menekan mulai 
+kuis pada bab 
+yang belum 
+lulus 
+Sesi baru 
+terbentuk dan 
+soal tampil 
+dengan angka 
+acak 
+Sesuai 
+Valid 
+PB-32 
+Kuis bab sudah 
+lulus 
+Memastikan 
+pencegahan 
+pengerjaan ulang 
+Memulai kuis 
+pada bab 
+dengan nilai 
+kelulusan 
+tercapai 
+Sistem 
+mengarahkan 
+ke riwayat 
+dengan pesan 
+sudah lulus 
+Sesuai 
+Valid 
+PB-33 
+Melanjutkan sesi 
+aktif 
+Memastikan sesi 
+belum selesai 
+dapat dilanjutkan 
+Memulai kuis 
+saat masih ada 
+sesi yang 
+belum 
+diselesaikan 
+Sistem 
+melanjutkan 
+sesi yang 
+sama, bukan 
+membuat sesi 
+baru 
+Sesuai 
+Valid 
+PB-34 
+Penilaian 
+otomatis 
+Memastikan auto-
+grading 
+menghitung 
+dengan benar 
+Menjawab soal 
+dengan nilai 
+benar dan nilai 
+salah secara 
+bergantian 
+Status 
+benar/salah 
+tercatat sesuai 
+kunci jawaban 
+dengan 
+toleransi 
+desimal 
+Sesuai 
+Valid 
+
+
+===== HALAMAN 111 =====
+
+ 
+95 
+ 
+Kode 
+Nama Pengujian 
+Tujuan Pengujian 
+Skenario 
+Hasil yang 
+Diharapkan 
+Hasil 
+Pengujian 
+Kesimpulan 
+PB-35 
+Validasi jawaban 
+numerik 
+Memastikan 
+masukan non-
+angka ditolak 
+Mengisi 
+jawaban 
+dengan huruf 
+Sistem 
+menolak dan 
+meminta 
+masukan 
+numerik 
+Sesuai 
+Valid 
+PB-36 
+Menyelesaikan 
+kuis 
+Memastikan 
+penutupan sesi 
+dan perhitungan 
+nilai 
+Menekan 
+tombol 
+selesaikan kuis 
+setelah semua 
+soal dijawab 
+Waktu selesai 
+tercatat dan 
+halaman hasil 
+tampil beserta 
+skor 
+Sesuai 
+Valid 
+PB-37 
+Melihat hasil dan 
+umpan balik 
+Memastikan auto-
+feedback tampil 
+Membuka 
+halaman hasil 
+sesi ujian milik 
+sendiri 
+Skor akhir, 
+status 
+kelulusan, dan 
+koreksi tiap 
+jawaban tampil 
+Sesuai 
+Valid 
+PB-38 
+Otorisasi hasil 
+ujian 
+Memastikan hasil 
+hanya untuk 
+pemilik sesi 
+Siswa 
+membuka hasil 
+sesi milik siswa 
+lain 
+Sistem 
+menolak akses 
+Sesuai 
+Valid 
+PB-39 
+Riwayat ujian 
+Memastikan rekap 
+riwayat tampil 
+lengkap 
+Membuka 
+halaman 
+riwayat ujian 
+Seluruh sesi 
+beserta skor, 
+status, dan 
+tanggal tampil 
+Sesuai 
+Valid 
+ 
+Kelompok Fitur 
+Kode 
+Jumlah Skenario 
+Valid Persentase 
+Autentikasi 
+PB-01–04 
+4 
+4 
+100% 
+Pengelolaan Kelas 
+PB-05–09 
+5 
+5 
+100% 
+Pengelolaan Bab & Materi 
+PB-10–15 
+6 
+6 
+100% 
+Pengelolaan Soal 
+PB-16–18 
+3 
+3 
+100% 
+Asisten AI 
+PB-19–22 
+4 
+4 
+100% 
+Pemantauan & Audit 
+PB-23–24 
+2 
+2 
+100% 
+Gabung Kelas 
+PB-25–27 
+3 
+3 
+100% 
+Pembelajaran Materi 
+PB-28–30 
+3 
+3 
+100% 
+Pengerjaan Kuis 
+PB-31–36 
+6 
+6 
+100% 
+Hasil & Riwayat 
+PB-37–39 
+3 
+3 
+100% 
+Total 
+ 
+39 
+39 
+100% 
+
+
+===== HALAMAN 112 =====
+
+ 
+96 
+ 
+BAB V PENUTUP 
+5.1 Kesimpulan 
+Berdasarkan hasil pengembangan dan pengujian sistem Learning Management 
+System (LMS) Soal Latihan Dinamis untuk pembelajaran matematika tingkat SMP 
+berbasis web, dapat ditarik kesimpulan yang menjawab rumusan masalah sebagai 
+berikut. 
+Pertama, sistem terbukti mampu membantu guru mereduksi beban kerja 
+administratif dalam penyusunan materi pembelajaran, pembuatan variasi soal 
+latihan, dan koreksi hasil evaluasi. Guru dapat mengelola kelas, bab, dan materi 
+dalam tiga format (teks, video YouTube, dan PDF) secara terpusat, serta cukup 
+membuat satu template soal dengan aturan variabel dan rumus jawaban untuk 
+menghasilkan variasi soal yang berbeda bagi setiap siswa melalui mekanisme Rule-
+Based Variable Randomization. Koreksi jawaban tidak lagi dilakukan manual karena 
+sistem melakukan penilaian otomatis (auto-grading) dengan komputasi presisi tinggi 
+BCMath, dan hasilnya dapat dipantau serta diaudit secara transparan oleh guru. Hal 
+ini dibuktikan melalui pengujian PB-05 sampai PB-18 serta PB-23 dan PB-24 yang 
+seluruhnya dinyatakan valid. 
+Kedua, sistem mampu meningkatkan kemandirian belajar siswa melalui penyediaan 
+akses materi yang fleksibel serta mekanisme evaluasi interaktif dengan umpan balik 
+otomatis. Siswa dapat bergabung ke kelas menggunakan kode akses, mempelajari 
+materi secara terstruktur dengan perekaman kemajuan membaca, mengerjakan kuis 
+dengan variasi angka acak yang berbeda antarsiswa, serta langsung memperoleh 
+skor, status kelulusan, dan koreksi tiap jawaban (auto-feedback) segera setelah kuis 
+diselesaikan tanpa menunggu koreksi guru. Kemampuan ini dibuktikan melalui 
+pengujian PB-25 sampai PB-39 yang seluruhnya dinyatakan valid. 
+Ketiga, integrasi asisten cerdas berbasis Large Language Model Model Llama 3.3 70B 
+Versatile melalui infrastruktur API Groq terbukti dapat membantu guru mempercepat 
+proses penyusunan draf konten instruksional. Guru cukup memasukkan poin-poin 
+inti untuk menghasilkan draf materi berformat HTML, atau memasukkan topik dan 
+jumlah soal untuk menghasilkan draf template soal dinamis beserta formula 
+jawabannya, yang seluruhnya tetap berada dalam kendali guru untuk ditinjau dan 
+disunting sebelum disimpan. Sistem juga menangani kegagalan layanan eksternal 
+dan membatasi hak akses fitur AI hanya bagi guru pemilik kelas. Hal ini dibuktikan 
+melalui pengujian PB-19 sampai PB-22 yang seluruhnya dinyatakan valid. 
+Secara keseluruhan, hasil pengujian black box terhadap 39 skenario yang mencakup 
+jalur normal maupun alternatif menunjukkan tingkat keberhasilan 100%, sehingga 
+
+
+===== HALAMAN 113 =====
+
+ 
+97 
+ 
+seluruh kebutuhan fungsional yang ditetapkan pada Bab II dinyatakan terpenuhi dan 
+sistem layak digunakan sesuai tujuan pengembangannya. 
+5.2 Saran 
+Berdasarkan batasan-batasan yang ditetapkan pada penelitian ini, terdapat 
+beberapa saran untuk pengembangan selanjutnya. Pertama, sistem yang saat ini 
+diuji pada lingkungan pengembangan lokal dapat diterapkan (deployment) ke 
+peladen produksi dan diujicobakan langsung di sekolah, disertai pengujian 
+penerimaan pengguna (User Acceptance Testing) terhadap guru dan siswa nyata 
+untuk mengukur kebermanfaatan sistem secara empiris. Kedua, mekanisme soal 
+dinamis yang saat ini terbatas pada pengacakan angka dengan jawaban numerik 
+dapat diperluas ke bentuk soal lain, seperti pilihan ganda dinamis, soal bergambar, 
+atau soal dengan langkah penyelesaian bertahap. Ketiga, integrasi kecerdasan 
+buatan yang saat ini bergantung pada satu penyedia layanan dapat dikembangkan 
+dengan mekanisme cadangan (fallback) multi-model atau multi-penyedia agar fitur 
+AI tetap tersedia saat layanan utama terganggu, serta dapat diperluas untuk 
+membangkitkan draf dalam format dokumen dan presentasi. Keempat, sistem dapat 
+dilengkapi fitur komunikasi dan kolaborasi, seperti forum diskusi atau pengumuman 
+kelas, untuk memperkaya interaksi antara guru dan siswa. Kelima, analitik 
+pembelajaran dapat diperdalam, misalnya dengan pemetaan tingkat kesulitan soal 
+dan rekomendasi materi berdasarkan pola kesalahan jawaban siswa, sehingga 
+umpan balik yang diberikan sistem menjadi lebih.
+
+
+===== HALAMAN 114 =====
+
+ 
+98 
+ 
+DAFTAR PUSTAKA 
+[1] 
+Nurhaliza Nurhaliza dan Rayyan Firdaus, “E-learning: Revolusi 
+Pembelajaran Masa Kini untuk Masa Depan yang Cerdas,” JURNAL 
+MANAJEMEN DAN BISNIS EKONOMI, vol. 2, no. 3, hlm. 159–165, 
+Jun 2024, doi: 10.54066/jmbe-itb.v2i3.1975. 
+[2] 
+M. Fadhli, R. Indra Prasta, M. Hur, R. Zh, dan D. Mahon, “The 
+Moderating Role of Self-Efficacy on the Effectiveness of LMS-
+Based Learning Modules toward Student Learning Outcomes: A Pre-
+Experimental Study at SMP Laboratorium UM,” Jurnal Teknologi 
+Pendidikan, vol. 2, no. 2, hlm. 352–359, Agu 2023, doi: 
+10.21009/JTP2001.6. 
+[3] 
+J. Ezra dkk., “Implementasi Manajemen Pendidikan Berbasis 
+Teknologi dalam Meningkatkan Kualitas Pembelajaran,” 
+INDONESIAN JOURNAL OF RESEARCH AND SERVICE 
+STUDIES, vol. 1, no. 4, hlm. 169–177, 2024. 
+[4] 
+H. D. Sundari dan P. Utomo, “Five E-Learning for Education in 
+Indonesia,” Advances in Social Science, Education and Humanities 
+Research, vol. 440, hlm. 48–52, 2020, [Daring]. Tersedia pada: 
+www.edmodo.com. 
+[5] 
+P. Sari dan Romelah, “PENGGUNAAN APLIKASI QUIZZIZ 
+PADA EVALUASI PEMBELAJARAN ISMUBA (AL-ISLAM) DI 
+SD MUHAMMADIYAH 2 SUMBERPUCUNG,” Jurnal Pemikiran 
+dan Pendidikan Islam, vol. 6, Des 2022. 
+[6] 
+S. Rohmah dkk., “IMPLEMENTASI LEARNING MANAGEMENT 
+SYSTEM (LMS) DALAM PEMBELAJARAN DI MADRASAH 
+ALIYAH NEGERI KOTA BATU Nayla Firda Aulia 6,” Jurnal 
+Media Akademik, vol. 4, no. 1, hlm. 3031–5220, 2026, doi: 
+10.62281. 
+[7] 
+E. R. Rahmi, E. Yumami, dan N. Hidayasari, “Analisis Metode 
+Pengembangan Sistem Informasi Berbasis Website: Systematic 
+Literature Review,” remik, vol. 7, no. 1, hlm. 821–834, Jan 2023, 
+doi: 10.33395/remik.v7i1.12177. 
+[8] 
+A. Syarif Aziz, “Implementasi Learning Management System (LMS) 
+Berbasis Web Menggunakan Moodle,” Education Achievment: 
+Journal of Science and Research, vol. 5, hlm. 742–753, Nov 2024, 
+[Daring]. Tersedia pada: http://pusdikra-
+publishing.com/index.php/jsr 
+[9] 
+M. Firmansyah, Mustika, dan Pujianto, “IMPLEMENTASI ROLE-
+BASED ACCESS CONTROL PADA SISTEM INFORMASI 
+LAYANAN ADMINISTRASI PADA LEMBAGA BAHASA UM 
+METRO,” JMIK (JURNAL MAHASISWA ILMU KOMPUTER), vol. 
+6, no. 2, hlm. 113–122, Okt 2025. 
+[10] C. C. Haerudin dan Y. Devianto, “Pemodelan Proses Bisnis 
+Reengineering Menggunakan Business Process Modeling Notation 
+
+
+===== HALAMAN 115 =====
+
+ 
+99 
+ 
+(Studi Kasus PT. Agusta Dryer),” Jurnal Teknik Informatika dan 
+Sistem Informasi, vol. 10, no. 3, hlm. 270–280, Sep 2023, [Daring]. 
+Tersedia pada: http://jurnal.mdp.ac.id 
+[11] M. M. Agung Mahardini, “Analisis Situasi Penggunaan Google 
+Classroom pada Pembelajaran Daring Fisika,” Jurnal Pendidikan 
+Fisika, vol. 8, no. 2, hlm. 215, Sep 2020, doi: 
+10.24127/jpf.v8i2.3102. 
+[12] H. Gultom, M. Auliya, dan A. Yulianto, “ANALISIS PENERAPAN 
+KECERDASAN BUATAN PADA LMS MOODLE UNTUK 
+MENINGKATKAN PERSONALISASI PEMBELAJARAN,” 
+Jurnal SIKOM, vol. 2, hlm. 2, Mei 2025. 
+  
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+
+
+===== HALAMAN 116 =====
+
+ 
+100 
+ 
+ 
+ 
+LAMPIRAN 
+ 
+Lampiran 1 Notulensi Wawancara 
+ 
+ 
+
+
+===== HALAMAN 117 =====
+
+ 
+101 
+ 
+ 
+Lampiran 2 Notulensi Wawancara 
+ 
+
+
+===== HALAMAN 118 =====
+
+ 
+102 
+ 
+ 
+
+
+===== HALAMAN 119 =====
+
+ 
+103 
+ 
+ 
+ 

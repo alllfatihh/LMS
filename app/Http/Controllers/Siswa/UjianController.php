@@ -27,15 +27,30 @@ class UjianController extends Controller
     {
         $pengguna = Auth::user();
 
-        $sesiSelesai = SesiUjian::where('user_id', $pengguna->id)
+        if ($bab->daftarSoal()->count() === 0) {
+            return redirect()->back()
+                ->with('error', 'Bab ini belum memiliki soal latihan. Silakan hubungi gurumu.');
+        }
+
+        $semuaSesiSelesai = SesiUjian::where('user_id', $pengguna->id)
             ->where('bab_id', $bab->id)
             ->whereNotNull('finished_at')
-            ->latest()
-            ->first();
+            ->get();
 
-        if ($sesiSelesai) {
+        $sudahLulus = false;
+        foreach ($semuaSesiSelesai as $sesiLama) {
+            $jumlahSoal = $sesiLama->daftarJawaban()->count();
+            $jumlahBenar = $sesiLama->daftarJawaban()->where('is_correct', true)->count();
+            $nilaiSesi = $jumlahSoal > 0 ? ($jumlahBenar / $jumlahSoal) * 100 : 0;
+            if ($nilaiSesi >= 80) {
+                $sudahLulus = true;
+                break;
+            }
+        }
+
+        if ($sudahLulus) {
             return redirect()->route('siswa.ujian.riwayat')
-                ->with('info', 'Kamu sudah pernah menyelesaikan latihan di bab "'.$bab->title.'".');
+                ->with('info', 'Kamu sudah pernah menyelesaikan latihan di bab "'.$bab->title.'" dengan nilai yang memuaskan.');
         }
 
         $sesiAktif = SesiUjian::where('user_id', $pengguna->id)
@@ -70,7 +85,7 @@ class UjianController extends Controller
         return redirect()->route('siswa.ujian.tampil-soal', $sesi->id);
     }
 
-    public function tampilSoal(SesiUjian $sesiUjian)
+    public function tampilSoal(Request $permintaan, SesiUjian $sesiUjian)
     {
         if ($sesiUjian->user_id !== Auth::id()) {
             abort(403);
@@ -83,17 +98,30 @@ class UjianController extends Controller
                 ->header('Pragma', 'no-cache');
         }
 
-        $jawaban = $sesiUjian->daftarJawaban()->whereNull('student_answer')->first();
+        $semuaJawaban = $sesiUjian->daftarJawaban()->orderBy('id')->get();
+
+        if ($semuaJawaban->isEmpty()) {
+            $sesiUjian->delete();
+            return redirect()->route('siswa.ujian.index')
+                ->with('error', 'Sesi ujian tidak valid karena tidak memiliki soal.');
+        }
+
+        $jawaban = null;
+
+        if ($permintaan->has('n') && is_numeric($permintaan->n)) {
+            $n = (int) $permintaan->n;
+            if ($n >= 1 && $n <= $semuaJawaban->count()) {
+                $jawaban = $semuaJawaban->values()->get($n - 1);
+            }
+        }
 
         if (! $jawaban) {
-            if (! $sesiUjian->finished_at) {
-                $sesiUjian->update(['finished_at' => now()]);
-            }
-
-            return redirect()
-                ->route('siswa.ujian.hasil', $sesiUjian->id)
-                ->header('Cache-Control', 'private, no-store, no-cache, must-revalidate');
+            $jawaban = $semuaJawaban->whereNull('student_answer')->first() ?? $semuaJawaban->first();
         }
+
+        $nomorSoalAktif = $semuaJawaban->search(fn($j) => $j->id === $jawaban->id) + 1;
+        $totalSoal = $semuaJawaban->count();
+        $sisaSoal = $semuaJawaban->whereNull('student_answer')->count();
 
         $soal = $jawaban->soal;
 
@@ -103,7 +131,7 @@ class UjianController extends Controller
         );
 
         return response()
-            ->view('siswa.ujian.tampil-soal', compact('sesiUjian', 'jawaban', 'teksSoalTerurai'))
+            ->view('siswa.ujian.tampil-soal', compact('sesiUjian', 'jawaban', 'teksSoalTerurai', 'semuaJawaban', 'nomorSoalAktif', 'totalSoal', 'sisaSoal'))
             ->header('Cache-Control', 'private, no-store, no-cache, must-revalidate')
             ->header('Pragma', 'no-cache');
     }
@@ -123,10 +151,7 @@ class UjianController extends Controller
                 ->header('Cache-Control', 'private, no-store, no-cache, must-revalidate');
         }
 
-        if ($jawaban->student_answer !== null) {
-            return redirect()->route('siswa.ujian.tampil-soal', $jawaban->sesi_ujian_id);
-        }
-
+        // Remove the block that prevents answering if already answered to allow updating
         $permintaan->validate([
             'student_answer' => ['required', 'numeric'],
         ], [
@@ -149,7 +174,33 @@ class UjianController extends Controller
             'is_correct' => $benar,
         ]);
 
-        return redirect()->route('siswa.ujian.tampil-soal', $jawaban->sesi_ujian_id);
+        $semuaJawaban = $sesi->daftarJawaban()->orderBy('id')->get();
+        $nextUnanswered = $semuaJawaban->whereNull('student_answer')->first();
+
+        if ($nextUnanswered) {
+            $nextNomor = $semuaJawaban->search(fn($j) => $j->id === $nextUnanswered->id) + 1;
+            return redirect()->route('siswa.ujian.tampil-soal', ['sesi_ujian' => $sesi->id, 'n' => $nextNomor]);
+        }
+
+        $currentNomor = $semuaJawaban->search(fn($j) => $j->id === $jawaban->id) + 1;
+        $nextNomor = $currentNomor < $semuaJawaban->count() ? $currentNomor + 1 : 1;
+
+        return redirect()->route('siswa.ujian.tampil-soal', ['sesi_ujian' => $sesi->id, 'n' => $nextNomor])
+            ->with('info', 'Semua soal telah dijawab. Silakan periksa kembali jawabanmu lalu klik Selesaikan Ujian.');
+    }
+
+    public function selesaikan(SesiUjian $sesiUjian)
+    {
+        if ($sesiUjian->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if (! $sesiUjian->finished_at) {
+            $sesiUjian->update(['finished_at' => now()]);
+        }
+
+        return redirect()->route('siswa.ujian.hasil', $sesiUjian->id)
+            ->header('Cache-Control', 'private, no-store, no-cache, must-revalidate');
     }
 
     public function hasil(SesiUjian $sesiUjian)

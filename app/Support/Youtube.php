@@ -13,7 +13,7 @@ final class Youtube
     {
         $id = self::extractVideoId($url);
 
-        return $id !== null ? 'https://www.youtube.com/embed/' . $id : null;
+        return $id !== null ? 'https://www.youtube-nocookie.com/embed/' . $id : null;
     }
 
     public static function toWatchUrl(?string $url): ?string

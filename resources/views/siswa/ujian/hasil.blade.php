@@ -22,7 +22,7 @@
     </style>
 
     @php
-        $isPassed = $nilai >= 70;
+        $isPassed = $nilai >= 80;
         $duration = $sesiUjian->finished_at && $sesiUjian->started_at
             ? $sesiUjian->finished_at->diffInMinutes($sesiUjian->started_at)
             : null;
@@ -38,11 +38,11 @@
                     @if($isPassed)
                         <div class="text-5xl mb-2" aria-hidden="true"></div>
                         <h3 class="text-gray-900 font-black text-2xl sm:text-3xl tracking-tight">Selamat, kamu lulus</h3>
-                        <p class="text-gray-500 text-sm mt-2 max-w-md mx-auto">Nilai memenuhi ambang kelulusan. Terus latihan untuk mempertajam pemahaman.</p>
+                        <p class="text-gray-500 text-sm mt-2 max-w-md mx-auto">Nilai memenuhi ambang kelulusan (Minimal 80). Terus latihan untuk mempertajam pemahaman.</p>
                     @else
                         <div class="text-5xl mb-2" aria-hidden="true"></div>
                         <h3 class="text-gray-900 font-black text-2xl sm:text-3xl tracking-tight">Tetap semangat</h3>
-                        <p class="text-gray-500 text-sm mt-2 max-w-md mx-auto">Pelajari pembahasan di bawah lalu ulangi materi bab ini bersama guru.</p>
+                        <p class="text-gray-500 text-sm mt-2 max-w-md mx-auto">Nilai kamu di bawah 80. Pelajari pembahasan di bawah lalu ulangi kuis ini untuk memperbaiki nilaimu.</p>
                     @endif
                 </div>
 
@@ -205,16 +205,23 @@
 
             <div class="flex flex-col sm:flex-row gap-3 pb-4">
                 <a href="{{ route('siswa.ujian.index') }}"
-                   class="flex-1 text-center rounded-2xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:from-brand-red-dark hover:to-brand-red-darker text-white font-extrabold py-4 px-6 shadow-lg shadow-brand-red/20 hover:shadow-brand-glow transition flex items-center justify-center gap-2">
+                   class="flex-1 text-center rounded-2xl bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 font-extrabold py-4 px-6 transition flex items-center justify-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                    <span>Daftar kelas</span>
+                    <span>Daftar Kelas</span>
                 </a>
                 <a href="{{ route('siswa.ujian.riwayat') }}"
                    class="flex-1 text-center rounded-2xl bg-white border-2 border-brand-red text-brand-red hover:bg-brand-red-light font-extrabold py-4 px-6 transition flex items-center justify-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span>Riwayat ujian</span>
+                    <span>Riwayat Ujian</span>
                 </a>
+                @if(!$isPassed)
+                <form action="{{ route('siswa.ujian.bab.mulai', $sesiUjian->bab->id) }}" method="POST" class="flex-[1.5]">
+                    @csrf
+                    <button type="submit" class="w-full h-full rounded-2xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:from-brand-red-dark hover:to-red-800 text-white font-extrabold py-4 px-6 shadow-lg shadow-brand-red/30 hover:shadow-brand-glow transform transition hover:-translate-y-1 flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        <span>Coba Ulangi Kuis</span>
+                    </button>
+                </form>
+                @endif
             </div>
-        </div>
-    </div>
 </x-app-layout>

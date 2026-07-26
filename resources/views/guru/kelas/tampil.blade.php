@@ -92,41 +92,58 @@
                     @if($daftarMateri->isEmpty())
                         <p class="py-12 text-center text-sm italic text-gray-400">Belum ada modul materi untuk kelas ini.</p>
                     @else
-                        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                            @foreach($daftarMateri as $modul)
-                                @php
-                                    $pathIkon = match ($modul->tipe) {
-                                        \App\Models\Materi::TIPE_VIDEO => 'M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z',
-                                        \App\Models\Materi::TIPE_PDF => 'M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z',
-                                        default => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
-                                    };
-                                @endphp
-                                <div class="premium-card group p-6 border-slate-100 bg-slate-50/30 hover:bg-white transition-all flex flex-col h-full relative">
-                                    <div class="flex-1">
-                                        <div class="flex items-start justify-between gap-4">
-                                            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-brand-red shadow-sm ring-1 ring-slate-100 group-hover:bg-brand-red group-hover:text-white transition-all">
-                                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $pathIkon }}"/></svg>
+                        @php
+                            // Mengelompokkan materi berdasarkan Bab
+                            $sortedMateri = collect($daftarMateri ?? [])->sortBy(function($item) {
+                                return sprintf('%04d-%04d', $item->bab ? $item->bab->order : 9999, $item->order);
+                            });
+                            $materiPerBab = $sortedMateri->groupBy(function($item) {
+                                return $item->bab ? 'Bab ' . $item->bab->order . ': ' . $item->bab->title : 'Materi Tanpa Bab (Lainnya)';
+                            });
+                        @endphp
+
+                        <div class="space-y-10">
+                            @foreach($materiPerBab as $namaBab => $materiGrup)
+                                <div>
+                                    <h4 class="text-lg font-black text-slate-800 mb-4 border-b border-slate-100 pb-2">{{ $namaBab }}</h4>
+                                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                                        @foreach($materiGrup as $modul)
+                                            @php
+                                                $pathIkon = match ($modul->tipe) {
+                                                    \App\Models\Materi::TIPE_VIDEO => 'M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z',
+                                                    \App\Models\Materi::TIPE_PDF => 'M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z',
+                                                    default => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+                                                };
+                                            @endphp
+                                            <div class="premium-card group p-6 border-slate-100 bg-slate-50/30 hover:bg-white transition-all flex flex-col h-full relative">
+                                                <div class="flex-1">
+                                                    <div class="flex items-start justify-between gap-4">
+                                                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-brand-red shadow-sm ring-1 ring-slate-100 group-hover:bg-brand-red group-hover:text-white transition-all">
+                                                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $pathIkon }}"/></svg>
+                                                        </div>
+                                                        <div class="min-w-0 flex-1 pr-12">
+                                                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
+                                                                Modul {{ $modul->order }}
+                                                            </p>
+                                                            <h4 class="text-lg font-black text-slate-900 group-hover:text-brand-red transition-colors leading-tight">{{ $modul->judul }}</h4>
+                                                        </div>
+                                                        <div class="absolute right-6 top-6 rounded-lg bg-brand-red-light px-2 py-1 text-[9px] font-black uppercase tracking-widest text-brand-red shadow-sm">
+                                                            {{ $modul->labelTipe() }}
+                                                        </div>
+                                                    </div>
+                                                    @if($modul->ringkasan)
+                                                        <p class="mt-4 line-clamp-2 text-sm text-slate-500 font-medium leading-relaxed">{{ $modul->ringkasan }}</p>
+                                                    @endif
+                                                </div>
+                                                <div class="mt-6 flex flex-wrap gap-2 border-t border-slate-100 pt-5 mt-auto">
+                                                    @if(($materiTerhubungBab ?? true) && $modul->bab)
+                                                        <a href="{{ route('guru.bab.tampil', $modul->bab) }}" class="inline-flex flex-1 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-bold text-slate-600 hover:border-brand-red hover:text-brand-red transition-all">Bab</a>
+                                                    @endif
+                                                    <a href="{{ route('guru.materi.edit', $modul) }}" class="inline-flex flex-1 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-bold text-slate-600 hover:border-brand-red hover:text-brand-red transition-all">Edit</a>
+                                                    <a href="{{ route('siswa.materi.tampil', $modul->slug) }}" class="btn-brand flex-1 py-2.5 text-xs">Pratinjau</a>
+                                                </div>
                                             </div>
-                                            <div class="min-w-0 flex-1 pr-12">
-                                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
-                                                    Modul {{ $modul->order }}
-                                                </p>
-                                                <h4 class="text-lg font-black text-slate-900 group-hover:text-brand-red transition-colors leading-tight">{{ $modul->judul }}</h4>
-                                            </div>
-                                            <div class="absolute right-6 top-6 rounded-lg bg-brand-red-light px-2 py-1 text-[9px] font-black uppercase tracking-widest text-brand-red shadow-sm">
-                                                {{ $modul->labelTipe() }}
-                                            </div>
-                                        </div>
-                                        @if($modul->ringkasan)
-                                            <p class="mt-4 line-clamp-2 text-sm text-slate-500 font-medium leading-relaxed">{{ $modul->ringkasan }}</p>
-                                        @endif
-                                    </div>
-                                    <div class="mt-6 flex flex-wrap gap-2 border-t border-slate-100 pt-5 mt-auto">
-                                        @if(($materiTerhubungBab ?? true) && $modul->bab)
-                                            <a href="{{ route('guru.bab.tampil', $modul->bab) }}" class="inline-flex flex-1 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-bold text-slate-600 hover:border-brand-red hover:text-brand-red transition-all">Bab</a>
-                                        @endif
-                                        <a href="{{ route('guru.materi.edit', $modul) }}" class="inline-flex flex-1 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-bold text-slate-600 hover:border-brand-red hover:text-brand-red transition-all">Edit</a>
-                                        <a href="{{ route('siswa.materi.tampil', $modul->slug) }}" target="_blank" rel="noopener" class="btn-brand flex-1 py-2.5 text-xs">Pratinjau</a>
+                                        @endforeach
                                     </div>
                                 </div>
                             @endforeach

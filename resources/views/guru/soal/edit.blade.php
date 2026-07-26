@@ -76,13 +76,13 @@
                                     <div class="w-8 h-8 bg-brand-red-light rounded-lg flex items-center justify-center shrink-0">
                                         <span class="text-brand-red font-bold text-xs font-mono" x-text="v.name || '?'"></span>
                                     </div>
-                                    <input type="text" x-model="v.name" class="w-20 border-2 border-gray-200 focus:border-brand-red focus:ring-brand-red rounded-lg text-sm font-mono py-1.5 px-2" placeholder="x" required>
-                                    <input type="hidden" :name="'variable_rules['+v.name+'][min]'" :value="v.min">
-                                    <input type="hidden" :name="'variable_rules['+v.name+'][max]'" :value="v.max">
+                                    {{-- Nama variabel: dikirim sebagai variables[0][name], variables[1][name], dst. --}}
+                                    <input type="text" x-model="v.name" :name="'variables['+index+'][name]'" class="w-20 border-2 border-gray-200 focus:border-brand-red focus:ring-brand-red rounded-lg text-sm font-mono py-1.5 px-2" placeholder="x" required>
+                                    {{-- Min & Max: dikirim sebagai variables[0][min], dst. --}}
                                     <span class="text-gray-400 text-xs font-semibold">Min</span>
-                                    <input type="number" x-model="v.min" class="w-20 border-2 border-gray-200 focus:border-brand-red focus:ring-brand-red rounded-lg text-sm py-1.5 px-2" required>
+                                    <input type="number" x-model="v.min" :name="'variables['+index+'][min]'" class="w-20 border-2 border-gray-200 focus:border-brand-red focus:ring-brand-red rounded-lg text-sm py-1.5 px-2" required>
                                     <span class="text-gray-400 text-xs font-semibold">Max</span>
-                                    <input type="number" x-model="v.max" class="w-20 border-2 border-gray-200 focus:border-brand-red focus:ring-brand-red rounded-lg text-sm py-1.5 px-2" required>
+                                    <input type="number" x-model="v.max" :name="'variables['+index+'][max]'" class="w-20 border-2 border-gray-200 focus:border-brand-red focus:ring-brand-red rounded-lg text-sm py-1.5 px-2" required>
                                     <button type="button" @click="removeVariable(index)"
                                         class="ml-auto text-gray-300 hover:text-brand-red transition-colors p-1.5 rounded-lg hover:bg-brand-red-light">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
@@ -90,7 +90,10 @@
                                 </div>
                             </template>
                             <p x-show="variables.length === 0" class="text-xs text-brand-red italic text-center py-3">Belum ada variabel. Silakan tambah.</p>
-                            @error('variable_rules')<p class="text-brand-red text-xs mt-1.5">{{ $message }}</p>@enderror
+                            @error('variables')<p class="text-brand-red text-xs mt-1.5">{{ $message }}</p>@enderror
+                            @error('variables.*.name')<p class="text-brand-red text-xs mt-1">Nama variabel wajib diisi.</p>@enderror
+                            @error('variables.*.min')<p class="text-brand-red text-xs mt-1">Nilai minimum wajib diisi.</p>@enderror
+                            @error('variables.*.max')<p class="text-brand-red text-xs mt-1">Nilai maksimum harus lebih besar atau sama dengan minimum.</p>@enderror
                         </div>
 
                         <div class="mb-8">

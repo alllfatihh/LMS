@@ -11,7 +11,7 @@ class Bab extends Model
 {
     protected $table = 'bab';
 
-    protected $fillable = ['kelas_id', 'title', 'order'];
+    protected $fillable = ['kelas_id', 'title', 'order', 'durasi'];
 
     public function kelas(): BelongsTo
     {

@@ -36,7 +36,7 @@ class MateriController extends Controller
         }
 
         $babKembali = $modul->bab;
-        $daftarMateri = $kelas->modulMateri()->get();
+        $daftarMateri = $kelas->modulMateri()->with('bab')->get();
 
         return view('siswa.materi.tampil', compact('modul', 'babKembali', 'daftarMateri'));
     }

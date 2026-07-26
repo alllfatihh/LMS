@@ -30,16 +30,18 @@ class SoalController extends Controller
             abort(403);
         }
 
+        // Konversi dari format variables[{name, min, max}] ke format {nama: {min, max}}
         $aturan = [];
-        foreach ($permintaan->variable_rules as $nama => $konfig) {
+        foreach ($permintaan->variables as $konfig) {
+            $nama = trim($konfig['name']);
             $aturan[$nama] = ['min' => (int) $konfig['min'], 'max' => (int) $konfig['max']];
         }
 
         Soal::create([
-            'bab_id' => $bab->id,
+            'bab_id'            => $bab->id,
             'question_template' => $permintaan->question_template,
-            'variable_rules' => $aturan,
-            'answer_formula' => $permintaan->answer_formula,
+            'variable_rules'    => $aturan,
+            'answer_formula'    => $permintaan->answer_formula,
         ]);
 
         return redirect()->route('guru.bab.tampil', $bab->id)->with('success', 'Soal baru berhasil ditambahkan.');
@@ -62,15 +64,17 @@ class SoalController extends Controller
             abort(403);
         }
 
+        // Konversi dari format variables[{name, min, max}] ke format {nama: {min, max}}
         $aturan = [];
-        foreach ($permintaan->variable_rules as $nama => $konfig) {
+        foreach ($permintaan->variables as $konfig) {
+            $nama = trim($konfig['name']);
             $aturan[$nama] = ['min' => (int) $konfig['min'], 'max' => (int) $konfig['max']];
         }
 
         $soal->update([
             'question_template' => $permintaan->question_template,
-            'variable_rules' => $aturan,
-            'answer_formula' => $permintaan->answer_formula,
+            'variable_rules'    => $aturan,
+            'answer_formula'    => $permintaan->answer_formula,
         ]);
 
         return redirect()->route('guru.bab.tampil', $soal->bab_id)->with('success', 'Soal berhasil diperbarui.');

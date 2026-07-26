@@ -54,10 +54,7 @@
                     class="rounded border-slate-300 text-brand-red shadow-sm focus:ring-brand-red" name="remember">
                 <span class="text-sm text-slate-500 font-medium">Ingat saya</span>
             </label>
-            @if (Route::has('password.request'))
-                <a class="text-sm font-semibold text-brand-red hover:text-brand-red-dark transition"
-                    href="{{ route('password.request') }}">Lupa password?</a>
-            @endif
+
         </div>
 
         <!-- Submit -->

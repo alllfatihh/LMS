@@ -16,10 +16,17 @@
                             <p class="text-brand-red text-xs mt-1.5">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div class="mb-8">
+                    <div class="mb-6">
                         <label for="order" class="block text-sm font-bold text-gray-700 mb-2">Urutan</label>
                         <input type="number" name="order" id="order" class="focus:ring-brand-red focus:border-brand-red block w-full text-sm border-gray-200 rounded-xl shadow-sm py-3 px-4" value="{{ old('order', $bab->order) }}" required min="1">
                         @error('order')
+                            <p class="text-brand-red text-xs mt-1.5">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="mb-8">
+                        <label for="durasi" class="block text-sm font-bold text-gray-700 mb-2">Durasi Kuis (menit)</label>
+                        <input type="number" name="durasi" id="durasi" class="focus:ring-brand-red focus:border-brand-red block w-full text-sm border-gray-200 rounded-xl shadow-sm py-3 px-4" value="{{ old('durasi', $bab->durasi) }}" required min="1">
+                        @error('durasi')
                             <p class="text-brand-red text-xs mt-1.5">{{ $message }}</p>
                         @enderror
                     </div>
