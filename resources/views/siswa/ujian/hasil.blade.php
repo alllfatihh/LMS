@@ -23,9 +23,13 @@
 
     @php
         $isPassed = $nilai >= 80;
-        $duration = $sesiUjian->finished_at && $sesiUjian->started_at
-            ? $sesiUjian->finished_at->diffInMinutes($sesiUjian->started_at)
-            : null;
+        $duration = null;
+        if ($sesiUjian->finished_at && $sesiUjian->started_at) {
+            $secs = $sesiUjian->started_at->diffInSeconds($sesiUjian->finished_at);
+            $mins = floor($secs / 60);
+            $remSecs = $secs % 60;
+            $duration = "{$mins} menit {$remSecs} detik";
+        }
     @endphp
 
     <div class="result-anti-gravity-bg py-10 min-h-[60vh]">
@@ -98,7 +102,7 @@
                             </div>
                             <div>
                                 <p class="text-xs text-gray-500 font-semibold uppercase tracking-wide">Durasi</p>
-                                <p class="font-extrabold text-lg text-gray-900">{{ $duration }} menit</p>
+                                <p class="font-extrabold text-lg text-gray-900">{{ $duration }}</p>
                             </div>
                         </div>
                         @endif
@@ -124,26 +128,40 @@
                             $correctAnswer = null;
                             try {
                                 $evaluator = app(\App\Services\EvaluasiSoalService::class);
-                                $correctAnswer = $evaluator->hitungRumus(
+                                // hitungAtauUrai() sudah menangani SEMUA kasus dengan benar: mengeksekusi
+                                // formula (termasuk pemanggilan fungsi seperti faktorisasi_kuadrat(p, q))
+                                // jika bisa, dan baru fallback ke substitusi teks murni jika formulanya
+                                // template aljabar simbolik (mis. "2*x + {a}") yang tak bisa dieksekusi.
+                                $correctAnswer = $evaluator->hitungAtauUrai(
                                     $ans->soal->answer_formula,
-                                    $ans->generated_variables
+                                    $ans->generated_variables,
+                                    $ans->soal->jawaban_format
                                 );
                             } catch (\Exception $e) {
                                 $correctAnswer = null;
                             }
                             $parsedQ = '';
+                            $parsedGraph = '';
                             try {
                                 $evaluator2 = app(\App\Services\EvaluasiSoalService::class);
                                 $parsedQ = $evaluator2->uraiTemplatSoal(
                                     $ans->soal->question_template,
                                     $ans->generated_variables
                                 );
+                                if (isset($ans->soal->variable_rules['graph_formula'])) {
+                                    $parsedGraph = $evaluator2->uraiTemplatSoal(
+                                        $ans->soal->variable_rules['graph_formula'],
+                                        $ans->generated_variables
+                                    );
+                                }
                             } catch (\Exception $e) {
                                 $parsedQ = $ans->soal->question_template;
                             }
-                            $fmtCorrect = is_numeric($correctAnswer)
-                                ? rtrim(rtrim(number_format((float) $correctAnswer, 6, '.', ''), '0'), '.') ?: '0'
-                                : ($correctAnswer ?? 'N/A');
+                            $fmtCorrect = ($ans->soal->jawaban_format === 'pecahan' && is_numeric($correctAnswer))
+                                ? app(\App\Services\EvaluasiSoalService::class)->decimalToFraction((float) $correctAnswer)
+                                : (is_numeric($correctAnswer)
+                                    ? ((floor((float) $correctAnswer) == (float) $correctAnswer) ? (string) (int) $correctAnswer : rtrim(rtrim(number_format((float) $correctAnswer, 4, '.', ''), '0'), '.'))
+                                    : ($correctAnswer ?? 'N/A'));
                         @endphp
                         <div class="p-6 sm:p-7 {{ $ans->is_correct ? 'bg-white' : 'bg-brand-red-light/40' }}">
                             <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
@@ -168,7 +186,18 @@
                             </div>
 
                             <div class="rounded-2xl bg-gray-50 border border-gray-100 px-4 py-3 mb-4 ml-0 sm:ml-12">
-                                <p class="text-gray-800 text-sm leading-relaxed">{{ $parsedQ }}</p>
+                                @if($ans->soal->image_path)
+                                    <div class="mb-4">
+                                        <img src="{{ asset('storage/' . $ans->soal->image_path) }}" alt="Visual Soal" class="max-w-full h-auto max-h-48 rounded-xl border border-slate-200 shadow-sm">
+                                    </div>
+                                @endif
+                                @if(!empty($parsedGraph))
+                                    <div class="mb-4 rounded-xl overflow-hidden border border-slate-200 shadow-sm desmos-container" data-graph="{{ addslashes($parsedGraph) }}" style="width: 100%; height: 250px;"></div>
+                                @endif
+                                <div class="text-gray-800 text-sm leading-relaxed">{!! app(\App\Services\EvaluasiSoalService::class)->formatHTML($parsedQ) !!}</div>
+                                
+                                {{-- Visualisasi Titik Koordinat (Jika format jawaban koordinat) --}}
+                                <x-coordinate-visualizer :soal="$ans->soal" :teks="$parsedQ" />
                             </div>
 
                             <div class="ml-0 sm:ml-12 grid sm:grid-cols-2 gap-3">
@@ -198,6 +227,17 @@
                                 </p>
                             </div>
                             @endif
+                            @if($ans->pembahasan_rendered)
+                            <div class="mt-4 ml-0 sm:ml-12 rounded-2xl bg-blue-50/50 border border-blue-100 px-5 py-4">
+                                <h5 class="text-xs font-bold text-blue-900 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    Langkah Penyelesaian
+                                </h5>
+                                <div class="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap overflow-x-auto">
+                                    {!! nl2br(e($ans->pembahasan_rendered)) !!}
+                                </div>
+                            </div>
+                            @endif
                         </div>
                     @endforeach
                 </div>
@@ -224,4 +264,27 @@
                 </form>
                 @endif
             </div>
+        </div>
+    </div>
+
+    @push('scripts')
+    <script src="https://www.desmos.com/api/v1.8/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll('.desmos-container').forEach((elt, index) => {
+                const graphFormula = elt.getAttribute('data-graph');
+                if(graphFormula) {
+                    const calculator = Desmos.GraphingCalculator(elt, {
+                        keypad: false,
+                        expressions: false,
+                        settingsMenu: false,
+                        zoomButtons: true,
+                        lockViewport: false
+                    });
+                    calculator.setExpression({ id: 'graph' + index, latex: graphFormula });
+                }
+            });
+        });
+    </script>
+    @endpush
 </x-app-layout>

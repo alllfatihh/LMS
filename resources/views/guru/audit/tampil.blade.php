@@ -11,7 +11,7 @@
     </x-slot>
 
     <div class="py-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div class="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             
             {{-- Info Header --}}
             <div class="bg-white rounded-[2rem] shadow-sm border border-slate-100 p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -60,6 +60,9 @@
                                         <div class="text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Teks Soal Yang Diterima Siswa (Seed Teraplikasi)</div>
                                         <div class="p-4 bg-slate-50 rounded-xl text-slate-800 font-medium text-lg leading-relaxed border border-slate-100">
                                             {!! nl2br(e($audit->soal_terurai)) !!}
+                                            
+                                            {{-- Visualisasi Titik Koordinat (Jika format jawaban koordinat) --}}
+                                            <x-coordinate-visualizer :soal="$audit->soal" :teks="$audit->soal_terurai" />
                                         </div>
                                     </div>
                                     <div>

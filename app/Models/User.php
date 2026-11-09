@@ -47,7 +47,7 @@ class User extends Authenticatable
 
     public function kelasYangDiikuti()
     {
-        return $this->belongsToMany(Kelas::class, 'kelas_user', 'user_id', 'kelas_id');
+        return $this->belongsToMany(Kelas::class, 'kelas_user', 'user_id', 'kelas_id')->withTimestamps();
     }
 
     public function babYangSudahDibaca()

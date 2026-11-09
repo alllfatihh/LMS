@@ -110,37 +110,52 @@
 
                         <div class="px-8 pb-10 pt-8 bg-slate-50/30">
                             <div class="rounded-3xl bg-white border border-slate-200 shadow-sm p-8 mb-10 transition-colors hover:border-brand-red/30">
+                                @if($jawaban->soal->image_path)
+                                    <div class="mb-6 flex justify-center">
+                                        <img src="{{ asset('storage/' . $jawaban->soal->image_path) }}" alt="Visual Soal" class="max-w-full h-auto max-h-80 rounded-2xl border border-slate-200 shadow-sm">
+                                    </div>
+                                @endif
+
+                                @if(!empty($grafikTerurai))
+                                    <div class="mb-6 rounded-2xl overflow-hidden border-2 border-slate-200 shadow-sm">
+                                        <div id="desmos-calculator" style="width: 100%; height: 350px;"></div>
+                                    </div>
+                                @endif
                                 <div class="prose prose-slate prose-lg max-w-none text-slate-800 font-medium leading-relaxed">
-                                    {!! nl2br(e($teksSoalTerurai)) !!}
+                                    {!! app(\App\Services\EvaluasiSoalService::class)->formatHTML($teksSoalTerurai) !!}
                                 </div>
+                                
+                                {{-- Visualisasi Titik Koordinat (Jika format jawaban koordinat) --}}
+                                <x-coordinate-visualizer :soal="$jawaban->soal" :teks="$teksSoalTerurai" />
                             </div>
 
                             <form action="{{ route('siswa.ujian.jawaban.kirim', $jawaban) }}" method="POST">
                                 @csrf
 
                                 <div class="mb-8">
-                                    <label for="student_answer" class="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-slate-500 mb-4 px-2">
+                                    <label for="math_field_input" class="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-slate-500 mb-4 px-2">
                                         <svg class="w-5 h-5 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                                        Area Jawaban Anda
+                                        Area Jawaban Anda (Keyboard Matematika)
                                     </label>
                                     <div class="relative group">
-                                        <input
-                                            type="number"
-                                            step="any"
-                                            name="student_answer"
-                                            id="student_answer"
-                                            class="block w-full border-2 border-slate-200 focus:border-brand-red focus:ring-4 focus:ring-brand-red/20 rounded-2xl py-6 px-8 text-4xl font-black text-slate-900 text-center transition-all bg-white shadow-inner"
-                                            placeholder="Ketik jawaban numerik..."
-                                            value="{{ $jawaban->student_answer ?? '' }}"
-                                            required
-                                            autofocus
+                                        <input type="hidden" name="student_answer" id="student_answer" value="{{ $jawaban->student_answer ?? '' }}" required>
+                                        
+                                        <math-field 
+                                            id="math_field_input" 
+                                            class="block w-full border-2 border-slate-200 focus-within:border-brand-red focus-within:ring-4 focus-within:ring-brand-red/20 rounded-2xl py-6 px-8 text-4xl font-black text-slate-900 text-center transition-all bg-white shadow-inner"
+                                            math-virtual-keyboard-policy="manual"
                                         >
+                                            {{ $jawaban->student_answer ?? '' }}
+                                        </math-field>
                                     </div>
+                                    <p class="text-xs font-semibold text-slate-500 mt-4 text-center hidden" id="preview_numeric">
+                                        Nilai desimal terdeteksi: <strong class="text-brand-red text-sm bg-red-50 px-2 py-0.5 rounded border border-red-100" id="preview_value"></strong>
+                                    </p>
                                 </div>
 
                                 <div class="rounded-2xl bg-amber-50 border border-amber-200 px-6 py-5 flex gap-4 text-sm font-semibold text-amber-800 mb-10 shadow-sm">
                                     <svg class="w-6 h-6 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                    <p class="leading-relaxed">Gunakan titik <strong>(.)</strong> untuk desimal. Jika hasil berkoma panjang, tulis <strong>2 angka di belakang koma</strong>. Contoh penulisan yang benar: <code class="bg-amber-200/60 px-2 py-1 rounded-md font-black shadow-sm mx-1">3.55</code></p>
+                                    <p class="leading-relaxed">Gunakan ikon keyboard <svg class="w-4 h-4 inline-block -mt-1 mx-1 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg> untuk menampilkan papan ketik matematika. Anda dapat mengetikkan <strong>pecahan</strong> maupun <strong>akar kuadrat</strong>.</p>
                                 </div>
 
                                 <button
@@ -203,7 +218,15 @@
                             </div>
                             
                             <div class="pt-8 border-t border-slate-200">
-                                <form action="{{ route('siswa.ujian.selesaikan', $sesiUjian->id) }}" method="POST" onsubmit="return confirm('Peringatan: Kamu tidak bisa mengubah jawaban lagi setelah ini.\n\nApakah kamu sudah yakin 100% untuk mengakhiri sesi ujian ini?');">
+                                <form action="{{ route('siswa.ujian.selesaikan', $sesiUjian->id) }}" method="POST" id="form-akhiri" onsubmit="
+                                    let currentMathVal = document.getElementById('student_answer').value;
+                                    let savedMathVal = '{{ $jawaban->student_answer ?? '' }}';
+                                    if (currentMathVal !== savedMathVal && currentMathVal.trim() !== '') {
+                                        alert('Kamu sudah mengetik jawaban di soal ini tapi belum menyimpannya. Silakan klik tombol \'Simpan & Lanjut\' terlebih dahulu sebelum mengakhiri ujian!');
+                                        return false;
+                                    }
+                                    return confirm('Peringatan: Kamu tidak bisa mengubah jawaban lagi setelah ini.\n\nApakah kamu sudah yakin 100% untuk mengakhiri sesi ujian ini?');
+                                ">
                                     @csrf
                                     <button type="submit" class="w-full py-4 px-6 rounded-2xl bg-slate-900 text-white font-bold text-sm flex justify-center items-center gap-3 hover:bg-slate-800 transition-all transform hover:-translate-y-1 shadow-xl shadow-slate-900/20 focus:ring-4 focus:ring-slate-900/30">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
@@ -228,8 +251,23 @@
     </div>
 
     @push('scripts')
+    <script src="https://unpkg.com/mathlive"></script>
+    <script src="https://unpkg.com/@cortex-js/compute-engine"></script>
+    <script src="https://www.desmos.com/api/v1.8/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            @if(!empty($grafikTerurai))
+            const elt = document.getElementById('desmos-calculator');
+            const calculator = Desmos.GraphingCalculator(elt, {
+                keypad: false,
+                expressions: false,
+                settingsMenu: false,
+                zoomButtons: true,
+                lockViewport: false
+            });
+            calculator.setExpression({ id: 'graph1', latex: '{{ addslashes($grafikTerurai) }}' });
+            @endif
+
             const startTime = new Date("{{ $sesiUjian->started_at->toIso8601String() }}").getTime();
             const durasiMenit = {{ $sesiUjian->bab->durasi ?? 10 }};
             const endTime = startTime + (durasiMenit * 60 * 1000);
@@ -289,6 +327,48 @@
             }
             const timerInterval = setInterval(updateTimer, 1000);
             updateTimer();
+
+            // MathLive & Compute Engine Integration
+            const mf = document.getElementById('math_field_input');
+            const hiddenInput = document.getElementById('student_answer');
+            const previewText = document.getElementById('preview_numeric');
+            const previewVal = document.getElementById('preview_value');
+            
+            if (mf && typeof ComputeEngine !== 'undefined') {
+                const ce = new ComputeEngine.ComputeEngine();
+                
+                // Konfigurasi layout keyboard virtual
+                mathVirtualKeyboard.layouts = ['numeric', 'symbols'];
+                
+                mf.addEventListener('input', (ev) => {
+                    // Selalu kirim teks mentah LaTeX ke backend agar dievaluasi penuh
+                    hiddenInput.value = mf.value;
+
+                    try {
+                        const expr = ce.parse(mf.value);
+                        const numericResult = expr.N().valueOf();
+                        
+                        // Validasi apakah hasilnya berupa number asli untuk ditampilkan di preview (opsional)
+                        if (typeof numericResult === 'number' && !isNaN(numericResult)) {
+                            // Format 6 angka di belakang koma untuk akurasi
+                            const roundedStr = String(Math.round(numericResult * 1000000) / 1000000);
+                            previewVal.innerText = roundedStr;
+                            previewText.classList.remove('hidden');
+                        } else {
+                            previewText.classList.add('hidden');
+                        }
+                    } catch (e) {
+                        previewText.classList.add('hidden');
+                    }
+                });
+                
+                // Trigger evaluasi awal jika field sudah ada nilainya (misal saat navigasi kembali ke soal yang sudah dijawab)
+                setTimeout(() => {
+                    if (mf.value) {
+                        mf.dispatchEvent(new Event('input'));
+                    }
+                }, 500);
+            }
         });
     </script>
     @endpush

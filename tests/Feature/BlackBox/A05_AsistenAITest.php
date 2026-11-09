@@ -115,4 +115,100 @@ class A05_AsistenAITest extends TestCase
 
         $response->assertStatus(403);
     }
+
+    /** JSON rusak dari AI harus ditangani secara anggun dengan pesan ramah, bukan bocorkan error PHP mentah. */
+    public function test_generate_soal_json_rusak_ditangani_dengan_pesan_jelas(): void
+    {
+        Http::fake([
+            'api.groq.com/*' => Http::response([
+                'choices' => [
+                    ['message' => ['content' => 'ini bukan json sama sekali, AI berhalusinasi {{{']]
+                ]
+            ], 200)
+        ]);
+
+        $response = $this->actingAs($this->guru)->postJson(route('guru.ai.generate-soal', $this->bab), [
+            'topik' => 'Penjumlahan dasar',
+            'jumlah' => 1,
+        ]);
+
+        $response->assertStatus(500);
+        $response->assertJson(['success' => false]);
+        // Pesan harus ramah untuk guru, bukan bocoran detail JSON parser PHP.
+        $response->assertJsonFragment(['pesan' => 'AI memberikan format respons yang tidak valid. Silakan coba generate ulang.']);
+    }
+
+    /** Soal dengan variable_rules berstruktur salah (bukan objek) harus di-skip, bukan menyebabkan 500 fatal. */
+    public function test_generate_soal_skip_variable_rules_berstruktur_salah(): void
+    {
+        $mockResponse = [
+            'soal' => [
+                [
+                    'question_template' => 'Berapa {x} + {y}?',
+                    'variable_rules' => 'bukan objek, cuma string',
+                    'answer_formula' => 'x + y',
+                ],
+            ],
+        ];
+
+        Http::fake([
+            'api.groq.com/*' => Http::response([
+                'choices' => [
+                    ['message' => ['content' => json_encode($mockResponse)]]
+                ]
+            ], 200)
+        ]);
+
+        $response = $this->actingAs($this->guru)->postJson(route('guru.ai.generate-soal', $this->bab), [
+            'topik' => 'Penjumlahan dasar',
+            'jumlah' => 1,
+        ]);
+
+        $response->assertStatus(500);
+        $response->assertJson(['success' => false]);
+        $this->assertDatabaseMissing('soal', ['bab_id' => $this->bab->id]);
+    }
+
+    /** Jika server AI tidak merespons (timeout/koneksi gagal), pesan ke guru harus jelas, bukan crash. */
+    public function test_generate_soal_koneksi_ai_gagal_ditangani_dengan_pesan_jelas(): void
+    {
+        Http::fake([
+            'api.groq.com/*' => fn () => throw new \Illuminate\Http\Client\ConnectionException('Connection timed out'),
+        ]);
+
+        $response = $this->actingAs($this->guru)->postJson(route('guru.ai.generate-soal', $this->bab), [
+            'topik' => 'Penjumlahan dasar',
+            'jumlah' => 1,
+        ]);
+
+        $response->assertStatus(500);
+        $response->assertJson(['success' => false]);
+        $response->assertJsonFragment(['pesan' => 'Server AI tidak merespons saat ini. Silakan coba lagi beberapa saat lagi.']);
+    }
+
+    /** Prompt yang dikirim ke AI harus memuat batas kurikulum dan daftar fungsi dari MathExpressionProvider. */
+    public function test_prompt_generate_soal_memuat_kurikulum_dan_daftar_fungsi(): void
+    {
+        Http::fake([
+            'api.groq.com/*' => Http::response([
+                'choices' => [
+                    ['message' => ['content' => json_encode(['soal' => []])]]
+                ]
+            ], 200)
+        ]);
+
+        $this->actingAs($this->guru)->postJson(route('guru.ai.generate-soal', $this->bab), [
+            'topik' => 'Penjumlahan dasar',
+            'jumlah' => 1,
+        ]);
+
+        Http::assertSent(function ($request) {
+            $prompt = $request['messages'][0]['content'] ?? '';
+
+            return str_contains($prompt, 'DILARANG KERAS')
+                && str_contains($prompt, 'Kurikulum Merdeka')
+                && str_contains($prompt, 'akar_kubik(x)')
+                && str_contains($prompt, 'logaritma(n, basis)');
+        });
+    }
 }

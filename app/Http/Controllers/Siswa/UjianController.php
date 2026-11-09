@@ -39,9 +39,16 @@ class UjianController extends Controller
 
         $sudahLulus = false;
         foreach ($semuaSesiSelesai as $sesiLama) {
-            $jumlahSoal = $sesiLama->daftarJawaban()->count();
-            $jumlahBenar = $sesiLama->daftarJawaban()->where('is_correct', true)->count();
-            $nilaiSesi = $jumlahSoal > 0 ? ($jumlahBenar / $jumlahSoal) * 100 : 0;
+            $semuaBobot = 0;
+            $bobotBenar = 0;
+            foreach ($sesiLama->daftarJawaban as $jwb) {
+                $bobot = $jwb->soal->bobot ?? 10;
+                $semuaBobot += $bobot;
+                if ($jwb->is_correct) {
+                    $bobotBenar += $bobot;
+                }
+            }
+            $nilaiSesi = $semuaBobot > 0 ? ($bobotBenar / $semuaBobot) * 100 : 0;
             if ($nilaiSesi >= 80) {
                 $sudahLulus = true;
                 break;
@@ -130,8 +137,16 @@ class UjianController extends Controller
             $jawaban->generated_variables
         );
 
+        $grafikTerurai = null;
+        if (isset($soal->variable_rules['graph_formula'])) {
+            $grafikTerurai = $this->evaluasi->uraiTemplatSoal(
+                $soal->variable_rules['graph_formula'],
+                $jawaban->generated_variables
+            );
+        }
+
         return response()
-            ->view('siswa.ujian.tampil-soal', compact('sesiUjian', 'jawaban', 'teksSoalTerurai', 'semuaJawaban', 'nomorSoalAktif', 'totalSoal', 'sisaSoal'))
+            ->view('siswa.ujian.tampil-soal', compact('sesiUjian', 'jawaban', 'teksSoalTerurai', 'grafikTerurai', 'semuaJawaban', 'nomorSoalAktif', 'totalSoal', 'sisaSoal'))
             ->header('Cache-Control', 'private, no-store, no-cache, must-revalidate')
             ->header('Pragma', 'no-cache');
     }
@@ -151,20 +166,30 @@ class UjianController extends Controller
                 ->header('Cache-Control', 'private, no-store, no-cache, must-revalidate');
         }
 
-        // Remove the block that prevents answering if already answered to allow updating
-        $permintaan->validate([
-            'student_answer' => ['required', 'numeric'],
-        ], [
-            'student_answer.required' => 'Isi jawaban angka dulu, ya.',
-            'student_answer.numeric' => 'Jawaban harus berupa angka.',
-        ]);
+        $format = $jawaban->soal->jawaban_format ?? 'angka';
 
-        $jawabanBenar = $this->evaluasi->hitungRumus(
+        $rules = ['required', 'string'];
+        $messages = [
+            'student_answer.required' => 'Isi jawaban dulu, ya.',
+        ];
+
+        if ($format === 'angka') {
+            $rules[] = 'numeric';
+            $messages['student_answer.numeric'] = 'Jawaban harus berupa angka.';
+        }
+
+        $permintaan->validate([
+            'student_answer' => $rules,
+        ], $messages);
+
+        $jawabanBenar = $this->evaluasi->hitungAtauUrai(
             $jawaban->soal->answer_formula,
-            $jawaban->generated_variables
+            $jawaban->generated_variables,
+            $format
         );
 
-        $benar = $this->evaluasi->jawabanNumerikSama(
+        $benar = $this->evaluasi->cekJawaban(
+            $format,
             $permintaan->student_answer,
             $jawabanBenar
         );
@@ -213,7 +238,16 @@ class UjianController extends Controller
 
         $jumlahSoal = $sesiUjian->daftarJawaban()->count();
         $jumlahBenar = $sesiUjian->daftarJawaban()->where('is_correct', true)->count();
-        $nilai = $jumlahSoal > 0 ? ($jumlahBenar / $jumlahSoal) * 100 : 0;
+        $semuaBobot = 0;
+        $bobotBenar = 0;
+        foreach ($sesiUjian->daftarJawaban as $jwb) {
+            $bobot = $jwb->soal->bobot ?? 10;
+            $semuaBobot += $bobot;
+            if ($jwb->is_correct) {
+                $bobotBenar += $bobot;
+            }
+        }
+        $nilai = $semuaBobot > 0 ? ($bobotBenar / $semuaBobot) * 100 : 0;
 
         return response()
             ->view('siswa.ujian.hasil', compact('sesiUjian', 'jumlahSoal', 'jumlahBenar', 'nilai'))
@@ -233,7 +267,16 @@ class UjianController extends Controller
             ->get()
             ->map(function ($sesi) {
                 if ($sesi->finished_at && $sesi->jumlah_jawaban > 0) {
-                    $sesi->nilai = ($sesi->jumlah_benar / $sesi->jumlah_jawaban) * 100;
+                    $semuaBobot = 0;
+                    $bobotBenar = 0;
+                    foreach ($sesi->daftarJawaban as $jwb) {
+                        $bobot = $jwb->soal->bobot ?? 10;
+                        $semuaBobot += $bobot;
+                        if ($jwb->is_correct) {
+                            $bobotBenar += $bobot;
+                        }
+                    }
+                    $sesi->nilai = $semuaBobot > 0 ? ($bobotBenar / $semuaBobot) * 100 : 0;
                 } else {
                     $sesi->nilai = null;
                 }

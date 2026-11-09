@@ -13,7 +13,7 @@
     </x-slot>
 
     <div class="py-10">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-[1800px] px-4 sm:px-6 lg:px-8">
             @if(! $punyaKelas)
                 <div class="premium-card px-8 py-20 text-center">
                     <div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-brand-red-light text-brand-red">

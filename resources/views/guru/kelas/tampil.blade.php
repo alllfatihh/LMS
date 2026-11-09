@@ -32,8 +32,8 @@
         @method('DELETE')
     </form>
 
-    <div class="py-10" x-data="{ tab: 'materi' }">
-        <div class="mx-auto max-w-7xl space-y-10 px-4 sm:px-6 lg:px-8">
+    <div class="py-10" x-data="{ tab: window.location.hash === '#daftar-siswa' ? 'siswa' : 'materi' }" @hashchange.window="tab = window.location.hash === '#daftar-siswa' ? 'siswa' : 'materi'">
+        <div class="mx-auto max-w-[1800px] space-y-10 px-4 sm:px-6 lg:px-8">
             @if(session('error'))
                 <div class="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
                     <p class="font-bold">{{ session('error') }}</p>
@@ -153,35 +153,118 @@
 
                 <div class="p-5 sm:p-8" x-show="tab === 'siswa'" x-cloak>
                     @if($daftarSiswa->isEmpty())
-                        <p class="py-12 text-center text-sm italic text-gray-400">Belum ada siswa yang bergabung.</p>
+                        <div class="py-16 text-center">
+                            <div class="mx-auto h-16 w-16 bg-slate-50 text-slate-300 rounded-2xl flex items-center justify-center mb-4">
+                                <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                            </div>
+                            <h4 class="text-base font-bold text-slate-800">Belum ada siswa yang bergabung</h4>
+                            <p class="text-xs text-slate-400 mt-1">Bagikan kode akses kelas kepada siswa untuk mulai belajar bersama.</p>
+                        </div>
                     @else
+                        <div class="mb-4 flex flex-wrap items-center justify-between gap-3 px-1">
+                            <div class="flex items-center gap-2 text-xs font-bold text-slate-500">
+                                <span>Total {{ $daftarSiswa->count() }} Siswa</span>
+                                <span>&bull;</span>
+                                <span class="text-emerald-600 flex items-center gap-1">
+                                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                                    Klik Bab / Kuis untuk Audit Jawaban Siswa
+                                </span>
+                            </div>
+                        </div>
+
                         <div class="overflow-hidden rounded-2xl border border-slate-100 shadow-sm">
                             <div class="overflow-x-auto">
                                 <table class="min-w-full divide-y divide-slate-100">
-                                    <thead class="bg-slate-50">
+                                    <thead class="bg-slate-50/80">
                                         <tr>
-                                            <th class="py-4 pl-6 pr-4 text-left text-[10px] font-black uppercase tracking-widest text-slate-400">Nama Siswa</th>
-                                            <th class="py-4 px-6 text-left text-[10px] font-black uppercase tracking-widest text-slate-400">Progres Baca Bab</th>
-                                            <th class="py-4 px-6 text-center text-[10px] font-black uppercase tracking-widest text-slate-400">Aksi</th>
+                                            <th class="py-4 pl-6 pr-4 text-left text-[10px] font-black uppercase tracking-widest text-slate-400">Siswa & Progres</th>
+                                            <th class="py-4 px-6 text-left text-[10px] font-black uppercase tracking-widest text-slate-400">Peta Pembelajaran (Klik skor untuk audit)</th>
+                                            <th class="py-4 px-6 text-center text-[10px] font-black uppercase tracking-widest text-slate-400 w-24">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-slate-50 bg-white">
                                         @foreach($daftarSiswa as $siswa)
-                                            <tr class="transition hover:bg-slate-50/50">
-                                                <td class="py-5 pl-6 pr-4">
-                                                    <span class="text-sm font-bold text-slate-900">{{ $siswa->name }}</span>
-                                                </td>
-                                                <td class="py-5 px-6">
+                                            <tr class="transition hover:bg-slate-50/60 group/row">
+                                                {{-- 1. Info Siswa & Progres --}}
+                                                <td class="py-4 pl-6 pr-4 align-middle">
                                                     <div class="flex items-center gap-4">
-                                                        <div class="h-2 w-full max-w-[12rem] overflow-hidden rounded-full bg-slate-100 shadow-inner">
-                                                            <div class="h-full rounded-full bg-brand-red shadow-[0_0_8px_rgba(237,30,40,0.3)] transition-all" style="width: {{ min(100, $siswa->persen_kemajuan) }}%"></div>
+                                                        <div class="h-12 w-12 shrink-0 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 text-slate-700 flex items-center justify-center font-black text-lg border border-slate-200/60 shadow-xs relative">
+                                                            {{ strtoupper(substr($siswa->name, 0, 1)) }}
+                                                            @if($siswa->persen_kemajuan >= 100)
+                                                                <div class="absolute -right-1 -top-1 h-4 w-4 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center text-white" title="Selesai 100%">
+                                                                    <svg class="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                                                </div>
+                                                            @endif
                                                         </div>
-                                                        <span class="text-xs font-black text-brand-red">{{ round($siswa->persen_kemajuan) }}%</span>
+                                                        <div class="flex flex-col min-w-0 w-48">
+                                                            <span class="text-sm font-black text-slate-900 leading-snug truncate" title="{{ $siswa->name }}">{{ $siswa->name }}</span>
+                                                            <span class="text-xs text-slate-400 truncate">{{ $siswa->email }}</span>
+                                                            <span class="text-[10px] text-slate-400 truncate mb-1.5">
+                                                                @if($siswa->tanggal_bergabung)
+                                                                    Bergabung {{ $siswa->tanggal_bergabung->translatedFormat('d M Y') }}
+                                                                @else
+                                                                    Tanggal gabung tidak tercatat
+                                                                @endif
+                                                            </span>
+
+                                                            <div class="flex flex-col gap-1 w-full">
+                                                                <div class="flex items-center justify-between text-[10px] font-bold">
+                                                                    <span class="text-slate-500">{{ $siswa->jumlah_bab_dibaca }} dari {{ $siswa->total_bab_kelas }} Bab</span>
+                                                                    <span class="{{ $siswa->persen_kemajuan == 100 ? 'text-emerald-600' : 'text-brand-red' }}">{{ round($siswa->persen_kemajuan) }}%</span>
+                                                                </div>
+                                                                <div class="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                                                                    <div class="h-full rounded-full transition-all {{ $siswa->persen_kemajuan == 100 ? 'bg-emerald-500' : 'bg-gradient-to-r from-brand-red to-rose-400' }}" style="width: {{ min(100, $siswa->persen_kemajuan) }}%"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </td>
-                                                <td class="py-5 px-6 text-center">
-                                                    <button type="button" @click="confirmKeluarkanSiswa(@js($siswa->name), @js(route('guru.kelas.keluarkan-siswa', [$kelas, $siswa])))" class="rounded-lg px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-brand-red hover:bg-brand-red-light transition-all">
-                                                        Keluarkan
+
+                                                {{-- 2. Peta Pembelajaran (Learning Map) --}}
+                                                <td class="py-4 px-6 align-middle">
+                                                    <div class="flex flex-wrap items-center gap-2">
+                                                        @foreach($siswa->status_per_bab as $itemBab)
+                                                            @if($itemBab->sesi_id)
+                                                                {{-- Sudah Ujian --}}
+                                                                <a href="{{ route('guru.audit.tampil', $itemBab->sesi_id) }}"
+                                                                   title="{{ $itemBab->title }} - Ujian Selesai. Skor: {{ $itemBab->nilai_akhir }}. Klik untuk audit."
+                                                                   class="group/bab relative flex flex-col items-center justify-center w-12 h-12 rounded-xl border-2 transition-all hover:-translate-y-1 hover:shadow-md z-10 
+                                                                   {{ $itemBab->nilai_akhir >= 80 ? 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:border-emerald-400' : 
+                                                                      ($itemBab->nilai_akhir >= 60 ? 'bg-amber-50 border-amber-200 text-amber-700 hover:border-amber-400' : 
+                                                                      'bg-rose-50 border-rose-200 text-brand-red hover:border-rose-400') }}">
+                                                                    
+                                                                    <span class="text-[8px] font-black uppercase opacity-60 mt-0.5">B{{ $itemBab->order }}</span>
+                                                                    <span class="text-sm font-black leading-none mb-0.5">{{ $itemBab->nilai_akhir }}</span>
+                                                                    
+                                                                    {{-- Hover Icon --}}
+                                                                    <div class="absolute inset-0 bg-white/90 rounded-lg opacity-0 group-hover/bab:opacity-100 flex items-center justify-center transition-opacity">
+                                                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                                                    </div>
+                                                                </a>
+                                                            @elseif($itemBab->is_dibaca)
+                                                                {{-- Hanya Dibaca --}}
+                                                                <div title="{{ $itemBab->title }} - Sudah dibaca, belum ujian."
+                                                                     class="flex flex-col items-center justify-center w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 text-blue-500 relative">
+                                                                    <span class="text-[8px] font-black uppercase opacity-60 mt-0.5">B{{ $itemBab->order }}</span>
+                                                                    <svg class="h-4 w-4 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                                                                </div>
+                                                            @else
+                                                                {{-- Belum Diakses --}}
+                                                                <div title="{{ $itemBab->title }} - Belum diakses."
+                                                                     class="flex flex-col items-center justify-center w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 text-slate-300">
+                                                                    <span class="text-[8px] font-black uppercase opacity-60 mt-0.5">B{{ $itemBab->order }}</span>
+                                                                    <div class="h-1 w-4 rounded-full bg-slate-200 mt-1"></div>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
+                                                </td>
+
+                                                {{-- 3. Aksi --}}
+                                                <td class="py-4 px-6 text-center align-middle">
+                                                    <button type="button" @click="confirmKeluarkanSiswa(@js($siswa->name), @js(route('guru.kelas.keluarkan-siswa', [$kelas, $siswa])))" 
+                                                            class="h-8 w-8 rounded-lg text-slate-300 hover:text-brand-red hover:bg-brand-red-light inline-flex items-center justify-center transition-all" title="Keluarkan Siswa">
+                                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                                     </button>
                                                 </td>
                                             </tr>

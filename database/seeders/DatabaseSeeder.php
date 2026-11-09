@@ -15,6 +15,34 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        // 1. Pastikan akun Guru untuk demo tersedia
+        $guru = \App\Models\User::firstOrCreate(
+            ['email' => 'guru@example.com'],
+            [
+                'name' => 'Bapak Guru Demo',
+                'password' => bcrypt('password'),
+                'role' => 'guru',
+                'email_verified_at' => now(),
+            ]
+        );
+
+        // 2. Pastikan akun Siswa untuk demo tersedia
+        $siswa = \App\Models\User::firstOrCreate(
+            ['email' => 'siswa@example.com'],
+            [
+                'name' => 'Siswa Demo',
+                'password' => bcrypt('password'),
+                'role' => 'siswa',
+                'email_verified_at' => now(),
+            ]
+        );
+
+        // 3. Jalankan Seeder Kelas Matematika SMP (Kelas 7, 8, dan 9 Kurikulum Merdeka)
+        $this->call([
+            KelasMatematikaSeeder::class,
+            KelasMatematikaKelas8Seeder::class,
+            KelasMatematikaKelas9Seeder::class,
+            SiswaSeeder::class,
+        ]);
     }
 }

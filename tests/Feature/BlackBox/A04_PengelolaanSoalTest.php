@@ -43,8 +43,12 @@ class A04_PengelolaanSoalTest extends TestCase
                 ['name' => 'y', 'min' => 1, 'max' => 10]
             ],
             'answer_formula' => 'x + y',
+            'jawaban_format' => 'angka',
+            'bobot' => 10,
         ]);
-
+        if ($response->exception || session('errors')) {
+            $response->dumpSession();
+        }
         $response->assertRedirect();
         $this->assertDatabaseHas('soal', [
             'bab_id' => $this->bab->id,
@@ -89,6 +93,8 @@ class A04_PengelolaanSoalTest extends TestCase
                 ['name' => 'y', 'min' => 1, 'max' => 5]
             ],
             'answer_formula' => 'x * y',
+            'jawaban_format' => 'angka',
+            'bobot' => 15,
         ]);
 
         $response->assertRedirect();
@@ -97,5 +103,33 @@ class A04_PengelolaanSoalTest extends TestCase
             'question_template' => 'Hitung {x} * {y}',
             'answer_formula' => 'x * y',
         ]);
+    }
+
+    /** Halaman buat soal harus memuat aset JSXGraph & kontainer live-preview visualisasi koordinat. */
+    public function test_halaman_buat_soal_memuat_visualisasi_koordinat(): void
+    {
+        $response = $this->actingAs($this->guru)->get(route('guru.soal.buat', $this->bab));
+
+        $response->assertStatus(200);
+        $response->assertSee('jsxgraphcore.js', false);
+        $response->assertSee('jxgboard-preview-soal', false);
+    }
+
+    /** Halaman edit soal juga harus memuat live-preview visualisasi koordinat yang sama. */
+    public function test_halaman_edit_soal_memuat_visualisasi_koordinat(): void
+    {
+        $soal = Soal::create([
+            'bab_id' => $this->bab->id,
+            'question_template' => 'Titik A({x}, {y})',
+            'variable_rules' => ['x' => ['min' => 1, 'max' => 10], 'y' => ['min' => 1, 'max' => 10]],
+            'answer_formula' => 'refleksi_x(x, y)',
+            'jawaban_format' => 'koordinat',
+        ]);
+
+        $response = $this->actingAs($this->guru)->get(route('guru.soal.edit', $soal));
+
+        $response->assertStatus(200);
+        $response->assertSee('jsxgraphcore.js', false);
+        $response->assertSee('jxgboard-preview-soal', false);
     }
 }

@@ -10,7 +10,16 @@ class Soal extends Model
 {
     protected $table = 'soal';
 
-    protected $fillable = ['bab_id', 'question_template', 'variable_rules', 'answer_formula'];
+    protected $fillable = [
+        'bab_id',
+        'question_template',
+        'variable_rules',
+        'answer_formula',
+        'bobot',
+        'jawaban_format',
+        'pembahasan_template',
+        'image_path',
+    ];
 
     protected function casts(): array
     {
@@ -27,5 +36,10 @@ class Soal extends Model
     public function daftarJawaban(): HasMany
     {
         return $this->hasMany(Jawaban::class, 'soal_id');
+    }
+
+    public function getVariableRangesAttribute(): ?array
+    {
+        return $this->variable_rules;
     }
 }

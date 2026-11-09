@@ -365,12 +365,18 @@
                                             Modul sudah diselesaikan
                                         </span>
                                     @else
+                                    @if(Auth::user()->role === 'siswa')
                                         <form action="{{ route('siswa.materi.tandai-dibaca', $modul->slug) }}" method="POST" id="form-selesai">
                                             @csrf
-                                            <button type="submit" id="btn-selesai" disabled class="inline-flex items-center gap-2 rounded-full bg-gray-400 px-8 py-3 text-sm font-extrabold text-white shadow-md cursor-not-allowed transition-all duration-300">
+                                            <button type="submit" id="btn-selesai" disabled class="group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gray-400 rounded-2xl shadow-md cursor-not-allowed w-full sm:w-auto">
                                                 <span id="text-selesai">Tunggu {{ $waktuDetikDinamis }} detik & gulir ke bawah</span>
                                             </button>
                                         </form>
+                                    @else
+                                        <div class="px-8 py-4 font-bold text-white bg-green-500 rounded-2xl shadow-md text-center">
+                                            Guru sedang mode pratinjau
+                                        </div>
+                                    @endif
                                     @endif
                                 </div>
                             @endif

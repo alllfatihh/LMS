@@ -37,6 +37,9 @@ class GabungKelasController extends Controller
             return redirect()->route('siswa.ujian.index')->with('success', 'Kamu sudah di kelas ini.');
         }
 
+        // [SIDANG] Ini adalah implementasi relasi Many-to-Many di Laravel.
+        // Method 'attach' secara otomatis memasukkan 1 record baru ke dalam tabel pivot (kelas_user)
+        // yang menghubungkan id user dan id kelas.
         $pengguna->kelasYangDiikuti()->attach($kelas->id);
 
         return redirect()->route('siswa.ujian.index')->with('success', 'Berhasil gabung ke kelas '.$kelas->name.'!');

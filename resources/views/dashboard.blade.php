@@ -1,20 +1,9 @@
 <x-app-layout>
-    <x-slot name="header">
-        @if(auth()->user()->role === 'guru')
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Dashboard Utama') }}
-            </h2>
-        @endif
-    </x-slot>
 
-    {{-- Subtle animated background glow for the whole page --}}
-    <div class="absolute top-0 inset-x-0 h-[500px] overflow-hidden -z-10 pointer-events-none">
-        <div class="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-brand-red/5 blur-[100px]"></div>
-        <div class="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-blue-500/5 blur-[100px]"></div>
-    </div>
+
 
     <div class="py-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div class="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             
             {{-- Masterpiece Welcome Banner --}}
             <div class="relative overflow-hidden rounded-[2.5rem] bg-slate-900 p-10 sm:p-16 shadow-2xl text-white">
@@ -62,23 +51,22 @@
             </div>
 
             {{-- Dynamic Bento-Style Stats Grid --}}
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 {{ auth()->user()->role === 'guru' ? 'lg:grid-cols-3' : 'lg:grid-cols-4' }} gap-6" x-data="{ modalPilihKelasSiswa: false }">
                 @if(auth()->user()->role === 'guru')
                     {{-- Guru Stats --}}
                     @php
                         $stats = [
-                            ['label' => 'Total Kelas', 'value' => $data['total_kelas'] ?? 0, 'color' => 'brand-red', 'bg' => 'bg-brand-red/5', 'icon' => 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10'],
-                            ['label' => 'Total Siswa', 'value' => $data['total_siswa'] ?? 0, 'color' => 'blue-600', 'bg' => 'bg-blue-50', 'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'],
-                            ['label' => 'Ujian Selesai', 'value' => $data['total_ujian'] ?? 0, 'color' => 'purple-600', 'bg' => 'bg-purple-50', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4'],
-                            ['label' => 'Rata-rata Skor', 'value' => ($data['rata_skor'] ?? 0) . '%', 'color' => 'emerald-600', 'bg' => 'bg-emerald-50', 'icon' => 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6']
+                            ['label' => 'Total Kelas', 'value' => $data['total_kelas'] ?? 0, 'color' => 'brand-red', 'bg' => 'bg-brand-red/5', 'icon' => 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10', 'action' => "window.location.href='".route('guru.kelas.index')."'"],
+                            ['label' => 'Total Siswa', 'value' => $data['total_siswa'] ?? 0, 'color' => 'blue-600', 'bg' => 'bg-blue-50', 'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z', 'action' => 'modalPilihKelasSiswa = true'],
+                            ['label' => 'Ujian Selesai', 'value' => $data['total_ujian'] ?? 0, 'color' => 'purple-600', 'bg' => 'bg-purple-50', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4', 'action' => "document.getElementById('aktivitas-guru')?.scrollIntoView({ behavior: 'smooth' })"]
                         ];
                     @endphp
                 @else
                     {{-- Siswa Stats --}}
                     @php
                         $stats = [
-                            ['label' => 'Kelas Diikuti', 'value' => $data['total_kelas'] ?? 0, 'color' => 'brand-red', 'bg' => 'bg-brand-red/5', 'icon' => 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10'],
-                            ['label' => 'Ujian Selesai', 'value' => $data['total_ujian'] ?? 0, 'color' => 'blue-600', 'bg' => 'bg-blue-50', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4'],
+                            ['label' => 'Kelas Diikuti', 'value' => $data['total_kelas'] ?? 0, 'color' => 'brand-red', 'bg' => 'bg-brand-red/5', 'icon' => 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10', 'action' => "window.location.href='".route('siswa.ujian.index')."'"],
+                            ['label' => 'Ujian Selesai', 'value' => $data['total_ujian'] ?? 0, 'color' => 'blue-600', 'bg' => 'bg-blue-50', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4', 'action' => "window.location.href='".route('siswa.ujian.riwayat')."'"],
                             ['label' => 'Rata-rata Skor', 'value' => ($data['rata_skor'] ?? 0) . '%', 'color' => 'purple-600', 'bg' => 'bg-purple-50', 'icon' => 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6'],
                             ['label' => 'Skor Tertinggi', 'value' => ($data['skor_tertinggi'] ?? 0) . '%', 'color' => 'emerald-600', 'bg' => 'bg-emerald-50', 'icon' => 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z']
                         ];
@@ -86,7 +74,11 @@
                 @endif
 
                 @foreach($stats as $stat)
-                    <div class="relative overflow-hidden rounded-[2rem] bg-white p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 group cursor-default border border-slate-100">
+                    @if(isset($stat['action']))
+                        <button type="button" @click="{{ $stat['action'] }}" class="text-left relative overflow-hidden rounded-[2rem] bg-white p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 group cursor-pointer border border-slate-100 outline-none focus-visible:ring-2 focus-visible:ring-brand-red">
+                    @else
+                        <div class="relative overflow-hidden rounded-[2rem] bg-white p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 group cursor-default border border-slate-100">
+                    @endif
                         {{-- Watermark Icon --}}
                         <svg class="absolute -right-6 -bottom-6 h-40 w-40 text-slate-50 opacity-50 group-hover:scale-110 group-hover:-rotate-12 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ $stat['icon'] }}"/></svg>
                         
@@ -94,11 +86,62 @@
                             <div class="flex h-14 w-14 items-center justify-center rounded-2xl {{ $stat['bg'] }} text-{{ $stat['color'] }} shadow-inner mb-6 group-hover:scale-110 transition-transform duration-300">
                                 <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $stat['icon'] }}"/></svg>
                             </div>
-                            <span class="block text-[11px] font-black uppercase tracking-[0.15em] text-slate-400 mb-1">{{ $stat['label'] }}</span>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="block text-[11px] font-black uppercase tracking-[0.15em] text-slate-400">{{ $stat['label'] }}</span>
+                                @if(isset($stat['action']))
+                                    <svg class="h-3 w-3 text-slate-400 group-hover:text-brand-red transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/></svg>
+                                @endif
+                            </div>
                             <span class="block text-4xl font-black text-slate-900">{{ $stat['value'] }}</span>
                         </div>
-                    </div>
+                    @if(isset($stat['action']))
+                        </button>
+                    @else
+                        </div>
+                    @endif
                 @endforeach
+                
+                {{-- Modal Pilih Kelas untuk Daftar Siswa --}}
+                @if(auth()->user()->role === 'guru' && isset($data['daftar_kelas']))
+                    <template x-teleport="body">
+                        <div x-show="modalPilihKelasSiswa" 
+                             x-transition.opacity
+                             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm"
+                             style="display: none;">
+                             
+                            <div x-show="modalPilihKelasSiswa"
+                                 x-transition.scale.origin.bottom
+                                 @click.away="modalPilihKelasSiswa = false"
+                                 class="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg overflow-hidden border border-slate-100 flex flex-col max-h-[85vh]">
+                                 
+                                <div class="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                                    <h3 class="text-xl font-black text-slate-900">Pilih Kelas</h3>
+                                    <button @click="modalPilihKelasSiswa = false" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    </button>
+                                </div>
+                                
+                                <div class="p-6 overflow-y-auto space-y-3">
+                                    @forelse($data['daftar_kelas'] as $kls)
+                                        <a href="{{ route('guru.kelas.tampil', $kls->id) }}#daftar-siswa" class="flex items-center justify-between p-4 rounded-2xl border border-slate-100 bg-white hover:border-brand-red hover:shadow-md hover:-translate-y-0.5 transition-all group">
+                                            <div class="flex flex-col">
+                                                <span class="font-bold text-slate-900 group-hover:text-brand-red transition-colors">{{ $kls->name }}</span>
+                                                <span class="text-sm font-medium text-slate-500">{{ $kls->siswa()->count() }} Siswa &bull; Tahun {{ $kls->tahun }}</span>
+                                            </div>
+                                            <div class="h-10 w-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-brand-red/10 group-hover:text-brand-red transition-colors">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                            </div>
+                                        </a>
+                                    @empty
+                                        <div class="text-center py-6">
+                                            <p class="text-slate-500 font-medium">Belum ada kelas.</p>
+                                        </div>
+                                    @endforelse
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                @endif
             </div>
 
             {{-- Ultra-Premium Content Grid for Siswa --}}
@@ -162,13 +205,16 @@
                     @if(isset($data['aktivitas_terbaru']) && count($data['aktivitas_terbaru']) > 0)
                         <div class="p-6 sm:p-10 space-y-4">
                             @foreach($data['aktivitas_terbaru'] as $akt)
-                                <div class="group relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 rounded-3xl p-6 bg-white border border-slate-100 shadow-sm hover:shadow-[0_10px_40px_rgb(0,0,0,0.06)] hover:border-slate-200 transition-all duration-300">
-                                    <div class="flex items-center gap-5">
+                                <div class="group relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 rounded-3xl p-6 bg-white border border-slate-100 shadow-sm hover:shadow-[0_10px_40px_rgb(0,0,0,0.06)] hover:border-slate-200 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer">
+                                    {{-- Link Overlay for the whole card --}}
+                                    <a href="{{ route('siswa.ujian.hasil', $akt->sesi_id) }}" title="Lihat Hasil Ujian" class="absolute inset-0 z-0"></a>
+
+                                    <div class="flex items-center gap-5 relative z-10">
                                         <div class="h-12 w-12 rounded-full bg-slate-50 flex items-center justify-center text-brand-red group-hover:scale-110 transition-transform">
                                             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                         </div>
                                         <div>
-                                            <h4 class="font-bold text-slate-900 text-base mb-1">{{ $akt->judul_bab }}</h4>
+                                            <h4 class="font-bold text-slate-900 text-base mb-1 group-hover:text-brand-red transition-colors">{{ $akt->judul_bab }}</h4>
                                             <div class="flex items-center gap-3 text-xs font-medium text-slate-500">
                                                 <span>{{ $akt->nama_kelas }}</span>
                                                 <span class="text-slate-300">&bull;</span>
@@ -177,7 +223,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="w-full sm:w-auto shrink-0 flex items-center justify-between sm:justify-end gap-6 sm:min-w-[200px]">
+                                    <div class="w-full sm:w-auto shrink-0 flex items-center justify-between sm:justify-end gap-6 sm:min-w-[200px] relative z-10">
                                         <div class="w-full sm:w-32 hidden sm:block">
                                             <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
                                                 <div class="h-full rounded-full transition-all duration-1000 ease-out {{ $akt->skor >= 70 ? 'bg-emerald-500' : ($akt->skor >= 40 ? 'bg-amber-500' : 'bg-brand-red') }}" style="width: {{ $akt->skor }}%"></div>
@@ -204,7 +250,7 @@
 
             {{-- Ultra-Premium Activity Feed (Guru Only) --}}
             @if(auth()->user()->role === 'guru')
-                <div class="relative bg-white rounded-[2.5rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
+                <div id="aktivitas-guru" class="relative bg-white rounded-[2.5rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
                     <div class="p-8 sm:px-10 sm:pt-10 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 border-b border-slate-100/60 pb-6 bg-slate-50/30">
                         <div>
                             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3">
@@ -279,9 +325,6 @@
                     @endif
                 </div>
             @endif
-
-
-
             <form id="form-keluar-kelas" action="" method="POST" class="hidden">
                 @csrf
                 @method('DELETE')

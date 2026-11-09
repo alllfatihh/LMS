@@ -66,4 +66,27 @@ class A07_GabungKelasTest extends TestCase
         $response->assertSessionHas('success'); // Controller mengarahkan ke ujian.index dengan 'success'
         $this->assertEquals(1, $this->kelas->siswa()->where('user_id', $this->siswa->id)->count());
     }
+
+    /** Tanggal bergabung harus tercatat otomatis di tabel pivot saat siswa gabung kelas. */
+    public function test_tanggal_bergabung_tercatat_saat_gabung_kelas(): void
+    {
+        $this->actingAs($this->siswa)->post(route('siswa.gabung-kelas.simpan'), [
+            'class_code' => 'XYZ123',
+        ]);
+
+        $pivot = $this->kelas->siswa()->where('user_id', $this->siswa->id)->first()->pivot;
+
+        $this->assertNotNull($pivot->created_at);
+    }
+
+    /** Guru dapat melihat tanggal bergabung tiap siswa di halaman detail kelas. */
+    public function test_guru_melihat_tanggal_bergabung_siswa_di_halaman_kelas(): void
+    {
+        $this->kelas->siswa()->attach($this->siswa->id);
+
+        $response = $this->actingAs($this->guru)->get(route('guru.kelas.tampil', $this->kelas));
+
+        $response->assertStatus(200);
+        $response->assertSee('Bergabung');
+    }
 }

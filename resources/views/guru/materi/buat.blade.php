@@ -8,6 +8,7 @@
 @endpush
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/trix@2.1.1/dist/trix.umd.min.js" defer></script>
+    <script src="https://unpkg.com/mathlive"></script>
 @endpush
 
 <x-app-layout>
@@ -30,6 +31,7 @@
                 x-data="{ 
                     tipe: @js(old('tipe', 'teks')),
                     openAiModal: false,
+                    openMathModal: false,
                     aiPrompt: '',
                     aiLoading: false,
                     sisaKuota: null,
@@ -38,8 +40,8 @@
                         try {
                             const res = await fetch('{{ route('guru.ai.sisa-kuota') }}');
                             const d = await res.json();
-                            this.sisaKuota = d.sisa;
-                            this.batasKuota = d.batas;
+                            this.sisaKuota = d.sisa_generate;
+                            this.batasKuota = d.batas_generate;
                         } catch(e) {}
                     },
                     async generateAiMateri() {
@@ -109,6 +111,25 @@
                         } finally {
                             this.aiLoading = false;
                         }
+                    },
+                    insertMathToTrix() {
+                        const mf = document.getElementById('materi_math_field');
+                        if (mf && mf.value) {
+                            const latex = '\\(' + mf.value + '\\)';
+                            const trixEditor = document.querySelector('trix-editor');
+                            if (trixEditor && trixEditor.editor) {
+                                trixEditor.editor.insertString(latex);
+                                this.openMathModal = false;
+                                mf.value = '';
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil',
+                                    text: 'Rumus matematika disisipkan.',
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+                            }
+                        }
                     }
                 }"
             >
@@ -150,10 +171,16 @@
                     <div x-show="tipe === 'teks'" x-cloak x-transition>
                         <div class="flex items-center justify-between mb-2">
                             <label for="isi_teks_hidden" class="block text-sm font-bold text-gray-700">Isi materi</label>
-                            <button type="button" @click="openAiModal = true" class="inline-flex items-center gap-1.5 rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-bold text-indigo-700 hover:bg-indigo-100 transition-colors shadow-sm border border-indigo-100">
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                                Tulis dengan AI
-                            </button>
+                            <div class="flex items-center gap-2">
+                                <button type="button" @click="openMathModal = true; setTimeout(() => document.getElementById('materi_math_field').focus(), 100)" class="inline-flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-bold text-brand-red hover:bg-red-100 transition-colors shadow-sm border border-red-100">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                    Sisipkan Rumus
+                                </button>
+                                <button type="button" @click="openAiModal = true" class="inline-flex items-center gap-1.5 rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-bold text-indigo-700 hover:bg-indigo-100 transition-colors shadow-sm border border-indigo-100">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                    Tulis dengan AI
+                                </button>
+                            </div>
                         </div>
                         <input id="isi_teks_hidden" type="hidden" name="konten_teks" value="{{ old('konten_teks', '') }}">
                         <trix-editor input="isi_teks_hidden" class="trix-content rounded-xl border border-gray-200 bg-white"></trix-editor>
@@ -218,6 +245,45 @@
                                     </span>
                                 </button>
                                 <button type="button" @click="openAiModal = false" :disabled="aiLoading" class="mt-3 inline-flex w-full justify-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors">Batal</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal MathLive -->
+                <div x-show="openMathModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;" x-cloak>
+                    <div class="flex min-h-screen items-center justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
+                        <div x-show="openMathModal" x-transition.opacity class="fixed inset-0 transition-opacity" aria-hidden="true">
+                            <div class="absolute inset-0 bg-gray-900 bg-opacity-75 backdrop-blur-sm"></div>
+                        </div>
+                        <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
+                        <div x-show="openMathModal" x-transition.scale class="inline-block transform overflow-visible rounded-2xl bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl sm:align-middle">
+                            <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 rounded-t-2xl">
+                                <div class="sm:flex sm:items-start">
+                                    <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-50 sm:mx-0 sm:h-10 sm:w-10">
+                                        <svg class="h-6 w-6 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                    </div>
+                                    <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
+                                        <h3 class="text-lg font-extrabold leading-6 text-gray-900">Asisten Rumus Matematika</h3>
+                                        <div class="mt-2">
+                                            <p class="text-sm text-gray-500 mb-4">Gunakan keyboard matematika di bawah ini untuk mengetikkan persamaan, pecahan, atau akar. Rumus akan disisipkan ke editor Trix.</p>
+                                            
+                                            <!-- MathLive Element -->
+                                            <div class="relative group">
+                                                <math-field 
+                                                    id="materi_math_field" 
+                                                    class="block w-full border-2 border-gray-200 focus-within:border-brand-red focus-within:ring-4 focus-within:ring-brand-red/20 rounded-xl py-4 px-5 text-2xl font-black text-slate-900 transition-all bg-gray-50 shadow-inner"
+                                                >
+                                                </math-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 rounded-b-2xl">
+                                <button type="button" @click="insertMathToTrix" class="inline-flex w-full justify-center rounded-xl bg-brand-red px-4 py-2 text-base font-bold text-white shadow-sm hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
+                                    Sisipkan ke Teks
+                                </button>
+                                <button type="button" @click="openMathModal = false" class="mt-3 inline-flex w-full justify-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors">Batal</button>
                             </div>
                         </div>
                     </div>

@@ -30,3 +30,11 @@ Thumbs.db
 scratch/
 *.pdf
 test_groq*.php
+*.zip
+*.py
+*.txt
+!public/robots.txt
+laporan_*.html
+screenshots_full/
+screenshots/
+

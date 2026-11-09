@@ -41,7 +41,7 @@ class Kelas extends Model
 
     public function siswa()
     {
-        return $this->belongsToMany(User::class, 'kelas_user', 'kelas_id', 'user_id');
+        return $this->belongsToMany(User::class, 'kelas_user', 'kelas_id', 'user_id')->withTimestamps();
     }
 
     public function modulMateri(): HasMany

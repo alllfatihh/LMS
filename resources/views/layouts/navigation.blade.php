@@ -1,5 +1,5 @@
-<nav x-data="{ open: false }" class="bg-brand-red shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<nav x-data="{ open: false }" class="bg-brand-red/90 backdrop-blur-xl border-b border-brand-red-light/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)] sticky top-0 z-50 transition-all duration-300">
+    <div class="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <div class="shrink-0 flex items-center">

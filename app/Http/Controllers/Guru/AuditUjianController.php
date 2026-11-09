@@ -25,34 +25,48 @@ class AuditUjianController extends Controller
         $daftarJawaban = $sesiUjian->daftarJawaban;
         $jumlahSoal = $daftarJawaban->count();
         $jumlahBenar = $daftarJawaban->where('is_correct', true)->count();
-        $nilai = $jumlahSoal > 0 ? ($jumlahBenar / $jumlahSoal) * 100 : 0;
+
+        $semuaBobot = 0;
+        $bobotBenar = 0;
+        foreach ($daftarJawaban as $jwb) {
+            $bobot = $jwb->soal->bobot ?? 10;
+            $semuaBobot += $bobot;
+            if ($jwb->is_correct) {
+                $bobotBenar += $bobot;
+            }
+        }
+        $nilai = $semuaBobot > 0 ? ($bobotBenar / $semuaBobot) * 100 : 0;
 
         // Kami perlu mengevaluasi / menyuntikkan variabel kembali ke template agar guru bisa melihat
         // soal persis seperti yang dilihat siswa.
         $auditList = $daftarJawaban->map(function ($jawaban) {
             $soal = $jawaban->soal;
             
+            // [SIDANG] Di sinilah kehebatan arsitektur Audit. Karena kita menyimpan variabel acaknya di database,
+            // kita bisa "merekonstruksi/membangun ulang" soal dan jawabannya menggunakan EvaluasiSoalService
+            // sehingga guru melihat teks soal dan angka persis seperti yang dialami siswa ujian kemarin.
             // Reconstruct Text Soal
             $teksSoalTerurai = $this->evaluasi->uraiTemplatSoal(
                 $soal->question_template,
                 $jawaban->generated_variables ?? []
             );
 
-            // Reconstruct Kunci Jawaban
+            // Reconstruct Kunci Jawaban. hitungAtauUrai() mengeksekusi formula (mis. pemanggilan
+            // fungsi seperti faktorisasi_kuadrat(p, q)) jika bisa, dan fallback ke substitusi teks
+            // untuk template aljabar simbolik yang tak bisa dieksekusi — tidak pernah melempar
+            // exception, jadi guru tidak pernah melihat pesan error PHP mentah di halaman audit.
             $kunciJawaban = null;
             if (!empty($soal->answer_formula)) {
-                try {
-                    $kunciJawaban = $this->evaluasi->hitungRumus(
-                        $soal->answer_formula,
-                        $jawaban->generated_variables ?? []
-                    );
-                } catch (\Exception $e) {
-                    $kunciJawaban = 'Error: ' . $e->getMessage();
-                }
+                $kunciJawaban = $this->evaluasi->hitungAtauUrai(
+                    $soal->answer_formula,
+                    $jawaban->generated_variables ?? [],
+                    $soal->jawaban_format
+                );
             }
 
             return (object) [
                 'soal_asli' => $soal->question_template,
+                'soal' => $soal,
                 'soal_terurai' => $teksSoalTerurai,
                 'variabel_seed' => $jawaban->generated_variables,
                 'rumus_jawaban' => $soal->answer_formula,

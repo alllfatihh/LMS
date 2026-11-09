@@ -36,7 +36,7 @@
     </x-slot>
 
     <div class="py-10">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
+        <div class="max-w-[1800px] mx-auto sm:px-6 lg:px-8 space-y-8">
             @if(session('success'))
                 <div class="bg-green-50 border border-green-200 text-green-800 p-4 rounded-xl flex items-start space-x-3">
                     <p class="font-bold text-sm">{{ session('success') }}</p>
@@ -118,7 +118,7 @@
                                 <div class="space-y-4">
                                     @foreach($bab->daftarSoal as $soal)
                                         <div class="p-4 border border-gray-100 rounded-xl hover:shadow-md transition-shadow">
-                                            <p class="text-sm font-bold text-gray-800">{{ $soal->question_template }}</p>
+                                            <div class="text-sm font-bold text-gray-800">{!! app(\App\Services\EvaluasiSoalService::class)->formatHTML($soal->question_template) !!}</div>
                                             <div class="mt-2 flex items-center justify-between">
                                                 <div class="text-xs font-mono text-gray-500 bg-gray-50 px-2 py-1 rounded">
                                                     Rumus: {{ $soal->answer_formula }}
@@ -153,8 +153,8 @@
                                     try {
                                         const res = await fetch('{{ route('guru.ai.sisa-kuota') }}');
                                         const d = await res.json();
-                                        this.sisaKuota = d.sisa;
-                                        this.batasKuota = d.batas;
+                                        this.sisaKuota = d.sisa_generate;
+                                        this.batasKuota = d.batas_generate;
                                     } catch(e) {}
                                 },
                                 async generate() {
@@ -238,16 +238,32 @@
                                                 <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
                                                     <h3 class="text-lg font-extrabold leading-6 text-gray-900">Generate Soal dengan AI</h3>
                                                     <div class="mt-2 space-y-4">
-                                                        <p class="text-sm text-gray-500">AI akan membuatkan template soal matematika dinamis sesuai topik yang Anda berikan.</p>
+                                                        <p class="text-xs text-gray-500">AI akan membuatkan template soal matematika dinamis & kompleks sesuai topik dan kurikulum SMP.</p>
                                                         <div x-show="sisaKuota !== null" class="flex items-center gap-2">
                                                             <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold" :class="sisaKuota > 0 ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200' : 'bg-red-50 text-red-700 ring-1 ring-red-200'">
                                                                 <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                                                                 Sisa kuota: <span x-text="sisaKuota"></span>/<span x-text="batasKuota"></span> hari ini
                                                             </span>
                                                         </div>
+
+                                                        <!-- Preset Topik Cepat -->
                                                         <div>
-                                                            <label class="block text-xs font-bold text-gray-700 mb-1">Topik/Deskripsi Soal</label>
-                                                            <input type="text" x-model="topik" placeholder="Misal: Penjumlahan pecahan dasar" class="w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" :disabled="sisaKuota !== null && sisaKuota <= 0">
+                                                            <label class="block text-xs font-bold text-gray-700 mb-1.5">Preset Topik Cepat (Kompleks):</label>
+                                                            <div class="flex flex-wrap gap-1.5">
+                                                                <button type="button" @click="topik = 'SPLDV dua variabel soal cerita kontekstual dengan solusi bilangan bulat'" class="text-[11px] font-semibold bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 px-2.5 py-1 rounded-lg border border-gray-200 transition-colors">SPLDV</button>
+                                                                <button type="button" @click="topik = 'Persamaan Kuadrat menentukan akar dan jumlah/hasil kali akar'" class="text-[11px] font-semibold bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 px-2.5 py-1 rounded-lg border border-gray-200 transition-colors">Persamaan Kuadrat</button>
+                                                                <button type="button" @click="topik = 'Teorema Pythagoras dan tripel pythagoras pada segitiga dan soal cerita'" class="text-[11px] font-semibold bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 px-2.5 py-1 rounded-lg border border-gray-200 transition-colors">Pythagoras</button>
+                                                                <button type="button" @click="topik = 'Luas dan volume bangun ruang sisi lengkung (tabung/kerucut) dengan pi 22/7'" class="text-[11px] font-semibold bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 px-2.5 py-1 rounded-lg border border-gray-200 transition-colors">Bangun Ruang</button>
+                                                                <button type="button" @click="topik = 'Statistika data tunggal mencari kuartil (Q1, Q3) dan jangkauan interkuartil'" class="text-[11px] font-semibold bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 px-2.5 py-1 rounded-lg border border-gray-200 transition-colors">Statistika & Kuartil</button>
+                                                                <button type="button" @click="topik = 'Peluang pengambilan bola/kelereng dengan jawaban pecahan biasa'" class="text-[11px] font-semibold bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 px-2.5 py-1 rounded-lg border border-gray-200 transition-colors">Peluang (Pecahan)</button>
+                                                                <button type="button" @click="topik = 'Barisan dan deret aritmetika menentukan suku ke-n dan jumlah n suku pertama'" class="text-[11px] font-semibold bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 px-2.5 py-1 rounded-lg border border-gray-200 transition-colors">Barisan Aritmetika</button>
+                                                                <button type="button" @click="topik = 'Aritmetika sosial tentang untung rugi, persentase diskon dan pajak'" class="text-[11px] font-semibold bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 px-2.5 py-1 rounded-lg border border-gray-200 transition-colors">Aritmetika Sosial</button>
+                                                            </div>
+                                                        </div>
+
+                                                        <div>
+                                                            <label class="block text-xs font-bold text-gray-700 mb-1">Topik / Deskripsi Khusus</label>
+                                                            <textarea x-model="topik" rows="2" placeholder="Tuliskan topik atau tipe soal yang diinginkan..." class="w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" :disabled="sisaKuota !== null && sisaKuota <= 0"></textarea>
                                                         </div>
                                                         <div>
                                                             <label class="block text-xs font-bold text-gray-700 mb-1">Jumlah Soal</label>

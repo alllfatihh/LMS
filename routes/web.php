@@ -25,24 +25,51 @@ Route::get('/beranda', function () {
         $data['total_kelas'] = $pengguna->kelasYangDiikuti()->count();
         $data['total_ujian'] = $sesiSelesai->count();
 
-        $skorList = $sesiSelesai->map(function ($sesi) {
-            $total = $sesi->daftarJawaban->count();
-            if ($total === 0)
-                return 0;
-            $benar = $sesi->daftarJawaban->where('is_correct', true)->count();
-            return ($benar / $total) * 100;
-        });
+        $totalSemuaBobot = 0;
+        $totalBobotBenar = 0;
+        $skorTertinggi = 0;
 
-        $data['rata_skor'] = $skorList->count() > 0 ? round($skorList->average()) : 0;
-        $data['skor_tertinggi'] = $skorList->count() > 0 ? round($skorList->max()) : 0;
+        foreach ($sesiSelesai as $sesi) {
+            $total = $sesi->daftarJawaban->count();
+            if ($total === 0) continue;
+
+            $semuaBobot = 0;
+            $bobotBenar = 0;
+            foreach ($sesi->daftarJawaban as $jwb) {
+                $bobot = $jwb->soal->bobot ?? 10;
+                $semuaBobot += $bobot;
+                if ($jwb->is_correct) {
+                    $bobotBenar += $bobot;
+                }
+            }
+            
+            $totalSemuaBobot += $semuaBobot;
+            $totalBobotBenar += $bobotBenar;
+            
+            $skorSesi = $semuaBobot > 0 ? ($bobotBenar / $semuaBobot) * 100 : 0;
+            if ($skorSesi > $skorTertinggi) {
+                $skorTertinggi = $skorSesi;
+            }
+        }
+
+        $data['rata_skor'] = $totalSemuaBobot > 0 ? round(($totalBobotBenar / $totalSemuaBobot) * 100) : 0;
+        $data['skor_tertinggi'] = round($skorTertinggi);
 
         $data['daftar_kelas'] = $pengguna->kelasYangDiikuti()->with('guru')->get();
         $data['aktivitas_terbaru'] = $sesiSelesai->take(5)->map(function ($sesi) {
-            $total = $sesi->daftarJawaban->count();
-            $benar = $sesi->daftarJawaban->where('is_correct', true)->count();
-            $skor = $total > 0 ? round(($benar / $total) * 100) : 0;
+            $semuaBobot = 0;
+            $bobotBenar = 0;
+            foreach ($sesi->daftarJawaban as $jwb) {
+                $bobot = $jwb->soal->bobot ?? 10;
+                $semuaBobot += $bobot;
+                if ($jwb->is_correct) {
+                    $bobotBenar += $bobot;
+                }
+            }
+            $skor = $semuaBobot > 0 ? round(($bobotBenar / $semuaBobot) * 100) : 0;
 
             return (object) [
+                'sesi_id' => $sesi->id,
                 'judul_bab' => $sesi->bab->title,
                 'nama_kelas' => $sesi->bab->kelas->name,
                 'waktu' => $sesi->finished_at->diffForHumans(),
@@ -59,6 +86,7 @@ Route::get('/beranda', function () {
         $kelas = $pengguna->kelasYangDiajar;
         $data['total_kelas'] = $kelas->count();
         $data['total_siswa'] = $kelas->sum(fn($k) => $k->siswa()->count());
+        $data['daftar_kelas'] = $kelas;
 
         $babIds = \App\Models\Bab::whereIn('kelas_id', $kelas->pluck('id'))->pluck('id');
         $sesiSelesai = \App\Models\SesiUjian::whereIn('bab_id', $babIds)
@@ -69,19 +97,39 @@ Route::get('/beranda', function () {
 
         $data['total_ujian'] = $sesiSelesai->count();
 
-        $skorList = $sesiSelesai->map(function ($sesi) {
-            $total = $sesi->daftarJawaban->count();
-            if ($total === 0)
-                return 0;
-            $benar = $sesi->daftarJawaban->where('is_correct', true)->count();
-            return ($benar / $total) * 100;
-        });
+        $totalSemuaBobot = 0;
+        $totalBobotBenar = 0;
 
-        $data['rata_skor'] = $skorList->count() > 0 ? round($skorList->average()) : 0;
-        $data['aktivitas_terbaru'] = $sesiSelesai->take(5)->map(function ($sesi) {
+        foreach ($sesiSelesai as $sesi) {
             $total = $sesi->daftarJawaban->count();
-            $benar = $sesi->daftarJawaban->where('is_correct', true)->count();
-            $skor = $total > 0 ? round(($benar / $total) * 100) : 0;
+            if ($total === 0) continue;
+
+            $semuaBobot = 0;
+            $bobotBenar = 0;
+            foreach ($sesi->daftarJawaban as $jwb) {
+                $bobot = $jwb->soal->bobot ?? 10;
+                $semuaBobot += $bobot;
+                if ($jwb->is_correct) {
+                    $bobotBenar += $bobot;
+                }
+            }
+            
+            $totalSemuaBobot += $semuaBobot;
+            $totalBobotBenar += $bobotBenar;
+        }
+
+        $data['rata_skor'] = $totalSemuaBobot > 0 ? round(($totalBobotBenar / $totalSemuaBobot) * 100) : 0;
+        $data['aktivitas_terbaru'] = $sesiSelesai->take(5)->map(function ($sesi) {
+            $semuaBobot = 0;
+            $bobotBenar = 0;
+            foreach ($sesi->daftarJawaban as $jwb) {
+                $bobot = $jwb->soal->bobot ?? 10;
+                $semuaBobot += $bobot;
+                if ($jwb->is_correct) {
+                    $bobotBenar += $bobot;
+                }
+            }
+            $skor = $semuaBobot > 0 ? round(($bobotBenar / $semuaBobot) * 100) : 0;
 
             return (object) [
                 'sesi_id' => $sesi->id,
@@ -111,6 +159,9 @@ Route::middleware('auth')->group(function () {
 
 
 
+    // [SIDANG] Route Group ini dibungkus dengan middleware 'role:siswa'.
+    // Artinya, jika ada Guru atau orang luar yang iseng mengetik URL /siswa/... di browser,
+    // Laravel akan langsung memblokir dan melemparkannya (karena rolenya tidak cocok).
     Route::middleware('role:siswa')->prefix('siswa')->name('siswa.')->group(function () {
         Route::get('/gabung-kelas', [\App\Http\Controllers\Siswa\GabungKelasController::class, 'index'])->name('gabung-kelas.index');
         Route::post('/gabung-kelas', [\App\Http\Controllers\Siswa\GabungKelasController::class, 'simpan'])->name('gabung-kelas.simpan');
@@ -136,11 +187,14 @@ Route::middleware('auth')->group(function () {
         });
     });
 
+    // [SIDANG] Sebaliknya, URL yang berawalan /guru/... diamankan secara massal oleh middleware 'role:guru'.
+    // Siswa nakal yang mencoba meretas masuk ke URL guru akan langsung diblokir.
     Route::middleware('role:guru')->prefix('guru')->name('guru.')->group(function () {
         // Fitur AI Guru
         Route::get('/ai/sisa-kuota', [\App\Http\Controllers\Guru\AiGuruController::class, 'sisaKuota'])->name('ai.sisa-kuota');
         Route::post('/ai/generate-materi', [\App\Http\Controllers\Guru\AiGuruController::class, 'generateMateri'])->name('ai.generate-materi');
         Route::post('/ai/generate-soal/{bab}', [\App\Http\Controllers\Guru\AiGuruController::class, 'generateSoal'])->name('ai.generate-soal');
+        Route::post('/ai/bantu-template', [\App\Http\Controllers\Guru\AiGuruController::class, 'bantuTemplate'])->name('ai.bantu-template');
 
         Route::get('kelas', [\App\Http\Controllers\Guru\KelasController::class, 'index'])->name('kelas.index');
         Route::get('kelas/buat', [\App\Http\Controllers\Guru\KelasController::class, 'buat'])->name('kelas.buat');

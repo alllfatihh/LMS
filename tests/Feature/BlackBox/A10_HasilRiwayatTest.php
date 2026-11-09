@@ -108,4 +108,106 @@ class A10_HasilRiwayatTest extends TestCase
         // Halaman riwayat menampilkan judul bab dari sesi yang sudah selesai
         $response->assertSee('Bab 1');
     }
+
+    /** Nilai akhir harus dihitung berdasarkan bobot soal, bukan rata-rata jumlah soal biasa. */
+    public function test_nilai_akhir_dihitung_berdasarkan_bobot_soal(): void
+    {
+        $bab = Bab::create([
+            'kelas_id' => $this->kelas->id,
+            'title'    => 'Bab Bobot',
+            'order'    => 2,
+        ]);
+
+        $soalBerat = Soal::create([
+            'bab_id'            => $bab->id,
+            'question_template' => 'Soal berat',
+            'variable_rules'    => [],
+            'answer_formula'    => '1',
+            'bobot'             => 30,
+        ]);
+
+        $soalRingan = Soal::create([
+            'bab_id'            => $bab->id,
+            'question_template' => 'Soal ringan',
+            'variable_rules'    => [],
+            'answer_formula'    => '1',
+            'bobot'             => 10,
+        ]);
+
+        $sesi = SesiUjian::create([
+            'user_id'     => $this->siswa->id,
+            'bab_id'      => $bab->id,
+            'started_at'  => now()->subMinutes(10),
+            'finished_at' => now(),
+        ]);
+
+        // Soal berbobot besar dijawab BENAR, soal berbobot kecil dijawab SALAH.
+        Jawaban::create([
+            'sesi_ujian_id'       => $sesi->id,
+            'soal_id'             => $soalBerat->id,
+            'generated_variables' => [],
+            'student_answer'      => '1',
+            'is_correct'          => true,
+        ]);
+
+        Jawaban::create([
+            'sesi_ujian_id'       => $sesi->id,
+            'soal_id'             => $soalRingan->id,
+            'generated_variables' => [],
+            'student_answer'      => '2',
+            'is_correct'          => false,
+        ]);
+
+        // Rata-rata jumlah soal biasa akan menghasilkan 50%, tapi berbobot: 30/(30+10) = 75%.
+        $response = $this->actingAs($this->siswa)
+            ->get(route('siswa.ujian.hasil', $sesi));
+
+        $response->assertStatus(200);
+        $response->assertSee('75');
+    }
+
+    /**
+     * Regresi: soal berformat 'aljabar' dengan answer_formula berupa PEMANGGILAN FUNGSI
+     * (bukan template simbolik biasa) harus tetap dieksekusi dan ditampilkan sebagai hasil
+     * jadi (mis. "(x+5)(x+4)"), bukan string rumus mentah "faktorisasi_kuadrat(p, q)".
+     */
+    public function test_kunci_jawaban_aljabar_berupa_fungsi_dieksekusi_bukan_ditampilkan_mentah(): void
+    {
+        $bab = Bab::create(['kelas_id' => $this->kelas->id, 'title' => 'Bab Faktorisasi', 'order' => 3]);
+
+        $soal = Soal::create([
+            'bab_id'            => $bab->id,
+            'question_template' => 'Faktorkanlah bentuk kuadrat x^2 + {b}x + {c} menjadi perkalian dua binomial!',
+            'variable_rules'    => [
+                'p' => ['type' => 'integer', 'min' => 5, 'max' => 5],
+                'q' => ['type' => 'integer', 'min' => 4, 'max' => 4],
+                'b' => ['type' => 'derived', 'formula' => 'p + q'],
+                'c' => ['type' => 'derived', 'formula' => 'p * q'],
+            ],
+            'answer_formula'    => 'faktorisasi_kuadrat(p, q)',
+            'jawaban_format'    => 'aljabar',
+        ]);
+
+        $sesi = SesiUjian::create([
+            'user_id'     => $this->siswa->id,
+            'bab_id'      => $bab->id,
+            'started_at'  => now()->subMinutes(5),
+            'finished_at' => now(),
+        ]);
+
+        Jawaban::create([
+            'sesi_ujian_id'       => $sesi->id,
+            'soal_id'             => $soal->id,
+            'generated_variables' => ['p' => 5, 'q' => 4, 'b' => 9, 'c' => 20],
+            'student_answer'      => null,
+            'is_correct'          => false,
+        ]);
+
+        $response = $this->actingAs($this->siswa)->get(route('siswa.ujian.hasil', $sesi));
+
+        $response->assertStatus(200);
+        // Bagian "Kunci" harus menampilkan hasil evaluasi, bukan rumus mentah.
+        // (Rumus mentah tetap boleh muncul di bagian "Tips" sebagai referensi guru/siswa.)
+        $response->assertSee('(x+5)(x+4)');
+    }
 }

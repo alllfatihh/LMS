@@ -11,22 +11,41 @@
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
         @stack('styles')
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script>
+            window.MathJax = {
+                tex: {
+                    inlineMath: [['$', '$'], ['\\(', '\\)']],
+                    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+                },
+                options: {
+                    ignoreHtmlClass: 'no-mathjax',
+                    processHtmlClass: 'mathjax-full'
+                }
+            };
+        </script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </head>
     <body class="font-sans antialiased text-slate-900 bg-gray-50/50">
+        {{-- Subtle animated background glow for the whole page --}}
+        <div class="fixed top-0 inset-x-0 h-[500px] overflow-hidden -z-10 pointer-events-none">
+            <div class="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-brand-red/5 blur-[100px]"></div>
+            <div class="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-blue-500/5 blur-[100px]"></div>
+        </div>
+
         <div class="min-h-screen">
-            <div class="glass-header">
+            <div class="glass-header z-50 relative">
                 @include('layouts.navigation')
             </div>
 
             @isset($header)
-                <header class="bg-white border-b border-slate-100">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <header class="bg-white/70 backdrop-blur-md border-b border-white/20 sticky top-0 z-40">
+                    <div class="w-full max-w-[1800px] mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>
             @endisset
 
-            <main class="max-w-7xl mx-auto">
+            <main class="w-full" x-data="{ loaded: false }" x-init="setTimeout(() => loaded = true, 50)" x-show="loaded" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
                 @if(session('success') || session('info') || session('error'))
                     <div
                         class="pointer-events-none fixed inset-x-0 top-0 z-[100] flex justify-end px-4 pt-20 sm:pt-24"
