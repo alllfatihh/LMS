@@ -19,8 +19,14 @@ echo ">> Menjalankan migrasi database..."
 php artisan migrate --force
 
 # Pasang data awal (guru, siswa, kelas, bab, soal)
-echo ">> Menjalankan seeding data awal..."
-php artisan db:seed --force || true
+# Seeding hanya jika belum ada data, dan di background agar server tidak menunggu
+# (SiswaSeeder lambat dan sebelumnya menahan server sehingga muncul 502).
+if [ "$(php artisan tinker --execute='echo \App\Models\User::count();' 2>/dev/null | tail -n1)" = "0" ]; then
+    echo ">> Menjalankan seeding data awal di background..."
+    (php artisan db:seed --force || true) &
+else
+    echo ">> Data sudah ada, seeding dilewati."
+fi
 
 # Cache konfigurasi dan view untuk kecepatan optimal
 php artisan config:cache || true
