@@ -11,7 +11,7 @@ RUN npm run build
 # ---------------------------------------------
 # Tahap 2: Runtime PHP & Eksekusi Laravel
 # ---------------------------------------------
-FROM php:8.2-cli-alpine
+FROM php:8.4-cli-alpine
 
 # Install ekstensi PHP & dependensi sistem yang dibutuhkan
 RUN apk add --no-cache \
