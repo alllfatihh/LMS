@@ -14,18 +14,18 @@ fi
 # Tautkan public storage
 php artisan storage:link || true
 
+# Bersihkan cache lama agar variabel environment terbaru dari Railway terbaca segar
+php artisan config:clear || true
+php artisan route:clear || true
+php artisan view:clear || true
+
 # Jalankan migrasi tabel database
 echo ">> Menjalankan migrasi database..."
-php artisan migrate --force
+php artisan migrate --force || echo ">> Catatan: Migrasi belum selesai. Pastikan MySQL di Railway sudah aktif."
 
 # Pasang data awal (guru, siswa, kelas, bab, soal)
 echo ">> Menjalankan seeding data awal..."
 php artisan db:seed --force || true
-
-# Cache konfigurasi dan view untuk kecepatan optimal
-php artisan config:cache || true
-php artisan route:cache || true
-php artisan view:cache || true
 
 PORT_TO_USE="${PORT:-8000}"
 echo ">> LMS Matematika online di port ${PORT_TO_USE}!"

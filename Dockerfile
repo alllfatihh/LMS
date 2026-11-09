@@ -45,3 +45,4 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 EXPOSE 8000
 
 ENTRYPOINT ["/var/www/html/docker-entrypoint.sh"]
+
